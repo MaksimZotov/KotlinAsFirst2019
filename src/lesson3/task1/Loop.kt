@@ -9,9 +9,11 @@ import kotlin.math.sqrt
  *
  * Вычисление факториала
  */
-fun factorial(n: Int): Double {
+fun factorial(n: Int): Double
+{
     var result = 1.0
-    for (i in 1..n) {
+    for (i in 1..n)
+    {
         result = result * i // Please do not fix in master
     }
     return result
@@ -22,11 +24,13 @@ fun factorial(n: Int): Double {
  *
  * Проверка числа на простоту -- результат true, если число простое
  */
-fun isPrime(n: Int): Boolean {
+fun isPrime(n: Int): Boolean
+{
     if (n < 2) return false
     if (n == 2) return true
     if (n % 2 == 0) return false
-    for (m in 3..sqrt(n.toDouble()).toInt() step 2) {
+    for (m in 3..sqrt(n.toDouble()).toInt() step 2)
+    {
         if (n % m == 0) return false
     }
     return true
@@ -37,9 +41,11 @@ fun isPrime(n: Int): Boolean {
  *
  * Проверка числа на совершенность -- результат true, если число совершенное
  */
-fun isPerfect(n: Int): Boolean {
+fun isPerfect(n: Int): Boolean
+{
     var sum = 1
-    for (m in 2..n / 2) {
+    for (m in 2..n / 2)
+    {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -53,7 +59,8 @@ fun isPerfect(n: Int): Boolean {
  * Найти число вхождений цифры m в число n
  */
 fun digitCountInNumber(n: Int, m: Int): Int =
-    when {
+    when
+    {
         n == m -> 1
         n < 10 -> 0
         else -> digitCountInNumber(n / 10, m) + digitCountInNumber(n % 10, m)
@@ -196,7 +203,43 @@ fun hasDifferentDigits(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int
+{
+    var digit = 1;
+    var sqrDigit = 1;
+    var number = 1;
+    var result = 0;
+    while (true)
+    {
+        if (number < n)
+        {
+            digit++;
+            sqrDigit = digit * digit;
+            var razryad = 0;
+            var tempSqrDigit = sqrDigit;
+            while (tempSqrDigit > 0)
+            {
+                tempSqrDigit /= 10;
+                razryad++;
+            }
+            number += razryad;
+        }
+        else if (number == n)
+        {
+            result = sqrDigit % 10;
+            break;
+        }
+        else
+        {
+            var dif = number - n;
+            for (i in 1..dif)
+                sqrDigit /= 10;
+            result = sqrDigit % 10;
+            break;
+        }
+    }
+    return result;
+}
 
 /**
  * Сложная
