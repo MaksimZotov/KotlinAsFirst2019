@@ -80,7 +80,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double =
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double =
-    36 * PI / 180 + min / 60 * 1.8 + sec / 60 * 1.8
+    (deg + min / 60 + sec / 3600) * (PI / 180)
 
 /**
  * Тривиальная
@@ -121,7 +121,7 @@ fun accountInThreeYears(initial: Int, percent: Int): Double
 {
     var result = initial.toDouble();
     for (i in 1..3)
-        result *= (1 + percent / 100)
+        result *= (1 + percent / 100.0)
     return result;
 }
 
