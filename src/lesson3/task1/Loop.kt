@@ -1,4 +1,4 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "UNREACHABLE_CODE")
 
 package lesson3.task1
 
@@ -113,27 +113,30 @@ fun lcm(m: Int, n: Int): Int
     var result = 1;
     var M = m;
     var N = n;
-    var count = 1;
+    var count = 2;
     while (M > 1 && N > 1)
     {
         if (M % count == 0 && N % count == 0)
         {
             result *= count;
-            M /= 10;
-            N /= 10;
-            count++
+            M /= count;
+            N /= count;
+            if (M % count != 0 || N % count != 0)
+                count++
         }
         else if (M % count == 0)
         {
             result *= count;
-            M /= 10;
-            count++;
+            M /= count;
+            if (M % count != 0)
+                count++;
         }
         else if (N % count == 0)
         {
             result *= count;
-            N /= 10;
-            count++;
+            N /= count;
+            if (N % count != 0)
+                count++;
         }
     }
     return result;
@@ -144,14 +147,34 @@ fun lcm(m: Int, n: Int): Int
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int
+{
+    var result = 1;
+    for (i in 2..n)
+        if (n % i == 0)
+        {
+            result = i;
+            break;
+        }
+    return result;
+}
 
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int
+{
+    var result = 1;
+    for (i in n - 1 downTo 2)
+        if (n % i == 0)
+        {
+            result = i;
+            break;
+        }
+    return result;
+}
 
 /**
  * Простая
