@@ -3,6 +3,8 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * Пример
@@ -18,7 +20,8 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Четырехзначное число назовем счастливым, если сумма первых двух ее цифр равна сумме двух последних.
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
-fun isNumberHappy(number: Int): Boolean = TODO()
+fun isNumberHappy(number: Int): Boolean =
+    number / 100 / 10 + number / 100 % 10 == number / 10 % 10 + number % 10;
 
 /**
  * Простая
@@ -27,7 +30,13 @@ fun isNumberHappy(number: Int): Boolean = TODO()
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean
+{
+    var result = false;
+    if (abs(x1 - x2) == abs(y1 - y2) || x1 == x2 || y1 == y2)
+        result = true;
+    return result;
+}
 
 
 /**
@@ -36,7 +45,13 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int = TODO()
+fun daysInMonth(month: Int, year: Int): Int
+{
+    val days: Array<Int> = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+    if (month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
+        return 29;
+    return days[month - 1];
+}
 
 /**
  * Средняя
@@ -48,7 +63,8 @@ fun daysInMonth(month: Int, year: Int): Int = TODO()
 fun circleInside(
     x1: Double, y1: Double, r1: Double,
     x2: Double, y2: Double, r2: Double
-): Boolean = TODO()
+): Boolean =
+    sqrt(sqr(x1 - x2) + sqr(y1 - y2)) + r1 <= r2;
 
 /**
  * Средняя
@@ -59,4 +75,15 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean = TODO()
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean
+{
+    var result = false;
+    if (a <= r && b <= s ||
+        a <= s && b <= r ||
+        a <= r && c <= s ||
+        a <= s && c <= r ||
+        b <= r && c <= s ||
+        b <= s && c <= r)
+        result = true;
+    return result;
+}
