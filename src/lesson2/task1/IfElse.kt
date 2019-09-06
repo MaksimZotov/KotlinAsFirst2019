@@ -211,12 +211,24 @@ fun triangleKind(a: Double, b: Double, c: Double): Int
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int
 {
-    if (a == b || c == d || b == c)
-        return -1;
-    if (b > c && a < d)
-        return b - c;
-    if (d > b && b > c)
-        return c - b;
-    return 0;
+    var result = -1;
+    var A = a;
+    var B = b;
+    var C = c;
+    var D = d;
+    if (a > c)
+    {
+        A = c;
+        B = d;
+        C = a;
+        D = b;
+    }
+    if (B >= C && D > B && A < C)
+        result = B - C;
+    else if (A <= C && D <= B)
+        result = D - C;
+    else if (C <= A && B <= D)
+        result = B - A;
+    return result;
 }
 
