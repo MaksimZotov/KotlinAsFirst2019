@@ -11,10 +11,12 @@ import kotlin.math.sqrt
  * Найти все корни уравнения x^2 = y
  */
 fun sqRoots(y: Double) =
-    when {
+    when
+    {
         y < 0 -> listOf()
         y == 0.0 -> listOf(0.0)
-        else -> {
+        else ->
+        {
             val root = sqrt(y)
             // Результат!
             listOf(-root, root)
@@ -27,8 +29,10 @@ fun sqRoots(y: Double) =
  * Найти все корни биквадратного уравнения ax^4 + bx^2 + c = 0.
  * Вернуть список корней (пустой, если корней нет)
  */
-fun biRoots(a: Double, b: Double, c: Double): List<Double> {
-    if (a == 0.0) {
+fun biRoots(a: Double, b: Double, c: Double): List<Double>
+{
+    if (a == 0.0)
+    {
         return if (b == 0.0) listOf()
         else sqRoots(-c / b)
     }
@@ -45,10 +49,13 @@ fun biRoots(a: Double, b: Double, c: Double): List<Double> {
  *
  * Выделить в список отрицательные элементы из заданного списка
  */
-fun negativeList(list: List<Int>): List<Int> {
+fun negativeList(list: List<Int>): List<Int>
+{
     val result = mutableListOf<Int>()
-    for (element in list) {
-        if (element < 0) {
+    for (element in list)
+    {
+        if (element < 0)
+        {
             result.add(element)
         }
     }
@@ -60,10 +67,13 @@ fun negativeList(list: List<Int>): List<Int> {
  *
  * Изменить знак для всех положительных элементов списка
  */
-fun invertPositives(list: MutableList<Int>) {
-    for (i in 0 until list.size) {
+fun invertPositives(list: MutableList<Int>)
+{
+    for (i in 0 until list.size)
+    {
         val element = list[i]
-        if (element > 0) {
+        if (element > 0)
+        {
             list[i] = -element
         }
     }
@@ -92,9 +102,11 @@ fun squares(vararg array: Int) = squares(array.toList()).toTypedArray()
  * Пробелы не следует принимать во внимание при сравнении символов, например, строка
  * "А роза упала на лапу Азора" является палиндромом.
  */
-fun isPalindrome(str: String): Boolean {
+fun isPalindrome(str: String): Boolean
+{
     val lowerCase = str.toLowerCase().filter { it != ' ' }
-    for (i in 0..lowerCase.length / 2) {
+    for (i in 0..lowerCase.length / 2)
+    {
         if (lowerCase[i] != lowerCase[lowerCase.length - i - 1]) return false
     }
     return true
@@ -306,7 +318,25 @@ fun convert(n: Int, base: Int): List<Int>
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String = TODO()
+fun convertToString(n: Int, base: Int): String
+{
+    var result = "";
+    var stringDigit = "";
+    var DigitsAndAlphabet = listOf<Char>(
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    );
+    var nn = n;
+    while (nn > 0)
+    {
+        stringDigit += DigitsAndAlphabet[nn % base];
+        nn /= base;
+    }
+    for (i in (stringDigit.length - 1) downTo 0)
+        result += stringDigit[i];
+    return result;
+}
 
 /**
  * Средняя
@@ -315,7 +345,21 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int
+{
+    var result = 0;
+    var count = 0;
+    for (i in (digits.size - 1) downTo 0)
+    {
+        var cur = digits[i];
+        for (j in 1..count)
+            cur *= base;
+        result += cur;
+        count++;
+    }
+    return result;
+}
+
 
 /**
  * Сложная
