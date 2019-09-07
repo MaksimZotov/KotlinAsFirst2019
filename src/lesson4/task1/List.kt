@@ -373,7 +373,28 @@ fun decimal(digits: List<Int>, base: Int): Int
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int = TODO()
+fun decimalFromString(str: String, base: Int): Int
+{
+    var result = 0;
+    var count = 0;
+    var DigitsAndAlphabet = listOf<Char>(
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+    );
+    for (i in (str.length - 1) downTo 0)
+    {
+        var cur = 0;
+        for (j in 0 until DigitsAndAlphabet.size)
+            if (DigitsAndAlphabet[j] == str[i])
+                cur = j;
+        for (j in 1..count)
+            cur *= base;
+        result += cur;
+        count++;
+    }
+    return result;
+}
 
 /**
  * Сложная
