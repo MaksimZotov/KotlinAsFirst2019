@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import lesson1.task1.sqr
 import kotlin.math.sqrt
 
 /**
@@ -114,7 +115,7 @@ fun lcm(m: Int, n: Int): Int
     var M = m;
     var N = n;
     var count = 2;
-    while (M > 1 && N > 1)
+    while (M > 1 || N > 1)
     {
         if (M % count == 0 && N % count == 0)
         {
@@ -138,6 +139,8 @@ fun lcm(m: Int, n: Int): Int
             if (N % count != 0)
                 count++;
         }
+        else
+            count++
     }
     return result;
 }
@@ -183,7 +186,20 @@ fun maxDivisor(n: Int): Int
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean
+{
+    var M = m;
+    var N = n;
+    while (M != N)
+    {
+        if (M > N)
+            M -= N;
+        if (M < N)
+            N -= M;
+    }
+    return M == 1;
+}
+
 
 /**
  * Простая
@@ -192,7 +208,13 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean
+{
+    for (i in 1..n)
+        if (i * i in m..n)
+            return true;
+    return false;
+}
 
 /**
  * Средняя
@@ -210,7 +232,24 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int
+{
+    var xx = x;
+    var count = 0;
+    if (xx == 1)
+        return 0;
+    while (true)
+    {
+        if (xx % 2 == 0)
+            xx /= 2;
+        else
+            xx = 3 * xx + 1;
+        count++
+        if (xx == 1)
+            return count;
+    }
+}
+
 
 /**
  * Средняя
@@ -221,7 +260,25 @@ fun collatzSteps(x: Int): Int = TODO()
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double
+{
+    var result = x;
+    var number = 3;
+    var sign = -1;
+    while (true)
+    {
+        var mult = 1.toDouble();
+        for (i in 1..number)
+            mult *= x;
+        result += sign * (mult / factorial(number));
+        if (mult / factorial(number) < eps)
+            break;
+        number += 2;
+        sign *= (-1);
+    }
+    return result;
+}
+
 
 /**
  * Средняя
@@ -233,6 +290,7 @@ fun sin(x: Double, eps: Double): Double = TODO()
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double = TODO()
+
 
 /**
  * Средняя
