@@ -267,14 +267,14 @@ fun sin(x: Double, eps: Double): Double
     var sign = -1;
     while (true)
     {
-        var mult = 1.toDouble();
+        var mult = 1.0;
         for (i in 1..number)
             mult *= x;
         result += sign * (mult / factorial(number));
         if (mult / factorial(number) < eps)
             break;
         number += 2;
-        sign *= (-1);
+        sign *= -1;
     }
     return result;
 }
@@ -289,7 +289,25 @@ fun sin(x: Double, eps: Double): Double
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double = TODO()
+fun cos(x: Double, eps: Double): Double
+{
+    var result = 1.0;
+    var number = 2;
+    var sign = -1;
+    while (true)
+    {
+        var mult = 1.0;
+        for (i in 1..number)
+            mult *= x;
+        result += sign * (mult / factorial(number));
+        if (mult / factorial(number) < eps)
+            break;
+        number += 2;
+        sign *= -1;
+    }
+    return result;
+}
+
 
 
 /**
@@ -299,7 +317,17 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int
+{
+    var result = 0;
+    var nn = n;
+    while (nn > 0)
+    {
+        result = result * 10 + nn % 10;
+        nn /= 10;
+    }
+    return result
+}
 
 /**
  * Средняя
@@ -310,7 +338,8 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean =
+    revert(n) == n;
 
 /**
  * Средняя
@@ -320,7 +349,21 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean
+{
+    var nn = n;
+    if (nn < 10)
+        return false;
+    val digit = nn % 10;
+    while (nn > 0)
+    {
+        if (nn % 10 != digit)
+            return true;
+        nn /= 10;
+    }
+    return false;
+}
+
 
 /**
  * Сложная
@@ -335,11 +378,10 @@ fun squareSequenceDigit(n: Int): Int
 {
     var digit = 1;
     var sqrDigit = 1;
-    var number = 1;
-    var result = 0;
+    var count = 1;
     while (true)
     {
-        if (number < n)
+        if (count < n)
         {
             digit++;
             sqrDigit = digit * digit;
@@ -350,23 +392,21 @@ fun squareSequenceDigit(n: Int): Int
                 tempSqrDigit /= 10;
                 razryad++;
             }
-            number += razryad;
+            count += razryad;
         }
-        else if (number == n)
+        else if (count == n)
         {
-            result = sqrDigit % 10;
+            return sqrDigit % 10;
             break;
         }
         else
         {
-            var dif = number - n;
-            for (i in 1..dif)
+            for (i in 1..(count - n))
                 sqrDigit /= 10;
-            result = sqrDigit % 10;
+            return sqrDigit % 10;
             break;
         }
     }
-    return result;
 }
 
 /**
@@ -378,4 +418,42 @@ fun squareSequenceDigit(n: Int): Int
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int
+{
+    var prev1 = 1;
+    var prev2 = 1;
+    var cur = 0;
+    var count = 2;
+    if (n < 3)
+        return 1;
+    while (true)
+    {
+        if (count < n)
+        {
+            cur = prev1 + prev2;
+            prev2 = prev1;
+            prev1 = cur;
+            var razryad = 0;
+            var tempCur = cur;
+            while (tempCur > 0)
+            {
+                razryad++;
+                tempCur /= 10;
+            }
+            count += razryad;
+        }
+        if (count == n)
+        {
+            return cur % 10;
+            break;
+        }
+        if (count > n)
+        {
+            for (i in 1..(count - n))
+                cur /= 10
+            return cur % 10;
+            break;
+        }
+    }
+}
+
