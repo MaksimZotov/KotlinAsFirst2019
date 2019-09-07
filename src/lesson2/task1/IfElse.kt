@@ -73,14 +73,12 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double
 fun ageDescription(age: Int): String
 {
     var ageStr = "";
-    if ((age <= 14 && age >= 11) || (age <= 114 && age >= 111) ||
-        (age % 10 >= 5 && age % 10 <= 10)
-    )
-        ageStr = "лет"
+    ageStr = if ((age in 11..14) || (age in 111..114) || (age % 10 in 5..10))
+        "лет"
     else if (age % 10 == 1)
-        ageStr = "год"
+        "год"
     else
-        ageStr = "года"
+        "года"
     return "$age $ageStr";
 }
 
@@ -98,18 +96,18 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double
 {
-    var halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0;
+    val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0;
     var time = 0.0;
     if (halfWay <= t1 * v1)
         time = halfWay / v1;
     else if (halfWay > t1 * v1 && halfWay <= t1 * v1 + t2 * v2)
     {
-        var dif = halfWay - t1 * v1;
+        val dif = halfWay - t1 * v1;
         time = t1 + dif / v2;
     }
     else if (halfWay > t1 * v1 + t2 * v2)
     {
-        var dif = halfWay - (t1 * v1 + t2 * v2);
+        val dif = halfWay - (t1 * v1 + t2 * v2);
         time = t1 + t2 + dif / v3;
     }
     return time;
@@ -136,12 +134,12 @@ fun whichRookThreatens(
         return result;
     else
     {
-        if ((kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2))
-            result = 1;
+        result = if ((kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2))
+            1;
         else if ((kingX == rookX2 || kingY == rookY2) && (kingX != rookX1 && kingY != rookY1))
-            result = 2;
+            2;
         else
-            result = 3;
+            3;
     }
     return result;
 }
@@ -167,12 +165,12 @@ fun rookOrBishopThreatens(
         return result;
     else
     {
-        if ((kingX == rookX || kingY == rookY) && (abs(kingX - bishopX) != abs(kingY - bishopY)))
-            result = 1;
+        result = if ((kingX == rookX || kingY == rookY) && (abs(kingX - bishopX) != abs(kingY - bishopY)))
+            1;
         else if ((kingX != rookX && kingY != rookY) && (abs(kingX - bishopX) == abs(kingY - bishopY)))
-            result = 2;
+            2;
         else
-            result = 3;
+            3;
     }
     return result;
 }
@@ -188,16 +186,16 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int
 {
     var result = -1;
-    var C = max(a, max(b, c));
-    var A = min(a, min(b, c));
-    var B = (a + b + c) - (A + C);
-    if (A + B <= C)
+    val cc = max(a, max(b, c));
+    val aa = min(a, min(b, c));
+    val bb = (a + b + c) - (aa + cc);
+    if (aa + bb <= cc)
         return result;
-    else if (C * C < A * A + B * B)
+    else if (cc * cc < aa * aa + bb * bb)
         result = 0;
-    else if (C * C == A * A + B * B)
+    else if (cc * cc == aa * aa + bb * bb)
         result = 1;
-    else if (C * C > A * A + B * B)
+    else if (cc * cc > aa * aa + bb * bb)
         result = 2;
     return result;
 }
@@ -212,23 +210,23 @@ fun triangleKind(a: Double, b: Double, c: Double): Int
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int
 {
     var result = -1;
-    var A = a;
-    var B = b;
-    var C = c;
-    var D = d;
+    var aa = a;
+    var bb = b;
+    var cc = c;
+    var dd = d;
     if (a > c)
     {
-        A = c;
-        B = d;
-        C = a;
-        D = b;
+        aa = c;
+        bb = d;
+        cc = a;
+        dd = b;
     }
-    if (B >= C && D > B && A < C)
-        result = B - C;
-    else if (A <= C && D <= B)
-        result = D - C;
-    else if (C <= A && B <= D)
-        result = B - A;
+    if (bb >= cc && dd > bb && aa < dd)
+        result = bb - cc;
+    else if (aa <= cc && dd <= bb)
+        result = dd - cc;
+    else if (cc <= aa && bb <= dd)
+        result = bb - aa;
     return result;
 }
 

@@ -97,10 +97,10 @@ fun digitNumber(n: Int): Int
  */
 fun fib(n: Int): Int
 {
-    if (n <= 2)
-        return 1;
+    return if (n <= 2)
+        1;
     else
-        return fib(n - 1) + fib(n - 2);
+        fib(n - 1) + fib(n - 2);
 }
 
 /**
@@ -112,31 +112,31 @@ fun fib(n: Int): Int
 fun lcm(m: Int, n: Int): Int
 {
     var result = 1;
-    var M = m;
-    var N = n;
+    var mm = m;
+    var nn = n;
     var count = 2;
-    while (M > 1 || N > 1)
+    while (mm > 1 || nn > 1)
     {
-        if (M % count == 0 && N % count == 0)
+        if (mm % count == 0 && nn % count == 0)
         {
             result *= count;
-            M /= count;
-            N /= count;
-            if (M % count != 0 || N % count != 0)
+            mm /= count;
+            nn /= count;
+            if (mm % count != 0 || nn % count != 0)
                 count++
         }
-        else if (M % count == 0)
+        else if (mm % count == 0)
         {
             result *= count;
-            M /= count;
-            if (M % count != 0)
+            mm /= count;
+            if (mm % count != 0)
                 count++;
         }
-        else if (N % count == 0)
+        else if (nn % count == 0)
         {
             result *= count;
-            N /= count;
-            if (N % count != 0)
+            nn /= count;
+            if (nn % count != 0)
                 count++;
         }
         else
@@ -188,16 +188,16 @@ fun maxDivisor(n: Int): Int
  */
 fun isCoPrime(m: Int, n: Int): Boolean
 {
-    var M = m;
-    var N = n;
-    while (M != N)
+    var mm = m;
+    var nn = n;
+    while (mm != nn)
     {
-        if (M > N)
-            M -= N;
-        if (M < N)
-            N -= M;
+        if (mm > nn)
+            mm -= nn;
+        if (mm < nn)
+            nn -= mm;
     }
-    return M == 1;
+    return mm == 1;
 }
 
 
