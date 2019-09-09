@@ -11,17 +11,15 @@ import kotlin.math.sqrt
  * Найти все корни уравнения x^2 = y
  */
 fun sqRoots(y: Double) =
-    when
-    {
-        y < 0 -> listOf()
-        y == 0.0 -> listOf(0.0)
-        else ->
-        {
-            val root = sqrt(y)
-            // Результат!
-            listOf(-root, root)
+        when {
+            y < 0 -> listOf()
+            y == 0.0 -> listOf(0.0)
+            else -> {
+                val root = sqrt(y)
+                // Результат!
+                listOf(-root, root)
+            }
         }
-    }
 
 /**
  * Пример
@@ -29,10 +27,8 @@ fun sqRoots(y: Double) =
  * Найти все корни биквадратного уравнения ax^4 + bx^2 + c = 0.
  * Вернуть список корней (пустой, если корней нет)
  */
-fun biRoots(a: Double, b: Double, c: Double): List<Double>
-{
-    if (a == 0.0)
-    {
+fun biRoots(a: Double, b: Double, c: Double): List<Double> {
+    if (a == 0.0) {
         return if (b == 0.0) listOf()
         else sqRoots(-c / b)
     }
@@ -49,13 +45,10 @@ fun biRoots(a: Double, b: Double, c: Double): List<Double>
  *
  * Выделить в список отрицательные элементы из заданного списка
  */
-fun negativeList(list: List<Int>): List<Int>
-{
+fun negativeList(list: List<Int>): List<Int> {
     val result = mutableListOf<Int>()
-    for (element in list)
-    {
-        if (element < 0)
-        {
+    for (element in list) {
+        if (element < 0) {
             result.add(element)
         }
     }
@@ -67,13 +60,10 @@ fun negativeList(list: List<Int>): List<Int>
  *
  * Изменить знак для всех положительных элементов списка
  */
-fun invertPositives(list: MutableList<Int>)
-{
-    for (i in 0 until list.size)
-    {
+fun invertPositives(list: MutableList<Int>) {
+    for (i in 0 until list.size) {
         val element = list[i]
-        if (element > 0)
-        {
+        if (element > 0) {
             list[i] = -element
         }
     }
@@ -102,11 +92,9 @@ fun squares(vararg array: Int) = squares(array.toList()).toTypedArray()
  * Пробелы не следует принимать во внимание при сравнении символов, например, строка
  * "А роза упала на лапу Азора" является палиндромом.
  */
-fun isPalindrome(str: String): Boolean
-{
+fun isPalindrome(str: String): Boolean {
     val lowerCase = str.toLowerCase().filter { it != ' ' }
-    for (i in 0..lowerCase.length / 2)
-    {
+    for (i in 0..lowerCase.length / 2) {
         if (lowerCase[i] != lowerCase[lowerCase.length - i - 1]) return false
     }
     return true
@@ -127,8 +115,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double
-{
+fun abs(v: List<Double>): Double {
     var sqrSum = 0.0;
     for (i in v)
         sqrSum += i * i;
@@ -140,8 +127,7 @@ fun abs(v: List<Double>): Double
  *
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
-fun mean(list: List<Double>): Double
-{
+fun mean(list: List<Double>): Double {
     if (list.isEmpty())
         return 0.0;
     var sum = 0.0;
@@ -158,8 +144,7 @@ fun mean(list: List<Double>): Double
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double>
-{
+fun center(list: MutableList<Double>): MutableList<Double> {
     var sum = 0.0;
     for (i in list)
         sum += i;
@@ -176,8 +161,7 @@ fun center(list: MutableList<Double>): MutableList<Double>
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int
-{
+fun times(a: List<Int>, b: List<Int>): Int {
     var result = 0;
     for (i in 0 until a.size)
         result += a[i] * b[i];
@@ -192,12 +176,10 @@ fun times(a: List<Int>, b: List<Int>): Int
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int
-{
+fun polynom(p: List<Int>, x: Int): Int {
     var result = 0;
     var xx = 1;
-    for (i in 0 until p.size)
-    {
+    for (i in 0 until p.size) {
         result += p[i] * xx;
         xx *= x;
     }
@@ -214,10 +196,8 @@ fun polynom(p: List<Int>, x: Int): Int
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int>
-{
-    for (i in (list.size - 1) downTo 1)
-    {
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+    for (i in (list.size - 1) downTo 1) {
         var sum = 0;
         for (j in 0..i)
             sum += list[j];
@@ -233,21 +213,17 @@ fun accumulate(list: MutableList<Int>): MutableList<Int>
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int>
-{
+fun factorize(n: Int): List<Int> {
     var list = mutableListOf<Int>();
     var number = n;
     var count = 2;
-    while (number > 1)
-    {
-        if (number % count == 0)
-        {
+    while (number > 1) {
+        if (number % count == 0) {
             list.add(count);
             number /= count;
             if (number % count != 0)
                 count++;
-        }
-        else
+        } else
             count++;
     }
     return list;
@@ -260,23 +236,19 @@ fun factorize(n: Int): List<Int>
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String
-{
+fun factorizeToString(n: Int): String {
     var result = "";
     var number = n;
     var count = 2;
-    while (number > 1)
-    {
-        if (number % count == 0)
-        {
+    while (number > 1) {
+        if (number % count == 0) {
             result += "$count"
             if (number / (count + 1) > 1)
                 result += "*";
             number /= count;
             if (number % count != 0)
                 count++;
-        }
-        else
+        } else
             count++;
     }
     return result;
@@ -289,17 +261,14 @@ fun factorizeToString(n: Int): String
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int>
-{
+fun convert(n: Int, base: Int): List<Int> {
     var list = mutableListOf<Int>();
     var nn = n;
-    while (nn > 0)
-    {
+    while (nn > 0) {
         list.add(nn % base);
         nn /= base;
     }
-    for (i in 0..(list.size - 1) / 2)
-    {
+    for (i in 0..(list.size - 1) / 2) {
         var t = list[i];
         list[i] = list[list.size - 1 - i];
         list[list.size - 1 - i] = t;
@@ -318,18 +287,16 @@ fun convert(n: Int, base: Int): List<Int>
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String
-{
+fun convertToString(n: Int, base: Int): String {
     var result = "";
     var stringDigit = "";
     var digitsAndAlphabet = listOf<Char>(
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     );
     var nn = n;
-    while (nn > 0)
-    {
+    while (nn > 0) {
         stringDigit += digitsAndAlphabet[nn % base];
         nn /= base;
     }
@@ -345,11 +312,9 @@ fun convertToString(n: Int, base: Int): String
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int
-{
+fun decimal(digits: List<Int>, base: Int): Int {
     var result = 0;
-    for ((count, i) in ((digits.size - 1) downTo 0).withIndex())
-    {
+    for ((count, i) in ((digits.size - 1) downTo 0).withIndex()) {
         var cur = digits[i];
         for (j in 1..count)
             cur *= base;
@@ -371,16 +336,14 @@ fun decimal(digits: List<Int>, base: Int): Int
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int
-{
+fun decimalFromString(str: String, base: Int): Int {
     var result = 0;
     var digitsAndAlphabet = listOf<Char>(
-        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-        'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
     );
-    for ((count, i) in ((str.length - 1) downTo 0).withIndex())
-    {
+    for ((count, i) in ((str.length - 1) downTo 0).withIndex()) {
         var cur = 0;
         for (j in 0 until digitsAndAlphabet.size)
             if (digitsAndAlphabet[j] == str[i])

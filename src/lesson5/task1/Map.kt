@@ -10,8 +10,8 @@ package lesson5.task1
  * игнорируется.
  */
 fun shoppingListCost(
-    shoppingList: List<String>,
-    costs: Map<String, Double>
+        shoppingList: List<String>,
+        costs: Map<String, Double>
 ): Double {
     var totalCost = 0.0
 
@@ -32,8 +32,8 @@ fun shoppingListCost(
  * для которых телефон начинается с заданного кода страны `countryCode`
  */
 fun filterByCountryCode(
-    phoneBook: MutableMap<String, String>,
-    countryCode: String
+        phoneBook: MutableMap<String, String>,
+        countryCode: String
 ) {
     val namesToRemove = mutableListOf<String>()
 
@@ -55,8 +55,8 @@ fun filterByCountryCode(
  * и вернуть отфильтрованный текст
  */
 fun removeFillerWords(
-    text: List<String>,
-    vararg fillerWords: String
+        text: List<String>,
+        vararg fillerWords: String
 ): List<String> {
     val fillerWordSet = setOf(*fillerWords)
 
@@ -91,8 +91,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>>
-{
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     var map: Map<Int, List<String>> = mapOf();
     return map;
 }

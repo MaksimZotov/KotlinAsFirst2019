@@ -12,7 +12,7 @@ import kotlin.math.sqrt
  * Лежит ли точка (x, y) внутри окружности с центром в (x0, y0) и радиусом r?
  */
 fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
-    sqr(x - x0) + sqr(y - y0) <= sqr(r)
+        sqr(x - x0) + sqr(y - y0) <= sqr(r)
 
 /**
  * Простая
@@ -21,7 +21,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean =
-    number / 100 / 10 + number / 100 % 10 == number / 10 % 10 + number % 10;
+        number / 100 / 10 + number / 100 % 10 == number / 10 % 10 + number % 10;
 
 /**
  * Простая
@@ -30,9 +30,8 @@ fun isNumberHappy(number: Int): Boolean =
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean
-{
-    var result = false;
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
+    var result = false
     if (abs(x1 - x2) == abs(y1 - y2) || x1 == x2 || y1 == y2)
         result = true;
     return result;
@@ -45,8 +44,7 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int
-{
+fun daysInMonth(month: Int, year: Int): Int {
     val days: Array<Int> = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
     if (month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
         return 29;
@@ -61,10 +59,10 @@ fun daysInMonth(month: Int, year: Int): Int
  * Вернуть true, если утверждение верно
  */
 fun circleInside(
-    x1: Double, y1: Double, r1: Double,
-    x2: Double, y2: Double, r2: Double
+        x1: Double, y1: Double, r1: Double,
+        x2: Double, y2: Double, r2: Double
 ): Boolean =
-    sqrt(sqr(x1 - x2) + sqr(y1 - y2)) + r1 <= r2;
+        sqrt(sqr(x1 - x2) + sqr(y1 - y2)) + r1 <= r2;
 
 /**
  * Средняя
@@ -75,15 +73,14 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean
-{
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     var result = false;
     if (a <= r && b <= s ||
-        a <= s && b <= r ||
-        a <= r && c <= s ||
-        a <= s && c <= r ||
-        b <= r && c <= s ||
-        b <= s && c <= r)
+            a <= s && b <= r ||
+            a <= r && c <= s ||
+            a <= s && c <= r ||
+            b <= r && c <= s ||
+            b <= s && c <= r)
         result = true;
     return result;
 }
