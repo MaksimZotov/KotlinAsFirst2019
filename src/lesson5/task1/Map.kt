@@ -95,11 +95,11 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     var map: MutableMap<Int, List<String>> = mutableMapOf();
     for (grade in 2..5) {
         var list: MutableList<String> = mutableListOf();
-        for (item in grades)
-            if (item.value == grade)
-                list.add(item.key);
+        for ((key, value) in grades)
+            if (value == grade)
+                list.add(key);
         if (list.isNotEmpty())
-            map.put(grade, list);
+            map[grade] = list;
     }
     return map;
 }
@@ -144,7 +144,15 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *   subtractOf(a = mutableMapOf("a" to "z"), mapOf("a" to "z"))
  *     -> a changes to mutableMapOf() aka becomes empty
  */
-fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TODO()
+fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
+    for ((keyA, valueA) in a) {
+        for ((keyB, valueB) in b) {
+            if (keyA == keyB && valueA == valueB)
+                a.remove(keyA, valueA);
+            break;
+        }
+    }
+}
 
 /**
  * Простая
@@ -153,7 +161,16 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit = TO
  * В выходном списке не должно быть повторяюихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String>
+{
+    var list: MutableList<String> = mutableListOf();
+    for (aa in a)
+        for (bb in b)
+            if (aa == bb)
+                list.add(aa);
+    return list;
+}
+
 
 /**
  * Средняя
