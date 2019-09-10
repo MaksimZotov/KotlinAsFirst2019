@@ -92,9 +92,18 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var map: Map<Int, List<String>> = mapOf();
+    var map: MutableMap<Int, List<String>> = mutableMapOf();
+    for (grade in 2..5) {
+        var list: MutableList<String> = mutableListOf();
+        for (item in grades)
+            if (item.value == grade)
+                list.add(item.key);
+        if (list.isNotEmpty())
+            map.put(grade, list);
+    }
     return map;
 }
+
 
 /**
  * Простая
