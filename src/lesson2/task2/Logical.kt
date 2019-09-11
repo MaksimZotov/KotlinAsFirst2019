@@ -3,7 +3,10 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import lesson1.task1.trackLength
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.sqrt
 
 /**
@@ -30,12 +33,8 @@ fun isNumberHappy(number: Int): Boolean =
  * Определить, угрожают ли они друг другу. Вернуть true, если угрожают.
  * Считать, что ферзи не могут загораживать друг друга.
  */
-fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
-    var result = false
-    if (abs(x1 - x2) == abs(y1 - y2) || x1 == x2 || y1 == y2)
-        result = true;
-    return result;
-}
+fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
+        abs(x1 - x2) == abs(y1 - y2) || x1 == x2 || y1 == y2
 
 
 /**
@@ -44,11 +43,12 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Дан номер месяца (от 1 до 12 включительно) и год (положительный).
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
-fun daysInMonth(month: Int, year: Int): Int {
-    val days: Array<Int> = arrayOf(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
-    if (month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0))
-        return 29;
-    return days[month - 1];
+fun daysInMonth(month: Int, year: Int): Int = when {
+    month == 1 || month == 3 || month == 5 || month in 7..8 || month == 10 || month == 12 -> 31
+    month == 4 || month == 6 || month == 9 || month == 11 -> 30
+    month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) -> 29
+    else -> 28
+
 }
 
 /**
@@ -62,7 +62,7 @@ fun circleInside(
         x1: Double, y1: Double, r1: Double,
         x2: Double, y2: Double, r2: Double
 ): Boolean =
-        sqrt(sqr(x1 - x2) + sqr(y1 - y2)) + r1 <= r2;
+        trackLength(x1, y1, x2, y2) + r1 <= r2;
 
 /**
  * Средняя
@@ -73,14 +73,5 @@ fun circleInside(
  * кирпич 4 х 4 х 4 пройдёт через отверстие 4 х 4.
  * Вернуть true, если кирпич пройдёт
  */
-fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    var result = false;
-    if (a <= r && b <= s ||
-            a <= s && b <= r ||
-            a <= r && c <= s ||
-            a <= s && c <= r ||
-            b <= r && c <= s ||
-            b <= s && c <= r)
-        result = true;
-    return result;
-}
+fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean =
+        minOf(a, b, c) <= min(r, s) && a + b + c - minOf(a, b, c) - maxOf(a, b, c) <= max(r, s)

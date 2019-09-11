@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -66,14 +67,12 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    var ageStr = "";
-    ageStr = if ((age in 11..14) || (age in 111..114) || (age % 10 in 5..10))
-        "лет"
-    else if (age % 10 == 1)
-        "год"
-    else
-        "года"
-    return "$age $ageStr";
+    val ageStr = when {
+        age in 11..14 || age in 111..114 || age % 10 in 5..10 -> "лет"
+        age % 10 == 1 -> "год"
+        else -> "года"
+    }
+    return "$age $ageStr"
 }
 
 
@@ -89,18 +88,15 @@ fun timeForHalfWay(
         t2: Double, v2: Double,
         t3: Double, v3: Double
 ): Double {
-    val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0;
-    var time = 0.0;
-    if (halfWay <= t1 * v1)
-        time = halfWay / v1;
-    else if (halfWay > t1 * v1 && halfWay <= t1 * v1 + t2 * v2) {
-        val dif = halfWay - t1 * v1;
-        time = t1 + dif / v2;
-    } else if (halfWay > t1 * v1 + t2 * v2) {
-        val dif = halfWay - (t1 * v1 + t2 * v2);
-        time = t1 + t2 + dif / v3;
+    val halfWay = (t1 * v1 + t2 * v2 + t3 * v3) / 2.0
+    val s1 = t1 * v1
+    val s12 = t1 * v1 + t2 * v2
+    return when {
+        halfWay <= s1 -> halfWay / v1
+        halfWay > s1 && halfWay <= s12 -> t1 + (halfWay - s1) / v2
+        halfWay > s12 -> t1 + t2 + (halfWay - s12) / v3
+        else -> -1.0
     }
-    return time;
 }
 
 
@@ -118,18 +114,12 @@ fun whichRookThreatens(
         rookX1: Int, rookY1: Int,
         rookX2: Int, rookY2: Int
 ): Int {
-    var result = 0;
-    if (kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2)
-        return result;
-    else {
-        result = if ((kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2))
-            1;
-        else if ((kingX == rookX2 || kingY == rookY2) && (kingX != rookX1 && kingY != rookY1))
-            2;
-        else
-            3;
+    return when {
+        kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
+        (kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2) -> 1
+        (kingX == rookX2 || kingY == rookY2) && (kingX != rookX1 && kingY != rookY1) -> 2
+        else -> 3
     }
-    return result;
 }
 
 /**
@@ -147,18 +137,12 @@ fun rookOrBishopThreatens(
         rookX: Int, rookY: Int,
         bishopX: Int, bishopY: Int
 ): Int {
-    var result = 0;
-    if (kingX != rookX && kingY != rookY && abs(kingX - bishopX) != abs(kingY - bishopY))
-        return result;
-    else {
-        result = if ((kingX == rookX || kingY == rookY) && (abs(kingX - bishopX) != abs(kingY - bishopY)))
-            1;
-        else if ((kingX != rookX && kingY != rookY) && (abs(kingX - bishopX) == abs(kingY - bishopY)))
-            2;
-        else
-            3;
+    return when {
+        kingX != rookX && kingY != rookY && abs(kingX - bishopX) != abs(kingY - bishopY) -> 0
+        (kingX == rookX || kingY == rookY) && (abs(kingX - bishopX) != abs(kingY - bishopY)) -> 1
+        (kingX != rookX && kingY != rookY) && (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 2
+        else -> 3
     }
-    return result;
 }
 
 /**
@@ -170,19 +154,19 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var result = -1;
-    val cc = max(a, max(b, c));
-    val aa = min(a, min(b, c));
-    val bb = (a + b + c) - (aa + cc);
-    if (aa + bb <= cc)
-        return result;
-    else if (cc * cc < aa * aa + bb * bb)
-        result = 0;
-    else if (cc * cc == aa * aa + bb * bb)
-        result = 1;
-    else if (cc * cc > aa * aa + bb * bb)
-        result = 2;
-    return result;
+    val ccSqrt = maxOf(a, b, c)
+    val aaSqrt = minOf(a, b, c)
+    val bbSqrt = (a + b + c) - (ccSqrt + aaSqrt);
+    val cc = sqr(ccSqrt)
+    val aa = sqr(aaSqrt)
+    val bb = sqr(bbSqrt)
+    return when {
+        aaSqrt + bbSqrt <= ccSqrt -> -1
+        cc < aa + bb -> 0
+        cc == aa + bb -> 1
+        cc > aa + bb -> 2
+        else -> -1
+    }
 }
 
 /**
@@ -194,23 +178,15 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var result = -1;
-    var aa = a;
-    var bb = b;
-    var cc = c;
-    var dd = d;
-    if (a > c) {
-        aa = c;
-        bb = d;
-        cc = a;
-        dd = b;
+    val aa = min(a, c)
+    val bb = min(b, d)
+    val cc = max(a, c)
+    val dd = max(b, d)
+    return when {
+        bb in cc until dd && aa < dd -> bb - cc
+        aa <= cc && dd <= bb -> dd - cc
+        cc <= aa && bb <= dd -> bb - aa
+        else -> -1
     }
-    if (bb >= cc && dd > bb && aa < dd)
-        result = bb - cc;
-    else if (aa <= cc && dd <= bb)
-        result = dd - cc;
-    else if (cc <= aa && bb <= dd)
-        result = bb - aa;
-    return result;
 }
 
