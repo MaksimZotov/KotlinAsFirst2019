@@ -68,7 +68,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     val ageStr = when {
-        age in 11..14 || age in 111..114 || age % 10 in 5..10 -> "лет"
+        age in 10..14 || age in 110..114 || age % 10 in 5..9 -> "лет"
         age % 10 == 1 -> "год"
         else -> "года"
     }
@@ -114,10 +114,12 @@ fun whichRookThreatens(
         rookX1: Int, rookY1: Int,
         rookX2: Int, rookY2: Int
 ): Int {
+    val firstRook = (rookX1 == kingX || rookY1 == kingY)
+    val secondRook = (rookX2 == kingX || rookY2 == kingY)
     return when {
-        kingX != rookX1 && kingX != rookX2 && kingY != rookY1 && kingY != rookY2 -> 0
-        (kingX == rookX1 || kingY == rookY1) && (kingX != rookX2 && kingY != rookY2) -> 1
-        (kingX == rookX2 || kingY == rookY2) && (kingX != rookX1 && kingY != rookY1) -> 2
+        !firstRook && !secondRook -> 0
+        firstRook && !secondRook -> 1
+        !firstRook && secondRook -> 2
         else -> 3
     }
 }
@@ -137,10 +139,12 @@ fun rookOrBishopThreatens(
         rookX: Int, rookY: Int,
         bishopX: Int, bishopY: Int
 ): Int {
+    val rook = (rookX == kingX || rookY == kingY)
+    val bishop = (abs(bishopX - kingX) == abs(bishopY - kingY))
     return when {
-        kingX != rookX && kingY != rookY && abs(kingX - bishopX) != abs(kingY - bishopY) -> 0
-        (kingX == rookX || kingY == rookY) && (abs(kingX - bishopX) != abs(kingY - bishopY)) -> 1
-        (kingX != rookX && kingY != rookY) && (abs(kingX - bishopX) == abs(kingY - bishopY)) -> 2
+        !rook && !bishop -> 0
+        rook && !bishop -> 1
+        !rook && bishop -> 2
         else -> 3
     }
 }

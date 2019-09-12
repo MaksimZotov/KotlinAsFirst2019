@@ -24,7 +24,7 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean =
-        number / 100 / 10 + number / 100 % 10 == number / 10 % 10 + number % 10;
+        number / 100 / 10 + number / 100 % 10 == number / 10 % 10 + number % 10
 
 /**
  * Простая
@@ -48,7 +48,6 @@ fun daysInMonth(month: Int, year: Int): Int = when {
     month == 4 || month == 6 || month == 9 || month == 11 -> 30
     month == 2 && year % 4 == 0 && (year % 100 != 0 || year % 400 == 0) -> 29
     else -> 28
-
 }
 
 /**
@@ -62,7 +61,7 @@ fun circleInside(
         x1: Double, y1: Double, r1: Double,
         x2: Double, y2: Double, r2: Double
 ): Boolean =
-        trackLength(x1, y1, x2, y2) + r1 <= r2;
+        trackLength(x1, y1, x2, y2) + r1 <= r2
 
 /**
  * Средняя

@@ -70,15 +70,15 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var result = 0;
-    var digit = n;
+    var result = 0
+    var digit = n
     if (digit == 0)
-        return 1;
+        return 1
     while (digit > 0) {
-        digit /= 10;
-        result++;
+        digit /= 10
+        result++
     }
-    return result;
+    return result
 }
 
 /**
@@ -107,13 +107,13 @@ fun lcm(m: Int, n: Int): Int =
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var result = 1;
+    var result = 1
     for (i in 2..n)
         if (n % i == 0) {
-            result = i;
-            break;
+            result = i
+            break
         }
-    return result;
+    return result
 }
 
 /**
@@ -121,15 +121,8 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var result = 1;
-    for (i in n - 1 downTo 2)
-        if (n % i == 0) {
-            result = i;
-            break;
-        }
-    return result;
-}
+fun maxDivisor(n: Int): Int =
+        n / minDivisor(n)
 
 /**
  * Простая
@@ -142,15 +135,15 @@ fun isCoPrime(m: Int, n: Int): Boolean =
         gcd(m, n) == 1
 
 fun gcd(m: Int, n: Int): Int {
-    var mm = m;
-    var nn = n;
+    var mm = m
+    var nn = n
     while (mm != nn) {
         if (mm > nn)
-            mm -= nn;
+            mm -= nn
         if (mm < nn)
-            nn -= mm;
+            nn -= mm
     }
-    return mm;
+    return mm
 }
 
 
@@ -164,8 +157,8 @@ fun gcd(m: Int, n: Int): Int {
 fun squareBetweenExists(m: Int, n: Int): Boolean {
     for (i in 1..sqrt(n.toDouble()).toInt())
         if (i * i in m..n)
-            return true;
-    return false;
+            return true
+    return false
 }
 
 /**
@@ -185,18 +178,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * этого для какого-либо начального X > 0.
  */
 fun collatzSteps(x: Int): Int {
-    var xx = x;
-    var count = 0;
+    var xx = x
+    var count = 0
     if (xx == 1)
-        return 0;
+        return 0
     while (true) {
         if (xx % 2 == 0)
-            xx /= 2;
+            xx /= 2
         else
-            xx = 3 * xx + 1;
+            xx = 3 * xx + 1
         count++
         if (xx == 1)
-            return count;
+            return count
     }
 }
 
@@ -211,24 +204,24 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double {
-    var xx = x;
+    var xx = x
     while (xx > 2 * PI)
         xx -= 2 * PI
-    var result = xx;
-    var number = 3;
-    var sign = -1;
+    var result = xx
+    var number = 3
+    var sign = -1
     var mult: Double
     while (true) {
-        mult = 1.0;
+        mult = 1.0
         for (i in 1..number)
-            mult *= xx;
-        result += sign * (mult / factorial(number));
+            mult *= xx
+        result += sign * (mult / factorial(number))
         if (mult / factorial(number) < eps)
-            break;
-        number += 2;
-        sign *= -1;
+            break
+        number += 2
+        sign *= -1
     }
-    return result;
+    return result
 }
 
 
@@ -242,24 +235,24 @@ fun sin(x: Double, eps: Double): Double {
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double {
-    var result = 1.0;
-    var xx = x;
+    var result = 1.0
+    var xx = x
     while (xx > 2 * PI)
         xx -= 2 * PI
-    var number = 2;
-    var sign = -1;
+    var number = 2
+    var sign = -1
     var mult: Double
     while (true) {
-        mult = 1.0;
+        mult = 1.0
         for (i in 1..number)
-            mult *= xx;
-        result += sign * (mult / factorial(number));
+            mult *= xx
+        result += sign * (mult / factorial(number))
         if (mult / factorial(number) < eps)
-            break;
-        number += 2;
-        sign *= -1;
+            break
+        number += 2
+        sign *= -1
     }
-    return result;
+    return result
 }
 
 
@@ -271,11 +264,11 @@ fun cos(x: Double, eps: Double): Double {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun revert(n: Int): Int {
-    var result = 0;
-    var nn = n;
+    var result = 0
+    var nn = n
     while (nn > 0) {
-        result = result * 10 + nn % 10;
-        nn /= 10;
+        result = result * 10 + nn % 10
+        nn /= 10
     }
     return result
 }
@@ -290,7 +283,7 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean =
-        revert(n) == n;
+        revert(n) == n
 
 /**
  * Средняя
@@ -301,16 +294,16 @@ fun isPalindrome(n: Int): Boolean =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    var nn = n;
+    var nn = n
     if (nn < 10)
-        return false;
-    val digit = nn % 10;
+        return false
+    val digit = nn % 10
     while (nn > 0) {
         if (nn % 10 != digit)
-            return true;
-        nn /= 10;
+            return true
+        nn /= 10
     }
-    return false;
+    return false
 }
 
 
@@ -324,30 +317,16 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun squareSequenceDigit(n: Int): Int {
-    var digit = 1;
-    var sqrDigit = 1;
-    var count = 1;
-    var numberDigits: Int
+    var digit = 1
+    var sqrDigit = 1
+    var count = 1
     while (true) {
         if (count < n) {
-            digit++;
-            sqrDigit = digit * digit;
-            numberDigits = 0;
-            var tempSqrDigit = sqrDigit;
-            while (tempSqrDigit > 0) {
-                tempSqrDigit /= 10;
-                numberDigits++;
-            }
-            count += numberDigits;
-        } else if (count == n) {
-            return sqrDigit % 10;
-            break;
-        } else {
-            for (i in 1..(count - n))
-                sqrDigit /= 10;
-            return sqrDigit % 10;
-            break;
-        }
+            digit++
+            sqrDigit = digit * digit
+            count += digitNumber(sqrDigit)
+        } else
+            return resultSequence(n, count, sqrDigit)
     }
 }
 
@@ -361,36 +340,30 @@ fun squareSequenceDigit(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun fibSequenceDigit(n: Int): Int {
-    var prev1 = 1;
-    var prev2 = 1;
-    var cur = 0;
-    var count = 2;
-    var numberDigits: Int;
+    var prev1 = 1
+    var prev2 = 1
+    var cur = 0
+    var count = 2
     if (n < 3)
-        return 1;
+        return 1
     while (true) {
         if (count < n) {
-            cur = prev1 + prev2;
-            prev2 = prev1;
-            prev1 = cur;
-            numberDigits = 0;
-            var tempCur = cur;
-            while (tempCur > 0) {
-                numberDigits++;
-                tempCur /= 10;
-            }
-            count += numberDigits;
-        }
-        if (count == n) {
-            return cur % 10;
-            break;
-        }
-        if (count > n) {
-            for (i in 1..(count - n))
-                cur /= 10
-            return cur % 10;
-            break;
-        }
+            cur = prev1 + prev2
+            prev2 = prev1
+            prev1 = cur
+            count += digitNumber(cur)
+        } else
+            return resultSequence(n, count, cur)
     }
 }
 
+fun resultSequence(n: Int, count: Int, current: Int): Int {
+    var cur = current
+    if (count == n)
+        return cur % 10
+    else {
+        for (i in 1..(count - n))
+            cur /= 10
+        return cur % 10
+    }
+}
