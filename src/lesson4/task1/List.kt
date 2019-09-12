@@ -118,7 +118,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double = when {
-    v.isNotEmpty() -> sqrt(v.sumByDouble { item -> sqr(item) })
+    v.isNotEmpty() -> sqrt(v.sumByDouble { sqr(it) })
     else -> 0.0
 }
 
@@ -140,12 +140,12 @@ fun mean(list: List<Double>): Double = when {
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()/* {
-    var avg = mean(list)
-    for (item in list)
-        item -= avg
+fun center(list: MutableList<Double>): List<Double> {
+    val avg = mean(list)
+    if (list.isNotEmpty())
+        list.map { it - avg }
     return list
-}*/
+}
 
 /**
  * Средняя
@@ -255,7 +255,7 @@ fun factorizeToString(n: Int): String {
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    var list = mutableListOf<Int>()
+    val list = mutableListOf<Int>()
     var nn = n
     while (nn > 0) {
         list.add(nn % base)
