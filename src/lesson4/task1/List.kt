@@ -142,8 +142,8 @@ fun mean(list: List<Double>): Double = when {
  */
 fun center(list: MutableList<Double>): List<Double> {
     val avg = mean(list)
-    if (list.isNotEmpty())
-        list.map { it - avg }
+    for (i in list.indices)
+        list[i] -= avg
     return list
 }
 
@@ -154,12 +154,8 @@ fun center(list: MutableList<Double>): List<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var result = 0
-    for (i in 0 until a.size)
-        result += a[i] * b[i]
-    return result
-}
+fun times(a: List<Int>, b: List<Int>): Int =
+        a.foldIndexed(0) { index, acc, i -> acc + i * b[index] }
 
 /**
  * Средняя
@@ -169,15 +165,8 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    var result = 0
-    var xx = 1
-    for (i in 0 until p.size) {
-        result += p[i] * xx
-        xx *= x
-    }
-    return result
-}
+fun polynom(p: List<Int>, x: Int): Int =
+        p.foldIndexed(0) { index, acc, i -> acc + i * x.toDouble().pow(index).toInt() }
 
 /**
  * Средняя
@@ -190,12 +179,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    for (i in (list.size - 1) downTo 1) {
-        var sum = 0
-        for (j in 0..i)
-            sum += list[j]
-        list[i] = sum
-    }
+    for (i in 1..list.lastIndex)
+        list[i] = list[i - 1] + list[i]
     return list
 }
 
@@ -207,7 +192,7 @@ fun accumulate(list: MutableList<Int>): MutableList<Int> {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    var list = mutableListOf<Int>()
+    val list = mutableListOf<Int>()
     var number = n
     var count = 2
     while (number > 1) {
@@ -229,23 +214,8 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var result = ""
-    var number = n
-    var count = 2
-    while (number > 1) {
-        if (number % count == 0) {
-            result += "$count"
-            if (number / (count + 1) > 1)
-                result += "*"
-            number /= count
-            if (number % count != 0)
-                count++
-        } else
-            count++
-    }
-    return result
-}
+fun factorizeToString(n: Int): String =
+        factorize(n).joinToString("*")
 
 /**
  * Средняя
@@ -261,11 +231,7 @@ fun convert(n: Int, base: Int): List<Int> {
         list.add(nn % base)
         nn /= base
     }
-    for (i in 0..(list.size - 1) / 2) {
-        var t = list[i]
-        list[i] = list[list.size - 1 - i]
-        list[list.size - 1 - i] = t
-    }
+    list.reverse()
     return list
 }
 
@@ -280,23 +246,8 @@ fun convert(n: Int, base: Int): List<Int> {
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, n.toString(base) и подобные), запрещается.
  */
-fun convertToString(n: Int, base: Int): String {
-    var result = ""
-    var stringDigit = ""
-    var digitsAndAlphabet = listOf<Char>(
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-    )
-    var nn = n
-    while (nn > 0) {
-        stringDigit += digitsAndAlphabet[nn % base]
-        nn /= base
-    }
-    for (i in (stringDigit.length - 1) downTo 0)
-        result += stringDigit[i]
-    return result
-}
+fun convertToString(n: Int, base: Int): String =
+        convert(n, base).map { if (it > 9) 'a' + (it - 10) else '0' + it }.joinToString("")
 
 /**
  * Средняя
@@ -305,17 +256,8 @@ fun convertToString(n: Int, base: Int): String {
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int {
-    var result = 0
-    for ((count, i) in ((digits.size - 1) downTo 0).withIndex()) {
-        var cur = digits[i]
-        for (j in 1..count)
-            cur *= base
-        result += cur
-    }
-    return result
-}
-
+fun decimal(digits: List<Int>, base: Int): Int =
+        digits.reversed().foldIndexed(0) { index, acc, i -> acc + base.toDouble().pow(index).toInt() * i }
 
 /**
  * Сложная
@@ -330,22 +272,11 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var result = 0
-    var digitsAndAlphabet = listOf<Char>(
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-            'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-    )
-    for ((count, i) in ((str.length - 1) downTo 0).withIndex()) {
-        var cur = 0
-        for (j in 0 until digitsAndAlphabet.size)
-            if (digitsAndAlphabet[j] == str[i])
-                cur = j
-        for (j in 1..count)
-            cur *= base
-        result += cur
+    val list = str.map {
+        if (it <= '9') it.toInt() - 48
+        else it.toInt() - 87
     }
-    return result
+    return decimal(list, base)
 }
 
 /**
