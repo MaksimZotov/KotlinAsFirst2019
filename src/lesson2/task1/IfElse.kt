@@ -68,7 +68,7 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  */
 fun ageDescription(age: Int): String {
     val ageStr = when {
-        age in 10..14 || age in 110..114 || age % 10 in 5..9 -> "лет"
+        age in 11..14 || age in 111..114 || age % 10 in 5..9 || age % 10 == 0 -> "лет"
         age % 10 == 1 -> "год"
         else -> "года"
     }

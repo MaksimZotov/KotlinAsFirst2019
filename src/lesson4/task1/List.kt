@@ -225,6 +225,8 @@ fun factorizeToString(n: Int): String =
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
+    if (n == 0)
+        return listOf(0)
     val list = mutableListOf<Int>()
     var nn = n
     while (nn > 0) {

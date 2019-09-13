@@ -211,26 +211,8 @@ fun collatzSteps(x: Int): Int {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double {
-    var xx = x
-    while (xx > 2 * PI)
-        xx -= 2 * PI
-    var result = xx
-    var number = 3
-    var sign = -1
-    var mult: Double
-    while (true) {
-        mult = 1.0
-        for (i in 1..number)
-            mult *= xx
-        result += sign * (mult / factorial(number))
-        if (mult / factorial(number) < eps)
-            break
-        number += 2
-        sign *= -1
-    }
-    return result
-}
+fun sin(x: Double, eps: Double): Double =
+        calculateTrigonometry(calculateX(x), eps, calculateX(x), 3)
 
 
 /**
@@ -242,18 +224,19 @@ fun sin(x: Double, eps: Double): Double {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
-fun cos(x: Double, eps: Double): Double {
-    var result = 1.0
-    var xx = x
-    while (xx > 2 * PI)
-        xx -= 2 * PI
-    var number = 2
+fun cos(x: Double, eps: Double): Double =
+        calculateTrigonometry(calculateX(x), eps, 1.0, 2)
+
+
+fun calculateTrigonometry(x: Double, eps: Double, init: Double, num: Int): Double {
+    var result = init
+    var number = num
     var sign = -1
     var mult: Double
     while (true) {
         mult = 1.0
         for (i in 1..number)
-            mult *= xx
+            mult *= x
         result += sign * (mult / factorial(number))
         if (mult / factorial(number) < eps)
             break
@@ -263,6 +246,14 @@ fun cos(x: Double, eps: Double): Double {
     return result
 }
 
+fun calculateX(x: Double): Double {
+    var xx = x
+    while (xx > 2 * PI)
+        xx -= 2 * PI
+    while (xx < 2 * PI)
+        xx += 2 * PI
+    return xx
+}
 
 /**
  * Средняя
