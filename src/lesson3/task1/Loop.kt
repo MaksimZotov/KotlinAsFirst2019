@@ -4,6 +4,7 @@ package lesson3.task1
 
 import lesson1.task1.sqr
 import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 /**
@@ -71,7 +72,7 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var result = 0
-    var digit = n
+    var digit = abs(n)
     if (digit == 0)
         return 1
     while (digit > 0) {
@@ -87,9 +88,16 @@ fun digitNumber(n: Int): Int {
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = when {
-    n <= 2 -> 1
-    else -> fib(n - 1) + fib(n - 2)
+fun fib(n: Int): Int {
+    var prev1 = 1
+    var prev2 = 1
+    var cur = 1
+    for (i in 3..n) {
+        cur = prev1 + prev2
+        prev1 = prev2
+        prev2 = cur
+    }
+    return cur
 }
 
 /**
@@ -155,7 +163,7 @@ fun gcd(m: Int, n: Int): Int {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (i in 1..sqrt(n.toDouble()).toInt())
+    for (i in 0..sqrt(n.toDouble()).toInt())
         if (i * i in m..n)
             return true
     return false
