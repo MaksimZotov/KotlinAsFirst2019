@@ -291,18 +291,15 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val romanDigits = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
-    val arabDigits = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    val romanDigits = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arabDigits = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var result = ""
     var nn = n
-    var ind = romanDigits.lastIndex
-    while (nn > 0) {
-        while (nn >= arabDigits[ind]) {
-            result += romanDigits[ind]
-            nn -= arabDigits[ind]
+    for (i in arabDigits.lastIndex downTo 0)
+        while (nn >= arabDigits[i]) {
+            result += romanDigits[i]
+            nn -= arabDigits[i]
         }
-        ind--
-    }
     return result
 }
 
