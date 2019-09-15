@@ -323,46 +323,41 @@ fun russian(n: Int): String {
             "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
     val level4 = arrayOf("ноль", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи",
             "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
-    val level51 = level21 + "тысяч"
-    val level52 = level22 + "тысяч"
     val level6 = level3 + "тысяч"
-    val array = arrayOf(level1, level21, level22, level3, level4, level51, level52, level6)
     var result = ""
     var nn = n
     var digitNum: Int
     while (nn > 0) {
         digitNum = digitNumber(nn)
         if (digitNum == 1)
-            result += array[0][nn]
+            result += level1[nn]
         else if (digitNum == 2) {
             if (nn / 10 == 1) {
-                result += array[1][nn % 10]
-                nn -= nn / (10.0.pow(digitNum - 2).toInt()) * 10.0.pow(digitNum - 2).toInt()
-                continue
+                result += level21[nn % 10]
+                break
             } else
-                result += array[2][nn / 10] + " "
-        } else if (digitNum in 3..4)
-            result += array[digitNum][nn / (10.0.pow(digitNum - 1).toInt())] + " "
+                result += level22[nn / 10] + " "
+        } else if (digitNum == 3)
+            result += level3[nn / (10.0.pow(2).toInt())] + " "
+        else if (digitNum == 4)
+            result += level4[nn / (10.0.pow(3).toInt())] + " "
         else if (digitNum == 5) {
-            var t = nn / (10.0.pow(digitNum - 1).toInt())
-            var m = nn / (10.0.pow(digitNum - 2).toInt())
-            if (nn / (10.0.pow(digitNum - 1).toInt()) == 1) {
-                result += array[1][m % 10] + " тысяч "
-                nn -= nn / (10.0.pow(digitNum - 2).toInt()) * 10.0.pow(digitNum - 2).toInt()
-                continue
+            var t = 10.0.pow(4).toInt()
+            if (nn / t == 1) {
+                result += level21[nn / (t / 10) % 10] + " тысяч "
+                nn -= nn / (t / 10) * t / 10
             } else
-                result += array[2][t] + " "
+                result += level22[nn / t] + " "
         } else {
-            var t = nn % 100_000 == 0
-            var m = nn / 1000 % 100 == 0
-            if (t) {
-                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " тысяч"
+            result += level6[nn / (10.0.pow(5).toInt())]
+            if (nn % 100_000 == 0) {
+                result += " тысяч"
                 nn %= 1000
-            } else if (m) {
-                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " тысяч "
+            } else if (nn / 1000 % 100 == 0) {
+                result += " тысяч "
                 nn %= 1000
             } else
-                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " "
+                result += " "
         }
         nn -= nn / (10.0.pow(digitNum - 1).toInt()) * 10.0.pow(digitNum - 1).toInt()
     }
