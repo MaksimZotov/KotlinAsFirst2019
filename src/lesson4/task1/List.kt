@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import lesson3.task1.digitNumber
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -289,7 +290,21 @@ fun decimalFromString(str: String, base: Int): Int {
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val romanDigits = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arabDigits = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    var result = ""
+    var nn = n
+    var ind = romanDigits.lastIndex
+    while (nn > 0) {
+        while (nn >= arabDigits[ind]) {
+            result += romanDigits[ind]
+            nn -= arabDigits[ind]
+        }
+        ind--
+    }
+    return result
+}
 
 /**
  * Очень сложная
@@ -298,4 +313,58 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    val level1 = arrayOf("ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
+    val level21 = arrayOf("ноль", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+            "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+    val level22 = arrayOf("ноль", "десять", "двадцать", "тридцать", "сорок",
+            "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+    val level3 = arrayOf("ноль", "сто", "двести", "триста", "четыреста",
+            "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+    val level4 = arrayOf("ноль", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи",
+            "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
+    val level51 = level21 + "тысяч"
+    val level52 = level22 + "тысяч"
+    val level6 = level3 + "тысяч"
+    val array = arrayOf(level1, level21, level22, level3, level4, level51, level52, level6)
+    var result = ""
+    var nn = n
+    var digitNum: Int
+    while (nn > 0) {
+        digitNum = digitNumber(nn)
+        if (digitNum == 1)
+            result += array[0][nn]
+        else if (digitNum == 2) {
+            if (nn / 10 == 1) {
+                result += array[1][nn % 10]
+                nn -= nn / (10.0.pow(digitNum - 2).toInt()) * 10.0.pow(digitNum - 2).toInt()
+                continue
+            } else
+                result += array[2][nn / 10] + " "
+        } else if (digitNum in 3..4)
+            result += array[digitNum][nn / (10.0.pow(digitNum - 1).toInt())] + " "
+        else if (digitNum == 5) {
+            var t = nn / (10.0.pow(digitNum - 1).toInt())
+            var m = nn / (10.0.pow(digitNum - 2).toInt())
+            if (nn / (10.0.pow(digitNum - 1).toInt()) == 1) {
+                result += array[1][m % 10] + " тысяч "
+                nn -= nn / (10.0.pow(digitNum - 2).toInt()) * 10.0.pow(digitNum - 2).toInt()
+                continue
+            } else
+                result += array[2][t] + " "
+        } else {
+            var t = nn % 100_000 == 0
+            var m = nn / 1000 % 100 == 0
+            if (t) {
+                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " тысяч"
+                nn %= 1000
+            } else if (m) {
+                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " тысяч "
+                nn %= 1000
+            } else
+                result += array[digitNum + 1][nn / (10.0.pow(digitNum - 1).toInt())] + " "
+        }
+        nn -= nn / (10.0.pow(digitNum - 1).toInt()) * 10.0.pow(digitNum - 1).toInt()
+    }
+    return result
+}
