@@ -92,7 +92,7 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
-    var map: MutableMap<Int, MutableList<String>> = mutableMapOf();
+    val map: MutableMap<Int, MutableList<String>> = mutableMapOf();
     for ((k, v) in grades) {
         if (map[v] != null) map[v]?.add(k)
         else map[v] = mutableListOf(k)
@@ -112,18 +112,9 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
-    var count = 0;
-    for ((keyA, valueA) in a) {
-        for ((keyB, valueB) in b) {
-            count++;
-            if (keyA == keyB && valueA == valueB)
-                break;
-            if (keyA != keyB && valueA != valueB && count == b.size)
-                return false;
-        }
-        count = 0;
-    }
-    return true;
+    for ((k, v) in a)
+        if (b[k] == v) continue else return false
+    return true
 }
 
 /**
@@ -141,13 +132,8 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
-    for ((keyA, valueA) in a) {
-        for ((keyB, valueB) in b) {
-            if (keyA == keyB && valueA == valueB)
-                a.remove(keyA, valueA);
-            break;
-        }
-    }
+    for ((k, v) in b)
+        a.remove(k, v)
 }
 
 /**
@@ -159,11 +145,9 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>): Unit {
  */
 fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
     var list: MutableList<String> = mutableListOf();
-    for (aa in a)
-        for (bb in b)
-            if (aa == bb)
-                list.add(aa);
-    return list;
+    for (item in a)
+        if (b.contains(item)) list.add(item)
+    return list
 }
 
 
