@@ -274,8 +274,8 @@ fun decimal(digits: List<Int>, base: Int): Int =
  */
 fun decimalFromString(str: String, base: Int): Int {
     val list = str.map {
-        if (it <= '9') it.toInt() - 48
-        else it.toInt() - 87
+        if (it <= '9') it - '0'
+        else it - 'a' + 10
     }
     return decimal(list, base)
 }
