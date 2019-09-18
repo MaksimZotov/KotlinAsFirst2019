@@ -212,7 +212,7 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double =
-        calculateTrigonometry(calculateX(x), eps, calculateX(x), 3)
+        calculateTrigonometry(x % (2 * PI), eps, x % (2 * PI), 3)
 
 
 /**
@@ -225,7 +225,7 @@ fun sin(x: Double, eps: Double): Double =
  * Использовать kotlin.math.cos и другие стандартные реализации функции косинуса в этой задаче запрещается.
  */
 fun cos(x: Double, eps: Double): Double =
-        calculateTrigonometry(calculateX(x), eps, 1.0, 2)
+        calculateTrigonometry(x % (2 * PI), eps, 1.0, 2)
 
 
 fun calculateTrigonometry(x: Double, eps: Double, init: Double, num: Int): Double {
@@ -246,14 +246,6 @@ fun calculateTrigonometry(x: Double, eps: Double, init: Double, num: Int): Doubl
     return result
 }
 
-fun calculateX(x: Double): Double {
-    var xx = x
-    while (xx > 2 * PI)
-        xx -= 2 * PI
-    while (xx < 2 * PI)
-        xx += 2 * PI
-    return xx
-}
 
 /**
  * Средняя

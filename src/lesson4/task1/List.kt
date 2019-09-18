@@ -118,10 +118,9 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = when {
-    v.isNotEmpty() -> sqrt(v.sumByDouble { sqr(it) })
-    else -> 0.0
-}
+fun abs(v: List<Double>): Double =
+        sqrt(v.sumByDouble { sqr(it) })
+
 
 /**
  * Простая
@@ -143,8 +142,7 @@ fun mean(list: List<Double>): Double = when {
  */
 fun center(list: MutableList<Double>): List<Double> {
     val avg = mean(list)
-    for (i in list.indices)
-        list[i] -= avg
+    list.replaceAll { it - avg }
     return list
 }
 
@@ -167,7 +165,7 @@ fun times(a: List<Int>, b: List<Int>): Int =
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int =
-        p.foldIndexed(0) { index, acc, i -> acc + i * x.toDouble().pow(index).toInt() }
+        p.mapIndexed { index, i -> i * x.toDouble().pow(index).toInt() }.sum()
 
 /**
  * Средняя

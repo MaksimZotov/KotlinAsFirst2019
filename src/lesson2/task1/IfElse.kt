@@ -160,7 +160,7 @@ fun rookOrBishopThreatens(
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     val ccSqrt = maxOf(a, b, c)
     val aaSqrt = minOf(a, b, c)
-    val bbSqrt = (a + b + c) - (ccSqrt + aaSqrt);
+    val bbSqrt = (a + b + c) - (ccSqrt + aaSqrt)
     val cc = sqr(ccSqrt)
     val aa = sqr(aaSqrt)
     val bb = sqr(bbSqrt)
