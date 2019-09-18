@@ -307,19 +307,8 @@ fun hasDifferentDigits(n: Int): Boolean {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
-    var digit = 1
-    var sqrDigit = 1
-    var count = 1
-    while (true) {
-        if (count < n) {
-            digit++
-            sqrDigit = digit * digit
-            count += digitNumber(sqrDigit)
-        } else
-            return resultSequence(n, count, sqrDigit)
-    }
-}
+fun squareSequenceDigit(n: Int): Int =
+        sequenceDigit(n) { x -> x * x }
 
 /**
  * Сложная
@@ -330,31 +319,24 @@ fun squareSequenceDigit(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int {
-    var prev1 = 1
-    var prev2 = 1
-    var cur = 0
-    var count = 2
-    if (n < 3)
-        return 1
+fun fibSequenceDigit(n: Int): Int =
+        sequenceDigit(n) { x -> fib(x) }
+
+fun sequenceDigit(n: Int, operation: (Int) -> Int): Int {
+    var digit = 1
+    var cur = 1
+    var count = 1
     while (true) {
         if (count < n) {
-            cur = prev1 + prev2
-            prev2 = prev1
-            prev1 = cur
+            digit++
+            cur = operation(digit)
             count += digitNumber(cur)
-        } else
-            return resultSequence(n, count, cur)
-    }
-}
-
-fun resultSequence(n: Int, count: Int, current: Int): Int {
-    var cur = current
-    if (count == n)
-        return cur % 10
-    else {
-        for (i in 1..(count - n))
-            cur /= 10
-        return cur % 10
+        } else if (count == n)
+            return cur % 10
+        else {
+            for (i in 1..(count - n))
+                cur /= 10
+            return cur % 10
+        }
     }
 }

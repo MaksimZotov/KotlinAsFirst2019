@@ -258,7 +258,8 @@ fun convertToString(n: Int, base: Int): String =
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int =
-        digits.reversed().foldIndexed(0) { index, acc, i -> acc + base.toDouble().pow(index).toInt() * i }
+        digits.foldRightIndexed(0)
+        { index, i, acc -> acc + base.toDouble().pow(digits.lastIndex - index).toInt() * i }
 
 /**
  * Сложная
