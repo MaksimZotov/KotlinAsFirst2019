@@ -321,7 +321,12 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    for (i in list.indices)
+        if (list.contains(number - list[i]) && i != list.indexOf(number - list[i]))
+            return (i to list.indexOf(number - list[i]))
+    return (-1 to -1)
+}
 
 /**
  * Очень сложная
@@ -344,4 +349,26 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    var cap = capacity
+    var sum = 0
+    var set = mutableSetOf<String>()
+    for ((k, v) in treasures) {
+        if (v.first <= cap) {
+            set.add(k)
+            cap -= v.first
+            sum += v.second
+        } else {
+            for (item in set) {
+                val temp = treasures[item]!!
+                if (cap + temp.first - v.first < 0 || sum - temp.second + v.second < sum)
+                    continue
+                set.remove(item)
+                set.add(k)
+                cap += temp.first - v.first
+                sum -= temp.second + v.second
+            }
+        }
+    }
+    return set
+}
