@@ -315,6 +315,13 @@ class Tests {
     @Tag("Impossible")
     fun bagPacking() {
         assertEquals(
+                setOf("1"),
+                bagPacking(
+                        mapOf("0" to (1 to 1), "1" to (2 to 2)),
+                        2
+                )
+        )
+        assertEquals(
                 setOf("1", "0"),
                 bagPacking(
                         mapOf("0" to (1 to 1), "1" to (1 to 1),

@@ -69,7 +69,12 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val map = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
+            "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09",
+            "октября" to "10", "ноября" to "11", "декабря" to "12")
+    return str.split(" ").mapIndexed { index, s -> if (index == 1) map[s] }.joinToString(".")
+}
 
 /**
  * Средняя

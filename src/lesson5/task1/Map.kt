@@ -361,7 +361,7 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
         } else {
             for (i in setAsList.indices) {
                 val temp = treasures[setAsList[i]]!!
-                if (cap + temp.first - v.first <= 0 || sum - temp.second + v.second <= sum)
+                if (cap + temp.first - v.first < 0 || sum - temp.second + v.second <= sum)
                     continue
                 setAsList.remove(setAsList[i])
                 setAsList.add(k)
