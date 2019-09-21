@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.Exception
+
 /**
  * Пример
  *
@@ -70,10 +73,23 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    val map = mapOf("января" to "01", "февраля" to "02", "марта" to "03", "апреля" to "04",
-            "мая" to "05", "июня" to "06", "июля" to "07", "августа" to "08", "сентября" to "09",
+    val map = mapOf("января" to "1", "февраля" to "2", "марта" to "3", "апреля" to "4",
+            "мая" to "5", "июня" to "6", "июля" to "7", "августа" to "8", "сентября" to "9",
             "октября" to "10", "ноября" to "11", "декабря" to "12")
-    return str.split(" ").mapIndexed { index, s -> if (index == 1) map[s] }.joinToString(".")
+    val strList = str.split(" ").toList()
+    val day: Int
+    val mounth: Int
+    val year: Int
+    try {
+        day = strList[0].toInt()
+        mounth = map[strList[1]]!!.toInt()
+        year = strList[2].toInt()
+    } catch (e: Exception) {
+        return ""
+    }
+    if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3)
+        return ""
+    return String.format("%02d.%02d.%d", day, mounth, year)
 }
 
 /**
