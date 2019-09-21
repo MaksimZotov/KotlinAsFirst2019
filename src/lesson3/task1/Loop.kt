@@ -212,7 +212,7 @@ fun collatzSteps(x: Int): Int {
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
 fun sin(x: Double, eps: Double): Double =
-        calculateTrigonometry(x % (2 * PI), eps, x % (2 * PI), 3)
+        calculateTrigonometry(x % (2 * PI) + 2 * PI, eps, x % (2 * PI) + 2 * PI, 3)
 
 
 /**

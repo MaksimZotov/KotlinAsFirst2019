@@ -213,7 +213,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     var min = Double.MAX_VALUE
     var name: String? = null
     for ((k, v) in stuff)
-        if (v.first == kind && v.second < min) {
+        if (v.first == kind && v.second <= min) {
             min = v.second
             name = k
         }
@@ -230,7 +230,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    for (i in word) if (!chars.contains(i)) return false
+    val localChars = chars.map { it.toLowerCase() }
+    val localWord = word.toLowerCase()
+    for (i in localWord) if (!localChars.contains(i)) return false
     return true
 }
 
@@ -271,7 +273,7 @@ fun hasAnagrams(words: List<String>): Boolean {
             for (item in words[i])
                 if (words[j].contains(item))
                     count++
-            if (count == words[i].length || count == words[j].length)
+            if ((count == words[i].length || count == words[j].length) && count != 0)
                 return true
             count = 0
         }
