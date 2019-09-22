@@ -63,7 +63,7 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
         else
             map[item] = Regex(item.toUpperCase()).findAll(text).count()
     }
-    return map
+    return  map
 }
 
 
