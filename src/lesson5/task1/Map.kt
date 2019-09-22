@@ -94,8 +94,10 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val map: MutableMap<Int, MutableList<String>> = mutableMapOf();
     for ((k, v) in grades) {
-        if (map[v] != null) map[v]?.add(k)
-        else map[v] = mutableListOf(k)
+        if (map[v] != null)
+            map[v]?.add(k)
+        else
+            map[v] = mutableListOf(k)
     }
     return map
 }
@@ -113,7 +115,10 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
     for ((k, v) in a)
-        if (b[k] == v) continue else return false
+        if (b[k] == v)
+            continue
+        else
+            return false
     return true
 }
 
@@ -190,7 +195,8 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
         else
             map[stockPrices[i].first] = stockPrices[i].second
     }
-    for ((k, v) in map) map[k] = v / stockPrices.filter { it.first == k }.count()
+    for ((k, v) in map)
+        map[k] = v / stockPrices.filter { it.first == k }.count()
     return map
 }
 
@@ -232,7 +238,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val localChars = chars.map { it.toLowerCase() }
     val localWord = word.toLowerCase()
-    for (i in localWord) if (!localChars.contains(i)) return false
+    for (i in localWord)
+        if (!localChars.contains(i))
+            return false
     return true
 }
 
@@ -251,8 +259,10 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
 fun extractRepeats(list: List<String>): Map<String, Int> {
     val map = mutableMapOf<String, Int>()
     for (item in list) {
-        if (map.containsKey(item)) map[item] = map[item]!! + 1
-        else map[item] = 1
+        if (map.containsKey(item))
+            map[item] = map[item]!! + 1
+        else
+            map[item] = 1
     }
     return map.filter { it.value != 1 }
 }
@@ -270,6 +280,8 @@ fun hasAnagrams(words: List<String>): Boolean {
     var count = 0
     for (i in 0 until words.lastIndex)
         for (j in (i + 1)..words.lastIndex) {
+            if (words[i] == words[j])
+                return true
             for (item in words[i])
                 if (words[j].contains(item))
                     count++

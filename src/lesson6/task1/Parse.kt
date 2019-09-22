@@ -77,20 +77,17 @@ var mounths = arrayOf("января", "февраля", "марта", "апре�
         "июля", "августа", "сентября", "октября", "ноября", "декабря")
 
 fun dateStrToDigit(str: String): String {
-    val strList = str.split(" ").toList()
-    val day: Int
-    val mounth: Int
-    val year: Int
+    val strList = str.split(" ")
     try {
-        day = strList[0].toInt()
-        mounth = mounths.indexOf(strList[1]) + 1
-        year = strList[2].toInt()
+        val day = strList[0].toInt()
+        val mounth = mounths.indexOf(strList[1]) + 1
+        val year = strList[2].toInt()
+        if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
+            return ""
+        return String.format("%02d.%02d.%d", day, mounth, year)
     } catch (e: Exception) {
         return ""
     }
-    if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
-        return ""
-    return String.format("%02d.%02d.%d", day, mounth, year)
 }
 
 /**
@@ -104,20 +101,17 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    val strList = digital.split(".").toList()
-    val day: Int
-    val mounth: Int
-    val year: Int
+    val strList = digital.split(".")
     try {
-        day = strList[0].filterIndexed { i, c -> i != 0 || c != '0' }.toInt()
-        mounth = strList[1].filterIndexed { i, c -> i != 0 || c != '0' }.toInt()
-        year = strList[2].toInt()
+        val day = strList[0].filterIndexed { i, c -> i != 0 || c != '0' }.toInt()
+        val mounth = strList[1].filterIndexed { i, c -> i != 0 || c != '0' }.toInt()
+        val year = strList[2].toInt()
+        if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
+            return ""
+        return String.format("%d %s %d", day, mounths[mounth - 1], year)
     } catch (e: Exception) {
         return ""
     }
-    if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
-        return ""
-    return String.format("%d %s %d", day, mounths[mounth - 1], year)
 }
 
 /**
@@ -136,7 +130,9 @@ fun dateDigitToStr(digital: String): String {
  */
 fun flattenPhoneNumber(phone: String): String {
     var result = ""
-    for (item in phone) if (item in '0'..'9' || item == '+') result += item
+    for (item in phone)
+        if (item in '0'..'9' || item == '+')
+            result += item
     return result
 }
 
@@ -152,13 +148,15 @@ fun flattenPhoneNumber(phone: String): String {
  */
 fun bestLongJump(jumps: String): Int {
     val list = jumps.split(" ", "-", "%")
-    val listInt: MutableList<Int> = mutableListOf()
+    var max = -1
     try {
-        for (item in list) if (item != "") listInt.add(item.toInt())
-        return listInt.max()!!
+        for (item in list)
+            if (item != "" && item.toInt() > max)
+                max = item.toInt()
     } catch (e: Exception) {
         return -1
     }
+    return max
 }
 
 /**
@@ -184,17 +182,13 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    var listStr = expression.split(" ")
+    val listStr = expression.split(" ")
     val e = IllegalArgumentException()
-    try {
-        for (i in listStr.indices) {
-            if (i % 2 == 0 && (listStr[i].contains("+") || (listStr[i].contains("-"))) ||
-                    i % 2 != 0 && listStr[i] != "+" && listStr[i] != "-")
-                throw e
-            if (i % 2 == 0) listStr[i].toInt()
-        }
-    } catch (ex: Exception) {
-        throw e
+    for (i in listStr.indices) {
+        if (i % 2 == 0 && (listStr[i].contains("+") || (listStr[i].contains("-"))) ||
+                i % 2 != 0 && listStr[i] != "+" && listStr[i] != "-")
+            throw e
+        try { if (i % 2 == 0) listStr[i].toInt() } catch (e: Exception) { throw e }
     }
     var sign = 1
     var result = 0
@@ -222,7 +216,8 @@ fun firstDuplicateIndex(str: String): Int {
     val list = str.toLowerCase().split(" ")
     var count = 0
     for (i in 0 until list.lastIndex) {
-        if (list[i] == list[i + 1]) return count
+        if (list[i] == list[i + 1])
+            return count
         count += list[i].length + 1
     }
     return -1
@@ -241,15 +236,14 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     val list = description.split("; ")
-    val map = mutableMapOf<String, Int>()
     var max = 0
     var result = ""
     try {
         for (item in list) {
             val t = item.split(" ")
-            map[t[0]] = t[1].filter { it != '.' }.toInt()
-            if (map[t[0]]!! > max) {
-                max = map[t[0]]!!
+            val cur = t[1].filter { it != '.' }.toInt()
+            if (cur >= max) {
+                max = cur
                 result = t[0]
             }
         }
