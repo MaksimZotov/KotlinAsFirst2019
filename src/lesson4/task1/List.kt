@@ -338,32 +338,30 @@ fun russian(n: Int): String {
                 result += level21[nn % 10]
                 break
             } else
-                result += level22[nn / 10] + " "
+                result += level22[nn / 10]
         }
         if (digitNum == 3)
-            result += level3[nn / 100] + " "
+            result += level3[nn / 100]
         if (digitNum == 4)
-            result += level4[nn / 1000] + " "
+            result += level4[nn / 1000]
         if (digitNum == 5) {
             if (nn / 10000 == 1) {
                 result += level51[nn % 10000 / 1000] + " тысяч "
                 nn -= nn / 10.0.pow(3).toInt() * 10.0.pow(3).toInt()
                 continue
             } else
-                result += level52[nn / 10000] + " "
+                result += level52[nn / 10000]
         }
         if (digitNum == 6) {
             result += level6[nn / 100000]
-            if (nn % 100_000 == 0) {
+            if (nn % 100000 / 1000 == 0) {
                 result += " тысяч"
                 nn %= 1000
-            } else if (nn / 1000 % 100 == 0) {
-                result += " тысяч "
-                nn %= 1000
-            } else
-                result += " "
+            }
         }
         nn -= nn / 10.0.pow(digitNum - 1).toInt() * 10.0.pow(digitNum - 1).toInt()
+        if (nn % 10.0.pow(digitNum - 1).toInt() != 0)
+            result += " "
     }
     return result
 }
