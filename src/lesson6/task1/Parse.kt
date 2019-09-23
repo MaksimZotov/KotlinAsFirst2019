@@ -184,14 +184,16 @@ fun bestHighJump(jumps: String): Int = TODO()
  */
 fun plusMinus(expression: String): Int {
     val e = IllegalArgumentException()
-    if (expression == "")
-        throw e
     val listStr = expression.split(" ")
     for (i in listStr.indices) {
         if (i % 2 == 0 && (listStr[i].contains("+") || (listStr[i].contains("-"))) ||
                 i % 2 != 0 && listStr[i] != "+" && listStr[i] != "-")
             throw e
-        try { if (i % 2 == 0) listStr[i].toInt() } catch (e: Exception) { throw e }
+        try {
+            if (i % 2 == 0) listStr[i].toInt()
+        } catch (e: Exception) {
+            throw e
+        }
     }
     var sign = 1
     var result = 0
@@ -245,7 +247,11 @@ fun mostExpensive(description: String): String {
         for (item in list) {
             val name = item.split(" ")[0]
             val digit = item.split(" ")[1].split(".")
-            val cur = digit[0].toDouble() + digit[1].toDouble() / 10.0.pow(digit[1].length)
+            var cur = -1.0
+            if (digit.size == 2)
+                cur = digit[0].toDouble() + digit[1].toDouble() / 10.0.pow(digit[1].length)
+            else if (digit.size == 1)
+                cur = digit[0].toDouble()
             if (cur >= max) {
                 max = cur
                 result = name
