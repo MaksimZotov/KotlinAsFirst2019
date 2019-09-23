@@ -349,8 +349,11 @@ fun russian(n: Int): String {
                 result += level51[nn % 10000 / 1000] + " тысяч "
                 nn -= nn / 10.0.pow(3).toInt() * 10.0.pow(3).toInt()
                 continue
-            } else
+            } else {
                 result += level52[nn / 10000]
+                if (nn / 1000 % 10 == 0)
+                    result += " тысяч"
+            }
         }
         if (digitNum == 6) {
             result += level6[nn / 100000]
