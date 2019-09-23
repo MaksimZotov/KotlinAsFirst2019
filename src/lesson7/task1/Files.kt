@@ -2,7 +2,6 @@
 
 package lesson7.task1
 
-import sun.security.ec.point.ProjectivePoint
 import java.io.File
 
 /**
