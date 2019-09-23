@@ -5,6 +5,7 @@ package lesson6.task1
 import lesson2.task2.daysInMonth
 import java.lang.Exception
 import java.lang.IllegalArgumentException
+import kotlin.math.pow
 
 /**
  * Пример
@@ -182,8 +183,10 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val listStr = expression.split(" ")
     val e = IllegalArgumentException()
+    if (expression == "")
+        throw e
+    val listStr = expression.split(" ")
     for (i in listStr.indices) {
         if (i % 2 == 0 && (listStr[i].contains("+") || (listStr[i].contains("-"))) ||
                 i % 2 != 0 && listStr[i] != "+" && listStr[i] != "-")
@@ -236,15 +239,16 @@ fun firstDuplicateIndex(str: String): Int {
  */
 fun mostExpensive(description: String): String {
     val list = description.split("; ")
-    var max = 0
+    var max = 0.0
     var result = ""
     try {
         for (item in list) {
-            val t = item.split(" ")
-            val cur = t[1].filter { it != '.' }.toInt()
+            val name = item.split(" ")[0]
+            val digit = item.split(" ")[1].split(".")
+            val cur = digit[0].toDouble() + digit[1].toDouble() / 10.0.pow(digit[1].length)
             if (cur >= max) {
                 max = cur
-                result = t[0]
+                result = name
             }
         }
     } catch (e: Exception) {
