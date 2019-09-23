@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import kotlin.math.max
+
 /**
  * Пример
  *
@@ -367,27 +369,26 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var cap = 0
     var sum = 0
     val set = mutableSetOf<String>()
-    var toRemoveAdd: Pair<String, String>?
+    var mapForMaxSum = mutableMapOf<Pair<String, String>, Pair<Int, Int>>()
     for ((k, v) in treasures) {
         if (cap + v.first <= capacity) {
             set.add(k)
             cap += v.first
             sum += v.second
         } else {
-            toRemoveAdd = null
+            mapForMaxSum.clear()
             for (item in set) {
                 val tTrs = treasures[item]!!
-                if (cap - tTrs.first + v.first > capacity || sum - tTrs.second + v.second <= sum)
+                if (cap - tTrs.first + v.first > capacity || tTrs.second - v.second > 0)
                     continue
-                toRemoveAdd = item to k
-                sum = sum - tTrs.second + v.second
-                cap = cap - tTrs.first + v.first
+                mapForMaxSum[item to k] = sum - tTrs.second + v.second to cap - tTrs.first + v.first
             }
-            if (toRemoveAdd != null) {
-                set.remove(toRemoveAdd.first)
-                set.add(toRemoveAdd.second)
-            }
+            val maxSumFromMap = mapForMaxSum.maxBy { it.value.first }
+            set.remove(maxSumFromMap?.key?.first)
+            if (maxSumFromMap != null)
+                set.add(maxSumFromMap.key.second)
         }
     }
     return set
 }
+
