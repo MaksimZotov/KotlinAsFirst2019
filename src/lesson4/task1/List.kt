@@ -309,43 +309,51 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
+val level1 = arrayOf("ноль", "один", "два", "три", "четыре",
+        "пять", "шесть", "семь", "восемь", "девять")
+val level21 = arrayOf("десять", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+        "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
+val level22 = arrayOf("ноль", "десять", "двадцать", "тридцать", "сорок",
+        "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
+val level3 = arrayOf("ноль", "сто", "двести", "триста", "четыреста",
+        "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
+val level4 = arrayOf("ноль", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи",
+        "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
+val level51 = level21
+val level52 = level22
+val level6 = level3
+
 fun russian(n: Int): String {
-    val level1 = arrayOf("ноль", "один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять")
-    val level21 = arrayOf("ноль", "одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
-            "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать")
-    val level22 = arrayOf("ноль", "десять", "двадцать", "тридцать", "сорок",
-            "пятьдесят", "шестьдесят", "семьдесят", "восемьдесят", "девяносто")
-    val level3 = arrayOf("ноль", "сто", "двести", "триста", "четыреста",
-            "пятьсот", "шестьсот", "семьсот", "восемьсот", "девятьсот")
-    val level4 = arrayOf("ноль", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи",
-            "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч")
-    val level6 = level3 + "тысяч"
     var result = ""
     var nn = n
     var digitNum: Int
     while (nn > 0) {
         digitNum = digitNumber(nn)
-        if (digitNum == 1)
+        if (digitNum == 1) {
             result += level1[nn]
-        else if (digitNum == 2) {
+            break
+        }
+        if (digitNum == 2) {
             if (nn / 10 == 1) {
                 result += level21[nn % 10]
                 break
             } else
                 result += level22[nn / 10] + " "
-        } else if (digitNum == 3)
-            result += level3[nn / (10.0.pow(2).toInt())] + " "
-        else if (digitNum == 4)
-            result += level4[nn / (10.0.pow(3).toInt())] + " "
-        else if (digitNum == 5) {
-            var t = 10.0.pow(4).toInt()
-            if (nn / t == 1) {
-                result += level21[nn / (t / 10) % 10] + " тысяч "
-                nn -= nn / (t / 10) * t / 10
+        }
+        if (digitNum == 3)
+            result += level3[nn / 100] + " "
+        if (digitNum == 4)
+            result += level4[nn / 1000] + " "
+        if (digitNum == 5) {
+            if (nn / 10000 == 1) {
+                result += level51[nn % 10000 / 1000] + " тысяч "
+                nn -= nn / 10.0.pow(3).toInt() * 10.0.pow(3).toInt()
+                continue
             } else
-                result += level22[nn / t] + " "
-        } else {
-            result += level6[nn / (10.0.pow(5).toInt())]
+                result += level52[nn / 10000] + " "
+        }
+        if (digitNum == 6) {
+            result += level6[nn / 100000]
             if (nn % 100_000 == 0) {
                 result += " тысяч"
                 nn %= 1000
@@ -355,7 +363,7 @@ fun russian(n: Int): String {
             } else
                 result += " "
         }
-        nn -= nn / (10.0.pow(digitNum - 1).toInt()) * 10.0.pow(digitNum - 1).toInt()
+        nn -= nn / 10.0.pow(digitNum - 1).toInt() * 10.0.pow(digitNum - 1).toInt()
     }
     return result
 }
