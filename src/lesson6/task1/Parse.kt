@@ -184,6 +184,8 @@ fun bestHighJump(jumps: String): Int = TODO()
  */
 fun plusMinus(expression: String): Int {
     val e = IllegalArgumentException()
+    if (expression == "")
+        throw e
     val listStr = expression.split(" ")
     for (i in listStr.indices) {
         if (i % 2 == 0 && (listStr[i].contains("+") || (listStr[i].contains("-"))) ||
