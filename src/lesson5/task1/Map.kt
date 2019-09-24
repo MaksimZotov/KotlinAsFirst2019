@@ -326,7 +326,6 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     for ((k, v) in friends) {
         map[k] = (v to friends.filter { it.value.contains(k) }.keys)
                 as Pair<Set<String>, MutableSet<String>>
-        val t = 0
     }
     val resultMap = mutableMapOf<String, Set<String>>()
     for ((curName, whomIKnow_WhoKnowMe) in map) {
@@ -403,9 +402,12 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
                 mapForMaxSum[item to k] = sum - tTrs.second + v.second to cap - tTrs.first + v.first
             }
             val maxSumFromMap = mapForMaxSum.maxBy { it.value.first }
-            set.remove(maxSumFromMap?.key?.first)
-            if (maxSumFromMap != null)
+            if (maxSumFromMap != null) {
+                set.remove(maxSumFromMap?.key?.first)
                 set.add(maxSumFromMap.key.second)
+                sum = maxSumFromMap.value.first
+                cap = maxSumFromMap.value.second
+            }
         }
     }
     return set
