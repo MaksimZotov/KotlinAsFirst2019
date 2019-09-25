@@ -224,16 +224,14 @@ fun factorizeToString(n: Int): String =
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
 fun convert(n: Int, base: Int): List<Int> {
-    if (n == 0)
-        return listOf(0)
     val list = mutableListOf<Int>()
     var nn = n
-    while (nn > 0) {
+    while (nn >= base) {
         list.add(nn % base)
         nn /= base
     }
-    list.reverse()
-    return list
+    list.add(nn)
+    return list.reversed()
 }
 
 /**
@@ -258,8 +256,7 @@ fun convertToString(n: Int, base: Int): String =
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int =
-        digits.foldRightIndexed(0)
-        { index, i, acc -> acc + base.toDouble().pow(digits.lastIndex - index).toInt() * i }
+        digits.foldRightIndexed(0) { index, i, acc -> acc + base.toDouble().pow(digits.lastIndex - index).toInt() * i }
 
 /**
  * Сложная
@@ -273,13 +270,12 @@ fun decimal(digits: List<Int>, base: Int): Int =
  * Использовать функции стандартной библиотеки, напрямую и полностью решающие данную задачу
  * (например, str.toInt(base)), запрещается.
  */
-fun decimalFromString(str: String, base: Int): Int {
-    val list = str.map {
-        if (it <= '9') it - '0'
-        else it - 'a' + 10
-    }
-    return decimal(list, base)
-}
+fun decimalFromString(str: String, base: Int): Int =
+        decimal(str.map {
+            if (it <= '9') it - '0'
+            else it - 'a' + 10
+        }, base)
+
 
 /**
  * Сложная
