@@ -319,6 +319,8 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
+
+// Пока не довёл решение до конца
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val map = mutableMapOf<String, Pair<Set<String>, MutableSet<String>>>()
     //map.key - текущее имя, map.value.first - кого знает сам человек,
