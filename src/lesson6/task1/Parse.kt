@@ -242,8 +242,9 @@ fun mostExpensive(description: String): String {
     var result = ""
     try {
         for (item in list) {
-            val name = item.split(" ")[0]
-            val digit = item.split(" ")[1].split(".")
+            val itemToList = item.split(" ")
+            val name = itemToList[0]
+            val digit = itemToList[1].split(".")
             var cur = -1.0
             if (digit.size == 2)
                 cur = digit[0].toDouble() + digit[1].toDouble() / 10.0.pow(digit[1].length)
