@@ -311,20 +311,18 @@ fun hasAnagrams(words: List<String>): Boolean {
 
 // Пока не довёл решение до конца
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val map = mutableMapOf<String, Pair<Set<String>, MutableSet<String>>>()
+    val map = mutableMapOf<String, Pair<MutableSet<String>, MutableSet<String>>>()
     //map.key - текущее имя, map.value.first - кого знает сам человек,
     //map.value.second - кто знает человека с текущем именем
-    for ((k, v) in friends) {
-        map[k] = (v to friends.filter { it.value.contains(k) }.keys)
-                as Pair<Set<String>, MutableSet<String>>
-    }
-    val resultMap = mutableMapOf<String, Set<String>>()
+    for ((k, v) in friends)
+        map[k] = (v to friends.filter { it.value.contains(k) }.keys) as Pair<MutableSet<String>, MutableSet<String>>
+    val resultMap = mutableMapOf<String, MutableSet<String>>()
     for ((curName, whomIKnow_WhoKnowMe) in map) {
         resultMap[curName] = whomIKnow_WhoKnowMe.first
-        for (item in whomIKnow_WhoKnowMe.first)
-            for (item1 in whomIKnow_WhoKnowMe.second)
-                if (map[item]!!.first.contains(item1))
-                    resultMap[curName]!! + item1.toSet()
+        for (whoKnowMe in whomIKnow_WhoKnowMe.second)
+            for (whomIKnow in whomIKnow_WhoKnowMe.first)
+                if (whoKnowMe == whomIKnow && !resultMap[curName]!!.contains(whomIKnow))
+                    resultMap[curName]!!.add(whomIKnow)
     }
     return resultMap
 }
