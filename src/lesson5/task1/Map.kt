@@ -308,23 +308,41 @@ fun hasAnagrams(words: List<String>): Boolean {
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
+val mapFriends = mutableMapOf<String, Pair<Boolean, MutableSet<String>>>()
 
-// Пока не довёл решение до конца
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
-    val map = mutableMapOf<String, Pair<MutableSet<String>, MutableSet<String>>>()
-    //map.key - текущее имя, map.value.first - кого знает сам человек,
-    //map.value.second - кто знает человека с текущем именем
     for ((k, v) in friends)
-        map[k] = (v to friends.filter { it.value.contains(k) }.keys) as Pair<MutableSet<String>, MutableSet<String>>
-    val resultMap = mutableMapOf<String, MutableSet<String>>()
-    for ((curName, whomIKnow_WhoKnowMe) in map) {
-        resultMap[curName] = whomIKnow_WhoKnowMe.first
-        for (whoKnowMe in whomIKnow_WhoKnowMe.second)
-            for (whomIKnow in whomIKnow_WhoKnowMe.first)
-                if (whoKnowMe == whomIKnow && !resultMap[curName]!!.contains(whomIKnow))
-                    resultMap[curName]!!.add(whomIKnow)
+        mapFriends[k] = false to v as MutableSet<String>
+
+    for (k in friends.keys) {
+        searchFriends(k, k)
     }
+
+    val resultMap = mutableMapOf<String, MutableSet<String>>()
+    for ((k, v) in mapFriends) {
+        var set = mutableSetOf<String>() + v.second
+        if (v.second.isNotEmpty())
+            set -= k
+        resultMap[k] = set as MutableSet<String>
+    }
+    mapFriends.clear()
     return resultMap
+}
+
+fun searchFriends(curName: String, parentName: String): MutableSet<String> {
+    for (item in mapFriends[curName]!!.second) {
+        if (mapFriends[item] == null)
+            mapFriends[item] = false to mutableSetOf()
+        if (mapFriends[item] != null && item != parentName) {
+            var set: Set<String>
+            if (!mapFriends[item]!!.first)
+                set = (mapFriends[curName]!!.second).union(searchFriends(item, parentName))
+            else
+                set = mapFriends[item]!!.second
+            mapFriends[curName] = (true to set) as Pair<Boolean, MutableSet<String>>
+        }
+    }
+    return mapFriends[curName]!!.second
 }
 
 /**
