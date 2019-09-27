@@ -173,7 +173,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
         map[k] = v
     for ((k, v) in mapB) {
         map[k] = map.getOrDefault(k, v)
-        if (map[k] != null && map[k] != v)
+        if (map[k] != v)
             map[k] += ", $v"
     }
     return map
@@ -243,9 +243,7 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val wordAsSet = word.toLowerCase().toSet()
     val charsAsSet = chars.map { it.toLowerCase() }.toSet()
     val unionSet = wordAsSet.union(charsAsSet)
-    if (unionSet.size > charsAsSet.size)
-        return false
-    return true
+    return unionSet.size <= charsAsSet.size
 }
 
 /**
@@ -276,13 +274,8 @@ fun extractRepeats(list: List<String>): Map<String, Int> {
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean {
-    val listOfSets = words.map { it.toSet() }
-    for (item in listOfSets)
-        if (listOfSets.filter { it == item }.size > 1)
-            return true
-    return false
-}
+fun hasAnagrams(words: List<String>): Boolean =
+        words.map { it.toSet() }.toSet().size < words.size
 
 /**
  * Сложная
@@ -313,11 +306,8 @@ val mapFriends = mutableMapOf<String, Pair<Boolean, MutableSet<String>>>()
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     for ((k, v) in friends)
         mapFriends[k] = false to v as MutableSet<String>
-
-    for (k in friends.keys) {
+    for (k in friends.keys)
         searchFriends(k, k)
-    }
-
     val resultMap = mutableMapOf<String, MutableSet<String>>()
     for ((k, v) in mapFriends) {
         var set = mutableSetOf<String>() + v.second
