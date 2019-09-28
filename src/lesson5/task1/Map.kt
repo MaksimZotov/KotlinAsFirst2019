@@ -388,11 +388,13 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     var cap = 0
     val set = mutableSetOf<String>()
     for (w in 1..capacity)
-        for ((k, v) in treasures)
-            if (cap + v.first <= w && !set.contains(k)) {
-                set.add(k)
-                cap += v.first
+        for (n in treasures) {
+            var t = treasures.filter { it.value.first + cap <= w && !set.contains(it.key) }.maxBy { it.value.second }
+            if (t != null) {
+                set.add(t!!.key)
+                cap += t!!.value.first
             }
+        }
     return set
 }
 
