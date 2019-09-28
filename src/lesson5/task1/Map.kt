@@ -310,6 +310,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
             mapFriends[k] = false to v as MutableSet<String>
     }
     fun searchFriends(curName: String, parentName: String): MutableSet<String> {
+        mapFriends[curName] = true to mapFriends[curName]!!.second
         if (mapFriends[curName]!!.second.isEmpty())
             mapFriends[curName] = true to mutableSetOf()
         for (item in mapFriends[curName]!!.second) {
