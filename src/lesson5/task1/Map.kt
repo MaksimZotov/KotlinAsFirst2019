@@ -319,7 +319,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
             if (mapFriends[item] != null && item != parentName) {
                 var set: Set<String>
                 if (!mapFriends[item]!!.first)
-                    set = (mapFriends[curName]!!.second).union(searchFriends(item, parentName))
+                    set = mapFriends[curName]!!.second.union(searchFriends(item, parentName))
                 else
                     set = mapFriends[curName]!!.second.union(mapFriends[item]!!.second)
                 mapFriends[curName] = (true to set) as Pair<Boolean, MutableSet<String>>
@@ -338,6 +338,7 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
     }
     return resultMap
 }
+
 /**
  * Сложная
  *
@@ -385,31 +386,13 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  */
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
     var cap = 0
-    var sum = 0
     val set = mutableSetOf<String>()
-    val mapForMaxSum = mutableMapOf<Pair<String, String>, Pair<Int, Int>>()
-    for ((k, v) in treasures) {
-        if (cap + v.first <= capacity) {
-            set.add(k)
-            cap += v.first
-            sum += v.second
-        } else {
-            mapForMaxSum.clear()
-            for (item in set) {
-                val tTrs = treasures[item]!!
-                if (cap - tTrs.first + v.first > capacity || tTrs.second - v.second > 0)
-                    continue
-                mapForMaxSum[item to k] = sum - tTrs.second + v.second to cap - tTrs.first + v.first
+    for (w in 1..capacity)
+        for ((k, v) in treasures)
+            if (cap + v.first <= w && !set.contains(k)) {
+                set.add(k)
+                cap += v.first
             }
-            val maxSumFromMap = mapForMaxSum.maxBy { it.value.first }
-            if (maxSumFromMap != null) {
-                set.remove(maxSumFromMap?.key?.first)
-                set.add(maxSumFromMap.key.second)
-                sum = maxSumFromMap.value.first
-                cap = maxSumFromMap.value.second
-            }
-        }
-    }
     return set
 }
 
