@@ -129,7 +129,12 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String = TODO()
+fun flattenPhoneNumber(phone: String): String {
+    return if (Regex("""\+?[\d -]*(\(.+\))?[\d -]*""").matches(phone))
+        phone.filter { it != ' ' && it != '-' && it != '(' && it != ')' }
+    else
+        ""
+}
 
 
 /**
@@ -166,7 +171,17 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (Regex("""\d+ \+""").find(jumps) != null) {
+        val list = jumps.split(' ')
+        var max = 0
+        for (i in 0 until list.lastIndex)
+            if (list[i + 1] == "+")
+                max = maxOf(max, list[i].toInt())
+        return max
+    } else
+        return -1
+}
 
 /**
  * Сложная
