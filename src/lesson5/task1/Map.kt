@@ -303,13 +303,8 @@ fun hasAnagrams(words: List<String>): Boolean =
  */
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val mapFriends = mutableMapOf<String, Pair<Boolean, MutableSet<String>>>()
-    for ((k, v) in friends) {
-        try {
-            mapFriends[k] = false to v as MutableSet<String>
-        } catch (e: Exception) {
-            mapFriends[k] = false to mutableSetOf<String>()
-        }
-    }
+    for ((k, v) in friends)
+        mapFriends[k] = false to v.toMutableSet()
     fun searchFriends(curName: String, parentName: String): MutableSet<String> {
         mapFriends[curName] = true to mapFriends[curName]!!.second
         if (mapFriends[curName]!!.second.isEmpty())
@@ -357,14 +352,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val map = mutableMapOf<Int, Int>()
-    for (i in list.indices) {
-        if (map[number - list[i]] != null)
-            return map.values.indexOf(list[i]) to i
-        else
-            map[list[i]] = number - list[i]
-    }
-    return -1 to -1
+    for (i in list.indices)
+        if (list.contains(number - list[i]) && i != list.indexOf(number - list[i]))
+            return (i to list.indexOf(number - list[i]))
+    return (-1 to -1)
 }
 
 /**
