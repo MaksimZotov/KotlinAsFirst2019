@@ -287,7 +287,23 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
-fun fromRoman(roman: String): Int = TODO()
+fun fromRoman(roman: String): Int {
+    val romanDigits = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val arabDigits = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+    var result = 0
+    var str = roman
+    while (str != "") {
+        for (i in 0..romanDigits.lastIndex) {
+            if (str.endsWith(romanDigits[i])) {
+                result += arabDigits[i]
+                str = str.substring(0, str.lastIndex - romanDigits[i].length + 1)
+                break
+            } else if (i == romanDigits.lastIndex)
+                return -1
+        }
+    }
+    return result
+}
 
 /**
  * Очень сложная
