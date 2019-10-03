@@ -130,7 +130,7 @@ fun dateDigitToStr(digital: String): String {
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
 fun flattenPhoneNumber(phone: String): String {
-    return if (Regex("""\+?[\d -]*(\(.+\))?[\d -]*""").matches(phone))
+    return if (Regex("""\+?[\d -]*(\(.+\))?[\d -]*""").matches(phone) && Regex("""\d""").find(phone) != null)
         phone.filter { it != ' ' && it != '-' && it != '(' && it != ')' }
     else
         ""
@@ -291,6 +291,8 @@ fun fromRoman(roman: String): Int {
     val romanDigits = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
     val arabDigits = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var result = 0
+    if (roman == "")
+        return -1
     var str = roman
     while (str != "") {
         for (i in 0..romanDigits.lastIndex) {
