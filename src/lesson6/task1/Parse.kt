@@ -384,9 +384,10 @@ fun doForString(string: String) {
             commands = commands.substring(1, commands.lastIndex + 1)
             counterCommands++
         } else if (commands[0] == '[') {
-            if (listCells[i] == 0)
-                commands = commands.substring(commands.indexOf(']'))
-            else {
+            if (listCells[i] == 0) {
+                localStrCommands = findLocalString(commands)!!
+                commands = commands.substring(localStrCommands.length + 1)
+            } else {
                 localStrCommands = findLocalString(commands)!!
                 doForString(localStrCommands)
                 commands = commands.substring(localStrCommands.length + 1)
@@ -405,7 +406,7 @@ fun doForString(string: String) {
 }
 
 fun findLocalString(string: String): String? {
-    var count = 0;
+    var count = 0
     for (i in string.indices) {
         if (string[i] == '[')
             count++
