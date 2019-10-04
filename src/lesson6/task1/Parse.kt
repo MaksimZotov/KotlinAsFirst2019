@@ -398,6 +398,8 @@ fun doForString(string: String) {
                 counterCommands++
             } else if (localStrCommands != "")
                 doForString(localStrCommands)
+            else if (localStrCommands == "")
+                commands = commands.substring(1, commands.lastIndex + 1)
         }
     }
 }
