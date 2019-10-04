@@ -295,7 +295,7 @@ fun fromRoman(roman: String): Int {
         return -1
     var str = roman
     while (str != "") {
-        for (i in 0..romanDigits.lastIndex) {
+        for (i in romanDigits.indices) {
             if (str.endsWith(romanDigits[i])) {
                 result += arabDigits[i]
                 str = str.substring(0, str.lastIndex - romanDigits[i].length + 1)
@@ -343,4 +343,77 @@ fun fromRoman(roman: String): Int {
  * IllegalArgumentException должен бросаться даже если ошибочная команда не была достигнута в ходе выполнения.
  *
  */
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+fun checkCommands(string: String): Boolean {
+    return string.filter { it == '[' }.count() == string.filter { it == ']' }.count() &&
+            string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
+}
+
+val primitiveCommands = arrayOf('+', '-', '>', '<', ' ')
+var maxCommands = 0
+var counterCommands = 0
+var listCells = mutableListOf<Int>()
+var i = 0
+
+fun doForString(string: String) {
+    var commands = string
+    var localStrCommands = ""
+    while (commands != "" && counterCommands < maxCommands) {
+        if (commands == "")
+            break
+        if (commands[0] in primitiveCommands) {
+            when (commands[0]) {
+                '+' -> listCells[i]++
+                '-' -> listCells[i]--
+                '>' -> i++
+                '<' -> i--
+            }
+            if (i !in 0..listCells.lastIndex)
+                throw IllegalStateException()
+            commands = commands.substring(1, commands.lastIndex + 1)
+            counterCommands++
+        } else if (commands[0] == '[') {
+            if (listCells[i] == 0)
+                commands = commands.substring(commands.indexOf(']'))
+            else {
+                localStrCommands = findLocalString(commands)!!
+                doForString(localStrCommands)
+                commands = commands.substring(localStrCommands.length + 1)
+                counterCommands += localStrCommands.length + 1
+            }
+        } else if (commands[0] == ']') {
+            if (listCells[i] == 0) {
+                commands = commands.substring(1, commands.lastIndex + 1)
+                counterCommands++
+            } else if (localStrCommands != "")
+                doForString(localStrCommands)
+        }
+    }
+}
+
+fun findLocalString(string: String): String? {
+    var count = 0;
+    for (i in string.indices) {
+        if (string[i] == '[')
+            count++
+        else if (string[i] == ']') {
+            if (count != 0)
+                count--
+            if (count == 0)
+                return string.substring(1, i)
+        }
+    }
+    return null
+}
+
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (!checkCommands(commands))
+        throw IllegalArgumentException()
+    maxCommands = limit
+    counterCommands = 0
+    listCells = MutableList(cells) { 0 }
+    i = cells / 2
+    doForString(commands)
+    return listCells
+}
+
