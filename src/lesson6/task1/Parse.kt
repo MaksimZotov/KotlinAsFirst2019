@@ -344,16 +344,27 @@ fun fromRoman(roman: String): Int {
  *
  */
 
-fun checkCommands(string: String): Boolean {
-    return string.filter { it == '[' }.count() == string.filter { it == ']' }.count() &&
-            string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
-}
-
 val primitiveCommands = arrayOf('+', '-', '>', '<', ' ')
 var maxCommands = 0
 var counterCommands = 0
 var listCells = mutableListOf<Int>()
 var i = 0
+
+fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
+    if (!checkCommands(commands))
+        throw IllegalArgumentException()
+    maxCommands = limit
+    counterCommands = 0
+    listCells = MutableList(cells) { 0 }
+    i = cells / 2
+    doForString(commands)
+    return listCells
+}
+
+fun checkCommands(string: String): Boolean {
+    return string.filter { it == '[' }.count() == string.filter { it == ']' }.count() &&
+            string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
+}
 
 fun doForString(string: String) {
     var commands = string
@@ -404,16 +415,5 @@ fun findLocalString(string: String): String? {
         }
     }
     return null
-}
-
-fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    if (!checkCommands(commands))
-        throw IllegalArgumentException()
-    maxCommands = limit
-    counterCommands = 0
-    listCells = MutableList(cells) { 0 }
-    i = cells / 2
-    doForString(commands)
-    return listCells
 }
 
