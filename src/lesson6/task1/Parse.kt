@@ -410,7 +410,7 @@ fun doForString(string: String) {
             if (listCells[i] == 0)               // если текущий элемент равен 0, то нам НЕ НУЖНО заново выполнять команды внутри [...]
                 commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
             else if (localStrCommands != "")     // если текущий элемент не равен 0 (и внутри [...] есть команды), то нам НУЖНО заново выполнять команды внутри [...]
-                doForString(localStrCommands)    // заново выполняем команды внутри [...], где правая ']' есть commands[0], а содержимое [...] - это localStrCommands, вычисленная на 392 строке
+                doForString(localStrCommands)    // заново выполняем команды внутри [...], где правая ']' есть commands[0], а содержимое [...] - это localStrCommands
             else if (localStrCommands == "")     // если текущий элемент не равен 0 (и внутри [...] нет команд), то просто удаляем ']'
                 commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
         }
