@@ -345,19 +345,19 @@ fun fromRoman(roman: String): Int {
  */
 
 val primitiveCommands = arrayOf('+', '-', '>', '<', ' ')
-var maxCommands = 0
-var counterCommands = 0
-var listCells = mutableListOf<Int>()
-var i = 0
+var maxCommands = 0                   // всегда равно limit
+var counterCommands = 0               // счётчик выполненных команд
+var listCells = mutableListOf<Int>()  // список чисел, который будет изменяться посредством команд
+var i = 0                             // индекс текущей ячейки из listCells
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    if (!checkCommands(commands))
+    if (!checkCommands(commands))        // Проверка на соответствие строки команд требованиям
         throw IllegalArgumentException()
     maxCommands = limit
     counterCommands = 0
     listCells = MutableList(cells) { 0 }
     i = cells / 2
-    doForString(commands)
+    doForString(commands)                // Обработка строки команд
     return listCells
 }
 
@@ -367,40 +367,40 @@ fun checkCommands(string: String): Boolean {
 }
 
 fun doForString(string: String) {
-    var commands = string
-    var localStrCommands = ""
-    while (commands != "" && counterCommands < maxCommands) {
-        if (commands == "")
+    var commands = string                                     // Основная строка
+    var localStrCommands = ""                                 // Локальная строка, которую мы будем обрабатывать отдельно в случае, если встретим [...]
+    while (commands != "" && counterCommands < maxCommands) {    // Делаться это будет через рекурсию doForString(localStrCommands),
+        if (commands == "")                                      // Сама localStrCommands будет представлять из себя содержание [...]
             break
-        if (commands[0] in primitiveCommands) {
+        if (commands[0] in primitiveCommands) {  // если строка начинается с какой-то из базовых команд
             when (commands[0]) {
                 '+' -> listCells[i]++
                 '-' -> listCells[i]--
                 '>' -> i++
                 '<' -> i--
             }
-            if (i !in 0..listCells.lastIndex)
+            if (i !in 0..listCells.lastIndex)    // проверка на выход i за границы списка
                 throw IllegalStateException()
-            commands = commands.substring(1, commands.lastIndex + 1)
-            counterCommands++
-        } else if (commands[0] == '[') {
-            if (listCells[i] == 0) {
-                localStrCommands = findLocalString(commands)!!
-                commands = commands.substring(localStrCommands.length + 1)
-            } else {
-                localStrCommands = findLocalString(commands)!!
-                doForString(localStrCommands)
-                commands = commands.substring(localStrCommands.length + 1)
-                counterCommands += localStrCommands.length + 1
+            commands = commands.substring(1, commands.lastIndex + 1) // удаляем выполненную команду из строки
+            counterCommands++                    // увеличиваем счётчик выполненных команд
+        } else if (commands[0] == '[') {         // если встретили '['
+            counterCommands++                    // так как '[' является командой вне зависимости, что именно она будет выполнять, мы увеличиваем счётчик выполненных команд
+            if (listCells[i] == 0) {             // если текущий элемент равен 0, то перескакиваем через [...]
+                localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
+                commands = commands.substring(localStrCommands.length + 1) // удаляем [...] (т.е. локальную строку + '[' ']' по бокам) из основной строки
+            } else {                             // если текущий элемент не равен 0, и мы попадаем в [...]
+                localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
+                doForString(localStrCommands)    // выполняем для этой строки обработку на команды
+                commands = commands.substring(localStrCommands.length + 1) // после обработки удаляем эту строку из основной, оставляя от нее только ']' (']' нужен для дальнейшей обработки)
             }
-        } else if (commands[0] == ']') {
-            if (listCells[i] == 0) {
-                commands = commands.substring(1, commands.lastIndex + 1)
-                counterCommands++
-            } else if (localStrCommands != "")
-                doForString(localStrCommands)
-            else if (localStrCommands == "")
-                commands = commands.substring(1, commands.lastIndex + 1)
+        } else if (commands[0] == ']') {         // если обработили [...] (т.е. [localStrCommands]) и от нёё остался ']'
+            counterCommands++                    // так как ']' является командой вне зависимости, что именно она будет выполнять, мы увеличиваем счётчик выполненных команд
+            if (listCells[i] == 0)               // если текущий элемент равен 0, то нам НЕ НУЖНО заново выполнять команды внутри [...]
+                commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
+            else if (localStrCommands != "")     // если текущий элемент не равен 0 (и внутри [...] есть команды), то нам НУЖНО заново выполнять команды внутри [...]
+                doForString(localStrCommands)    // заново выполняем команды внутри [...], где правая ']' есть commands[0], а содержимое [...] - это localStrCommands, вычисленная на 392 строке
+            else if (localStrCommands == "")     // если текущий элемент не равен 0 (и внутри [...] нет команд), то просто удаляем ']'
+                commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
         }
     }
 }
