@@ -345,92 +345,85 @@ fun fromRoman(roman: String): Int {
  */
 
 val primitiveCommands = arrayOf('+', '-', '>', '<', ' ')
-var maxCommands = 0                   // всегда равно limit
-var counterCommands = 0               // счётчик выполненных команд
-var listCells = mutableListOf<Int>()  // список чисел, который будет изменяться посредством команд
-var i = 0                             // индекс текущей ячейки из listCells
+var maxCommands = 0
+var counterCommands = 0
+var listCells = mutableListOf<Int>()
+var i = 0
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
-    if (!checkCommands(commands))        // Проверка на соответствие строки команд требованиям
-        throw IllegalArgumentException()
+    if (!checkCommands(commands)) throw IllegalArgumentException()
     maxCommands = limit
     counterCommands = 0
     listCells = MutableList(cells) { 0 }
     i = cells / 2
-    doForString(commands)                // Обработка строки команд
+    doForString(commands)
     return listCells
 }
 
 fun checkCommands(string: String): Boolean {
     var count = 0
     for (item in string) {
-        if (item == '[')
-            count++
-        if (item == ']')
-            count--
-        if (count < 0)
-            return false
+        if (item == '[') count++
+        if (item == ']') count--
+        if (count < 0) return false
     }
-    if (count != 0)
-        return false
+    if (count != 0) return false
     return string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
 }
 
 fun doForString(string: String) {
-    var commands = string                                     // Основная строка
-    var localStrCommands = ""                                 // Локальная строка, которую мы будем обрабатывать отдельно в случае, если встретим [...]
-    while (commands != "" && counterCommands < maxCommands) {    // Делаться это будет через рекурсию doForString(localStrCommands),
-        if (commands == "")                                      // Сама localStrCommands будет представлять из себя содержание [...]
-            break
-        if (commands[0] in primitiveCommands) {  // если строка начинается с какой-то из базовых команд
-            when (commands[0]) {
-                '+' -> listCells[i]++
-                '-' -> listCells[i]--
-                '>' -> i++
-                '<' -> i--
-            }
-            if (i !in 0..listCells.lastIndex)    // проверка на выход i за границы списка
-                throw IllegalStateException()
-            commands = commands.substring(1, commands.lastIndex + 1) // удаляем выполненную команду из строки
-            counterCommands++                    // увеличиваем счётчик выполненных команд
-        } else if (commands[0] == '[') {         // если встретили '['
-            counterCommands++                    // так как '[' является командой вне зависимости от того, что именно она будет выполнять, мы увеличиваем счётчик выполненных команд
-            if (listCells[i] == 0) {             // если текущий элемент равен 0, то перескакиваем через [...]
-                localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
-                commands = commands.substring(localStrCommands.length + 2) // удаляем [...] (т.е. локальную строку и '[' с ']' по бокам) из основной строки
-            } else {                             // если текущий элемент не равен 0, то мы попадаем в [...]
-                localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
-                if (localStrCommands == "") {    // Если внутри [...] пусто, а ']' из-за того, что listCells[i] != 0, требует снова выполнить содержимое [...],
-                    counterCommands = maxCommands// то мы попадаем в бесконечный и ничего не изменяющий цикл, значит, разумно счётчик команд прировнять ограничению по числу команд,
-                    break                        // а также совершить выход
+    var commands = string
+    var localStrCommands = ""
+    while (commands != "" && counterCommands < maxCommands) {
+        if (commands == "") break
+        if (commands[0] in primitiveCommands || commands[0] == '[' || commands[0] == ']') counterCommands++ else continue
+        when (commands[0]) {
+            in primitiveCommands -> {
+                when (commands[0]) {
+                    '+' -> listCells[i]++
+                    '-' -> listCells[i]--
+                    '>' -> i++
+                    '<' -> i--
                 }
-                doForString(localStrCommands)    // выполняем для этой строки обработку на команды из [...]
-                commands = commands.substring(localStrCommands.length + 1) // после обработки удаляем эту строку из основной, оставляя от нее только ']' (']' нужен для дальнейшей обработки)
+                if (i !in 0..listCells.lastIndex) throw IllegalStateException()
+                commands = removeFirstElement(commands)
             }
-        } else if (commands[0] == ']') {         // если обработили [...] (т.е. [localStrCommands]) и от нёё остался ']'
-            counterCommands++                    // так как ']' является командой вне зависимости от того, что именно она будет выполнять, мы увеличиваем счётчик выполненных команд
-            if (listCells[i] == 0)               // если текущий элемент равен 0, то нам НЕ НУЖНО заново выполнять команды внутри [...]
-                commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
-            else if (localStrCommands != "")     // если текущий элемент не равен 0 (и внутри [...] есть команды), то нам НУЖНО заново выполнять команды внутри [...]
-                doForString(localStrCommands)    // заново выполняем команды внутри [...], где правая ']' есть commands[0], а содержимое [...] - это localStrCommands
-            else if (localStrCommands == "")     // если текущий элемент не равен 0 (и внутри [...] нет команд), то просто удаляем ']'
-                commands = commands.substring(1, commands.lastIndex + 1) // удаляем ']'
+            '[' -> {
+                localStrCommands = findLocalString(commands)
+                when {
+                    listCells[i] == 0 -> commands = removeLocalString(commands, localStrCommands, false)
+                    localStrCommands == "" -> counterCommands = maxCommands
+                    else -> {
+                        doForString(localStrCommands)
+                        commands = removeLocalString(commands, localStrCommands, true)
+                    }
+                }
+            }
+            ']' -> {
+                when {
+                    listCells[i] == 0 || localStrCommands == "" -> commands = removeFirstElement(commands)
+                    localStrCommands != "" -> doForString(localStrCommands)
+                }
+            }
         }
     }
 }
 
-fun findLocalString(string: String): String? {
+fun findLocalString(string: String): String {
     var count = 0
     for (i in string.indices) {
-        if (string[i] == '[')
-            count++
+        if (string[i] == '[') count++
         else if (string[i] == ']') {
-            if (count != 0)
-                count--
-            if (count == 0)
-                return string.substring(1, i)
+            if (count != 0) count--
+            if (count == 0) return string.substring(1, i)
         }
     }
-    return null
+    return ""
 }
 
+fun removeFirstElement(string: String): String = string.substring(1)
+
+fun removeLocalString(base: String, local: String, saveRightBracket: Boolean): String = when (saveRightBracket) {
+    true -> base.substring(local.length + 1)
+    else -> base.substring(local.length + 2)
+}
