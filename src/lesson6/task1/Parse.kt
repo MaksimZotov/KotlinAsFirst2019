@@ -362,8 +362,18 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
 }
 
 fun checkCommands(string: String): Boolean {
-    return string.filter { it == '[' }.count() == string.filter { it == ']' }.count() &&
-            string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
+    var count = 0
+    for (item in string) {
+        if (item == '[')
+            count++
+        if (item == ']')
+            count--
+        if (count < 0)
+            return false
+    }
+    if (count != 0)
+        return false
+    return string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
 }
 
 fun doForString(string: String) {
@@ -387,10 +397,10 @@ fun doForString(string: String) {
             counterCommands++                    // так как '[' является командой вне зависимости, что именно она будет выполнять, мы увеличиваем счётчик выполненных команд
             if (listCells[i] == 0) {             // если текущий элемент равен 0, то перескакиваем через [...]
                 localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
-                commands = commands.substring(localStrCommands.length + 1) // удаляем [...] (т.е. локальную строку + '[' ']' по бокам) из основной строки
-            } else {                             // если текущий элемент не равен 0, и мы попадаем в [...]
+                commands = commands.substring(localStrCommands.length + 1) // удаляем [...] (т.е. локальную строку и '[' с ']' по бокам) из основной строки
+            } else {                             // если текущий элемент не равен 0, то мы попадаем в [...]
                 localStrCommands = findLocalString(commands)!! // ищем строку, заключенную внутри [...]
-                doForString(localStrCommands)    // выполняем для этой строки обработку на команды
+                doForString(localStrCommands)    // выполняем для этой строки обработку на команды из [...]
                 commands = commands.substring(localStrCommands.length + 1) // после обработки удаляем эту строку из основной, оставляя от нее только ']' (']' нужен для дальнейшей обработки)
             }
         } else if (commands[0] == ']') {         // если обработили [...] (т.е. [localStrCommands]) и от нёё остался ']'
