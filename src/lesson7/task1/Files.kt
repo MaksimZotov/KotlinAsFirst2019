@@ -65,7 +65,6 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
                 if (list[i][k] == text[j + k]) {
                     if (k == list[i].lastIndex)
                         map[substrings[i]] = map[substrings[i]]!! + 1
-                    continue
                 } else
                     break
             }
