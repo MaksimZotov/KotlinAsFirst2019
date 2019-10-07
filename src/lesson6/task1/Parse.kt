@@ -357,7 +357,7 @@ var strCommands = ""
 var maxCommands = 0
 var counterCommands = 0
 var listCells = mutableListOf<Int>()
-var i = 0
+var indexOfCell = 0
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!checkCommands(commands)) throw IllegalArgumentException()
@@ -365,7 +365,7 @@ fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     maxCommands = limit
     counterCommands = 0
     listCells = MutableList(cells) { 0 }
-    i = cells / 2
+    indexOfCell = cells / 2
     doForString(0, strCommands.lastIndex)
     return listCells
 }
@@ -382,26 +382,23 @@ fun checkCommands(string: String): Boolean {
 }
 
 fun doForString(startIndex: Int, endIndex: Int) {
-    var ind = startIndex
-    while (ind <= endIndex && counterCommands < maxCommands) {
+    var currentIndex = startIndex
+    while (currentIndex <= endIndex && counterCommands < maxCommands) {
         counterCommands++
-        when (strCommands[ind]) {
+        when (strCommands[currentIndex]) {
             in listOf(' ', '+', '-', '>', '<') -> {
-                when (strCommands[ind]) {
-                    '+' -> listCells[i]++
-                    '-' -> listCells[i]--
-                    '>' -> i++
-                    '<' -> i--
+                when (strCommands[currentIndex]) {
+                    '+' -> listCells[indexOfCell]++
+                    '-' -> listCells[indexOfCell]--
+                    '>' -> indexOfCell++
+                    '<' -> indexOfCell--
                 }
-                if (i !in 0..listCells.lastIndex) throw IllegalStateException()
-                ind++
+                if (indexOfCell !in listCells.indices) throw IllegalStateException()
+                currentIndex++
             }
-            '[' -> {
-                val indexOfRightBracket = findIndexOfRightBracket(ind)
-                when {
-                    listCells[i] == 0 -> ind = indexOfRightBracket + 1
-                    else -> doForString(ind + 1, indexOfRightBracket - 1)
-                }
+            '[' -> when {
+                listCells[indexOfCell] == 0 -> currentIndex = findIndexOfRightBracket(currentIndex) + 1
+                else -> doForString(currentIndex + 1, findIndexOfRightBracket(currentIndex) - 1)
             }
         }
     }
