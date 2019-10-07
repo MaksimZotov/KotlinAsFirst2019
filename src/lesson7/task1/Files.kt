@@ -86,12 +86,29 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  * Исключения (жюри, брошюра, парашют) в рамках данного задания обрабатывать не нужно
  *
  */
+
+val correctSet = listOf('И', 'А', 'У', 'и', 'а', 'у')
+val incorrectSet = listOf('Ы', 'Я', 'Ю', 'ы', 'я', 'ю')
+val lettersToCheck = listOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
+
 fun sibilants(inputName: String, outputName: String) {
     val text = File(inputName).readText()
-    val correctSet = arrayOf("И", "А", "У")
-    val incorrectSet = arrayOf("Ы", "Я", "Ю")
-    val lettersToCheck = arrayOf("Ж", "Ч", "Ш", "Щ")
+    val writer = File(outputName).printWriter()
+    var nextLetter = text[0]
+    for (i in 1..text.lastIndex) {
+        writer.print(nextLetter)
+        nextLetter = text[i]
+        for (j in lettersToCheck.indices) {
+            if (text[i - 1] == lettersToCheck[j])
+                for (k in incorrectSet.indices)
+                    if (text[i] == incorrectSet[k])
+                        nextLetter = correctSet[k]
+        }
+    }
+    writer.print(text.last())
+    writer.close()
 }
+
 
 /**
  * Средняя
@@ -111,7 +128,17 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val outputStream = File(outputName).bufferedWriter()
+    val inputStream = File(inputName).readLines().map { it.filterIndexed { i, _ -> i >= it.indexOfFirst { it != ' ' } } }
+    val maxLength = inputStream.maxBy { it.length }!!.length
+    for (line in inputStream) {
+        for (i in 0 until (maxLength - line.length) / 2) {
+            outputStream.write(" ")
+        }
+        outputStream.write(line)
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
