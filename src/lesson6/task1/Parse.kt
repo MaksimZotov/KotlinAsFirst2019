@@ -129,13 +129,11 @@ fun dateDigitToStr(digital: String): String {
  *
  * PS: Дополнительные примеры работы функции можно посмотреть в соответствующих тестах.
  */
-fun flattenPhoneNumber(phone: String): String {
-    return if (Regex("""\+?[\d -]*(\(.+\))?[\d -]*""").matches(phone) && Regex("""\d""").find(phone) != null)
-        phone.filter { it != ' ' && it != '-' && it != '(' && it != ')' }
-    else
-        ""
-}
-
+fun flattenPhoneNumber(phone: String): String =
+        if (Regex("""\+?[\d -]*(\(.+\))?[\d -]*""").matches(phone) && Regex("""\d""").find(phone) != null)
+            phone.filter { it != ' ' && it != '-' && it != '(' && it != ')' }
+        else
+            ""
 
 /**
  * Средняя
@@ -172,15 +170,15 @@ fun bestLongJump(jumps: String): Int {
  * вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    if (Regex("""\d+ \+""").find(jumps) != null) {
+    return if (Regex("""\d+ \+""").find(jumps) != null) {
         val list = jumps.split(' ')
         var max = 0
         for (i in 0 until list.lastIndex)
             if (list[i + 1] == "+")
                 max = maxOf(max, list[i].toInt())
-        return max
+        max
     } else
-        return -1
+        -1
 }
 
 /**
@@ -287,24 +285,35 @@ fun mostExpensive(description: String): String {
  *
  * Вернуть -1, если roman не является корректным римским числом
  */
+
+val romanDigits = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+val arabDigits = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
+
 fun fromRoman(roman: String): Int {
-    val romanDigits = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
-    val arabDigits = arrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-    var result = 0
     if (roman == "")
         return -1
-    var str = roman
-    while (str != "") {
-        for (i in romanDigits.indices) {
-            if (str.endsWith(romanDigits[i])) {
+    var result = 0
+    var ind = 0
+    while (ind <= roman.lastIndex) {
+        for (i in romanDigits.lastIndex downTo 0) {
+            if (startsWith(roman, romanDigits[i], ind)) {
                 result += arabDigits[i]
-                str = str.substring(0, str.lastIndex - romanDigits[i].length + 1)
+                ind += romanDigits[i].length
                 break
-            } else if (i == romanDigits.lastIndex)
+            } else if (i == 0)
                 return -1
         }
     }
     return result
+}
+
+fun startsWith(string: String, start: String, indexOfFirstElement: Int): Boolean {
+    if (string.length - indexOfFirstElement < start.length)
+        return false
+    for (i in start.indices)
+        if (start[i] != string[i + indexOfFirstElement])
+            return false
+    return true
 }
 
 /**
@@ -344,7 +353,7 @@ fun fromRoman(roman: String): Int {
  *
  */
 
-val primitiveCommands = arrayOf('+', '-', '>', '<', ' ')
+var strCommands = ""
 var maxCommands = 0
 var counterCommands = 0
 var listCells = mutableListOf<Int>()
@@ -352,11 +361,12 @@ var i = 0
 
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> {
     if (!checkCommands(commands)) throw IllegalArgumentException()
+    strCommands = commands
     maxCommands = limit
     counterCommands = 0
     listCells = MutableList(cells) { 0 }
     i = cells / 2
-    doForString(commands)
+    doForString(0, strCommands.lastIndex)
     return listCells
 }
 
@@ -371,59 +381,40 @@ fun checkCommands(string: String): Boolean {
     return string.none { it !in listOf(' ', '+', '-', '>', '<', '[', ']') }
 }
 
-fun doForString(string: String) {
-    var commands = string
-    var localStrCommands = ""
-    while (commands != "" && counterCommands < maxCommands) {
-        if (commands == "") break
-        if (commands[0] in primitiveCommands || commands[0] == '[' || commands[0] == ']') counterCommands++ else continue
-        when (commands[0]) {
-            in primitiveCommands -> {
-                when (commands[0]) {
+fun doForString(startIndex: Int, endIndex: Int) {
+    var ind = startIndex
+    while (ind <= endIndex && counterCommands < maxCommands) {
+        counterCommands++
+        when (strCommands[ind]) {
+            in listOf(' ', '+', '-', '>', '<') -> {
+                when (strCommands[ind]) {
                     '+' -> listCells[i]++
                     '-' -> listCells[i]--
                     '>' -> i++
                     '<' -> i--
                 }
                 if (i !in 0..listCells.lastIndex) throw IllegalStateException()
-                commands = removeFirstElement(commands)
+                ind++
             }
             '[' -> {
-                localStrCommands = findLocalString(commands)
+                val indexOfRightBracket = findIndexOfRightBracket(ind)
                 when {
-                    listCells[i] == 0 -> commands = removeLocalString(commands, localStrCommands, false)
-                    localStrCommands == "" -> counterCommands = maxCommands
-                    else -> {
-                        doForString(localStrCommands)
-                        commands = removeLocalString(commands, localStrCommands, true)
-                    }
-                }
-            }
-            ']' -> {
-                when {
-                    listCells[i] == 0 || localStrCommands == "" -> commands = removeFirstElement(commands)
-                    localStrCommands != "" -> doForString(localStrCommands)
+                    listCells[i] == 0 -> ind = indexOfRightBracket + 1
+                    else -> doForString(ind + 1, indexOfRightBracket - 1)
                 }
             }
         }
     }
 }
 
-fun findLocalString(string: String): String {
+fun findIndexOfRightBracket(startIndex: Int): Int {
     var count = 0
-    for (i in string.indices) {
-        if (string[i] == '[') count++
-        else if (string[i] == ']') {
+    for (i in startIndex..strCommands.lastIndex) {
+        if (strCommands[i] == '[') count++
+        else if (strCommands[i] == ']') {
             if (count != 0) count--
-            if (count == 0) return string.substring(1, i)
+            if (count == 0) return i
         }
     }
-    return ""
-}
-
-fun removeFirstElement(string: String): String = string.substring(1)
-
-fun removeLocalString(base: String, local: String, saveRightBracket: Boolean): String = when (saveRightBracket) {
-    true -> base.substring(local.length + 1)
-    else -> base.substring(local.length + 2)
+    return -1
 }
