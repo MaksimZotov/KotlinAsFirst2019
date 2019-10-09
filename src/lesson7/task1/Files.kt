@@ -133,13 +133,11 @@ fun centerFile(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     val inputLines = File(inputName).readLines().map {
         val indexOfNoSpace = it.indexOfFirst { it != ' ' }
-        it.filterIndexed { i, _ -> i >= indexOfNoSpace }
+        if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
     }
     val maxLength = inputLines.maxBy { it.length }!!.length
     for (line in inputLines) {
-        for (i in 0 until (maxLength - line.length) / 2)
-            outputStream.write(" ")
-        outputStream.write(line)
+        outputStream.write(" ".repeat((maxLength - line.length) / 2) + line)
         outputStream.newLine()
     }
     outputStream.close()
@@ -173,22 +171,31 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 
-// не доделал
 fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
     val inputLines = File(inputName).readLines().map {
         val indexOfNoSpace = it.indexOfFirst { it != ' ' }
-        it.filterIndexed { i, _ -> i >= indexOfNoSpace }
+        if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
     }
-    val maxLength = File(inputName).readLines().maxBy { it.length }!!.length
+    val maxLength = inputLines.maxBy { it.length }!!.length
     for (line in inputLines) {
-        val countSpaces = line.filter { it == ' ' }.count()
-        val countSymbols = line.count() - countSpaces
-        for (word in line.split(" ")) {
-            writer.write(word)
-            val currentSizeOfSpace = (maxLength - countSymbols) / 2 + 1
-            for (i in 1..currentSizeOfSpace)
-                writer.write(" ")
+        val words = line.split(" ")
+        val countWords = words.count()
+        val countSymbols = line.filter { it != ' ' }.count()
+        val countSpaces = maxLength - countSymbols
+        val currentSizeOfGap = if (countWords != 1) countSpaces / (countWords - 1) + 1 else 1
+        val currentLengthOfLine = currentSizeOfGap * (countWords - 1) + countSymbols
+        var dif = 0
+        if (currentLengthOfLine > maxLength)
+            dif = currentLengthOfLine - maxLength
+        for (i in words.indices) {
+            writer.write(words[i])
+            if (i != words.lastIndex) {
+                if (words.lastIndex - i > dif)
+                    writer.write(" ".repeat(currentSizeOfGap))
+                else
+                    writer.write(" ".repeat(currentSizeOfGap - 1))
+            }
         }
         writer.newLine()
     }
