@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import jdk.nashorn.internal.runtime.regexp.RegExpMatcher
 import java.io.File
 
 /**
@@ -260,8 +261,12 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues { it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("") }
-    val lowerDictionary = dictionary.mapKeys { it.key.toLowerCase() }.mapValues { it.value.mapIndexed { _, it -> it.toLowerCase() }.joinToString("") }
+    val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues {
+        it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("")
+    }
+    val lowerDictionary = dictionary.mapKeys { it.key.toLowerCase() }.mapValues {
+        it.value.mapIndexed { _, it -> it.toLowerCase() }.joinToString("")
+    }
     val text = File(inputName).readText()
     val writer = File(outputName).printWriter()
     for (letter in text) {
@@ -299,7 +304,19 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val lines = File(inputName).readLines().toList()
+    val modifiedLines = lines.map { it.toLowerCase() }
+    val maxLine = modifiedLines.filter { it.toSet().size == it.length }.maxBy { it.length }
+    if (maxLine != null) {
+        val maxLength = maxLine!!.length
+        val indexOfMaxLine = modifiedLines.indexOf(maxLine)
+        writer.write(lines[indexOfMaxLine])
+        for (i in 1..modifiedLines.lastIndex)
+            if (modifiedLines[i].length == maxLength && modifiedLines[i].toSet().size == modifiedLines[i].length)
+                writer.write(", " + lines[i])
+    }
+    writer.close()
 }
 
 /**
