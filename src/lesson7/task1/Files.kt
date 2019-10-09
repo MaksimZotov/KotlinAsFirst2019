@@ -94,18 +94,20 @@ val lettersToCheck = listOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
 fun sibilants(inputName: String, outputName: String) {
     val text = File(inputName).readText()
     val writer = File(outputName).printWriter()
-    var nextLetter = text[0]
-    for (i in 1..text.lastIndex) {
-        writer.print(nextLetter)
-        nextLetter = text[i]
-        for (j in lettersToCheck.indices) {
-            if (text[i - 1] == lettersToCheck[j])
-                for (k in incorrectSet.indices)
-                    if (text[i] == incorrectSet[k])
-                        nextLetter = correctSet[k]
+    if (text.isNotEmpty()) {
+        var nextLetter = text[0]
+        for (i in 1..text.lastIndex) {
+            writer.print(nextLetter)
+            nextLetter = text[i]
+            for (j in lettersToCheck.indices) {
+                if (text[i - 1] == lettersToCheck[j])
+                    for (k in incorrectSet.indices)
+                        if (text[i] == incorrectSet[k])
+                            nextLetter = correctSet[k]
+            }
         }
+        writer.print(text.last())
     }
-    writer.print(text.last())
     writer.close()
 }
 
@@ -129,9 +131,12 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
-    val inputStream = File(inputName).readLines().map { it.filterIndexed { i, _ -> i >= it.indexOfFirst { it != ' ' } } }
-    val maxLength = inputStream.maxBy { it.length }!!.length
-    for (line in inputStream) {
+    val inputLines = File(inputName).readLines().map {
+        val indexOfNoSpace = it.indexOfFirst { it != ' ' }
+        it.filterIndexed { i, _ -> i >= indexOfNoSpace }
+    }
+    val maxLength = inputLines.maxBy { it.length }!!.length
+    for (line in inputLines) {
         for (i in 0 until (maxLength - line.length) / 2)
             outputStream.write(" ")
         outputStream.write(line)
@@ -167,8 +172,27 @@ fun centerFile(inputName: String, outputName: String) {
  * 7) В самой длинной строке каждая пара соседних слов должна быть отделена В ТОЧНОСТИ одним пробелом
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
+
+// не доделал
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val inputLines = File(inputName).readLines().map {
+        val indexOfNoSpace = it.indexOfFirst { it != ' ' }
+        it.filterIndexed { i, _ -> i >= indexOfNoSpace }
+    }
+    val maxLength = File(inputName).readLines().maxBy { it.length }!!.length
+    for (line in inputLines) {
+        val countSpaces = line.filter { it == ' ' }.count()
+        val countSymbols = line.count() - countSpaces
+        for (word in line.split(" ")) {
+            writer.write(word)
+            val currentSizeOfSpace = (maxLength - countSymbols) / 2 + 1
+            for (i in 1..currentSizeOfSpace)
+                writer.write(" ")
+        }
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
