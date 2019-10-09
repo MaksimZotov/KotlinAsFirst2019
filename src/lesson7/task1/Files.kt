@@ -186,9 +186,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         val countSpaces = maxLength - countSymbols
         val currentSizeOfGap = if (countWords != 1) countSpaces / (countWords - 1) + 1 else 1
         val currentLengthOfLine = currentSizeOfGap * (countWords - 1) + countSymbols
-        var dif = 0
-        if (currentLengthOfLine > maxLength)
-            dif = currentLengthOfLine - maxLength
+        val dif = maxOf(0, currentLengthOfLine - maxLength)
         for (i in words.indices) {
             writer.write(words[i])
             if (i != words.lastIndex) {
@@ -304,8 +302,8 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
+    val lines = File(inputName).readLines()
     val writer = File(outputName).bufferedWriter()
-    val lines = File(inputName).readLines().toList()
     val modifiedLines = lines.map { it.toLowerCase() }
     val maxLine = modifiedLines.filter { it.toSet().size == it.length }.maxBy { it.length }
     if (maxLine != null) {
