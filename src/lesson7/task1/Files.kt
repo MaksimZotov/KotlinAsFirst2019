@@ -181,7 +181,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     for (line in inputLines) {
         val words = line.split(" ")
         val countWords = words.count()
-        val countSymbols = line.filter { it != ' ' }.count()
+        val countSymbols = line.count { it != ' ' }
         val countSpaces = maxLength - countSymbols
         val currentSizeOfGap = if (countWords != 1) countSpaces / (countWords - 1) + 1 else 1
         val currentLengthOfLine = currentSizeOfGap * (countWords - 1) + countSymbols
@@ -220,7 +220,9 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    TODO()
+}
 
 /**
  * Средняя
@@ -258,7 +260,18 @@ fun top20Words(inputName: String): Map<String, Int> = TODO()
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    TODO()
+    val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues { it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("") }
+    val lowerDictionary = dictionary.mapKeys { it.key.toLowerCase() }.mapValues { it.value.mapIndexed { _, it -> it.toLowerCase() }.joinToString("") }
+    val text = File(inputName).readText()
+    val writer = File(outputName).printWriter()
+    for (letter in text) {
+        when {
+            upperDictionary.containsKey(letter) -> writer.print(upperDictionary[letter])
+            lowerDictionary.containsKey(letter) -> writer.print(lowerDictionary[letter])
+            else -> writer.print(letter)
+        }
+    }
+    writer.close()
 }
 
 /**
