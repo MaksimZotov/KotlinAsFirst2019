@@ -222,6 +222,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
 
 // Не доделал
 fun top20Words(inputName: String): Map<String, Int> {
+    TODO()
+    /*
     val text = File(inputName).readText()
     val wordsList = text.split(Regex("""[^а-я^ё^a-z^A-Я^Ё^A-Z]+""")).map { it.toLowerCase() }.toMutableList()
     val map = mutableMapOf<String, Int>()
@@ -232,6 +234,7 @@ fun top20Words(inputName: String): Map<String, Int> {
             wordsList.removeAll { it == wordMaxFrequency }
         }
     return map
+     */
 }
 
 /**
