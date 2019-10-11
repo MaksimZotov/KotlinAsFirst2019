@@ -3,7 +3,9 @@
 package lesson7.task1
 
 import jdk.nashorn.internal.runtime.regexp.RegExpMatcher
+import lesson3.task1.digitNumber
 import java.io.File
+import kotlin.math.pow
 
 /**
  * Пример
@@ -220,21 +222,8 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  *
  */
 
-// Не доделал
 fun top20Words(inputName: String): Map<String, Int> {
     TODO()
-    /*
-    val text = File(inputName).readText()
-    val wordsList = text.split(Regex("""[^а-я^ё^a-z^A-Я^Ё^A-Z]+""")).map { it.toLowerCase() }.toMutableList()
-    val map = mutableMapOf<String, Int>()
-    if (wordsList[0] != "" || wordsList.size > 1)
-        for (i in 1..minOf(20, wordsList.toSet().size)) {
-            val wordMaxFrequency = wordsList.maxBy { item -> wordsList.count { item == it } }
-            map[wordMaxFrequency!!] = wordsList.count { it == wordMaxFrequency }
-            wordsList.removeAll { it == wordMaxFrequency }
-        }
-    return map
-     */
 }
 
 /**
@@ -521,7 +510,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val res = lhv * rhv
+    val lhvSize = digitNumber(lhv)
+    val rhvSize = digitNumber(rhv)
+    val resSize = digitNumber(res)
+    val writer = File(outputName).printWriter()
+    writer.println(" ".repeat(rhvSize) + lhv)
+    writer.println("*" + " ".repeat(lhvSize - 1) + rhv)
+    writer.println("-".repeat(resSize + 1))
+    val firstMult = lhv * (rhv % 10)
+    writer.println(" ".repeat(rhvSize) + firstMult)
+    for (i in 2..rhvSize) {
+        val curMult = lhv * (rhv / 10.0.pow(i - 1) % 10).toInt()
+        writer.println("+" + " ".repeat(rhvSize - i) + curMult)
+    }
+    writer.println("-".repeat(resSize + 1))
+    writer.println(" $res")
+    writer.close()
 }
 
 
