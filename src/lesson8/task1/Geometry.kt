@@ -3,10 +3,8 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import kotlin.math.PI
-import kotlin.math.cos
-import kotlin.math.sin
-import kotlin.math.sqrt
+import java.lang.IllegalArgumentException
+import kotlin.math.*
 
 /**
  * Точка на плоскости
@@ -79,14 +77,18 @@ data class Circle(val center: Point, val radius: Double) {
      * расстояние между их центрами минус сумма их радиусов.
      * Расстояние между пересекающимися окружностями считать равным 0.0.
      */
-    fun distance(other: Circle): Double = TODO()
+    fun distance(other: Circle): Double {
+        val dist = center.distance(other.center) - (radius + other.radius)
+        return if (dist < 0) 0.0 else dist
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean =
+            center.distance(p) <= radius
 }
 
 /**
@@ -94,10 +96,10 @@ data class Circle(val center: Point, val radius: Double) {
  */
 data class Segment(val begin: Point, val end: Point) {
     override fun equals(other: Any?) =
-        other is Segment && (begin == other.begin && end == other.end || end == other.begin && begin == other.end)
+            other is Segment && (begin == other.begin && end == other.end || end == other.begin && begin == other.end)
 
     override fun hashCode() =
-        begin.hashCode() + end.hashCode()
+            begin.hashCode() + end.hashCode()
 }
 
 /**
@@ -106,7 +108,22 @@ data class Segment(val begin: Point, val end: Point) {
  * Дано множество точек. Вернуть отрезок, соединяющий две наиболее удалённые из них.
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
-fun diameter(vararg points: Point): Segment = TODO()
+fun diameter(vararg points: Point): Segment {
+    if (points.size < 2) throw  IllegalArgumentException()
+    var p1 = points[0]
+    var p2 = points[1]
+    var max = p1.distance(p2)
+    for (i in 0 until points.lastIndex)
+        for (j in (i + 1)..points.lastIndex) {
+            val cur = points[i].distance(points[j])
+            if (cur > max) {
+                max = cur
+                p1 = points[i]
+                p2 = points[j]
+            }
+        }
+    return Segment(p1, p2)
+}
 
 /**
  * Простая
@@ -114,7 +131,12 @@ fun diameter(vararg points: Point): Segment = TODO()
  * Построить окружность по её диаметру, заданному двумя точками
  * Центр её должен находиться посередине между точками, а радиус составлять половину расстояния между ними
  */
-fun circleByDiameter(diameter: Segment): Circle = TODO()
+fun circleByDiameter(diameter: Segment): Circle {
+    val centerX = (diameter.begin.x + diameter.end.x) / 2
+    val centerY = (diameter.begin.y + diameter.end.y) / 2
+    val radius = diameter.begin.distance(diameter.end) / 2
+    return Circle(Point(centerX, centerY), radius)
+}
 
 /**
  * Прямая, заданная точкой point и углом наклона angle (в радианах) по отношению к оси X.
@@ -135,7 +157,9 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Найти точку пересечения с другой линией.
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
-    fun crossPoint(other: Line): Point = TODO()
+    fun crossPoint(other: Line): Point {
+        TODO()
+    }
 
     override fun equals(other: Any?) = other is Line && angle == other.angle && b == other.b
 
@@ -153,14 +177,26 @@ class Line private constructor(val b: Double, val angle: Double) {
  *
  * Построить прямую по отрезку
  */
-fun lineBySegment(s: Segment): Line = TODO()
+fun lineBySegment(s: Segment): Line {
+    val x = abs(s.end.x - s.begin.x)
+    val y = abs(s.end.y - s.begin.y)
+    val c = sqrt(sqr(x) + sqr(y))
+    val angle = asin(y / c)
+    return Line(Point(s.begin.x, s.begin.y), angle)
+}
 
 /**
  * Средняя
  *
  * Построить прямую по двум точкам
  */
-fun lineByPoints(a: Point, b: Point): Line = TODO()
+fun lineByPoints(a: Point, b: Point): Line {
+    val x = abs(a.x - b.x)
+    val y = abs(a.y - b.y)
+    val c = sqrt(sqr(x) + sqr(y))
+    val angle = asin(y / c)
+    return Line(Point(a.x, a.y), angle)
+}
 
 /**
  * Сложная
