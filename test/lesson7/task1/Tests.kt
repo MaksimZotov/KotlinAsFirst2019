@@ -129,7 +129,8 @@ Basic, Ruby, Swift.
         alignFileByWidth("input/personalTest", "temp.txt")
         assertFileContent(
                 "temp.txt",
-                """"""
+                """оАбаб --- ОАБАБ
+оабаб         -"""
         )
         File("temp.txt").delete()
 
@@ -224,10 +225,6 @@ Basic, Ruby, Swift.
     @Test
     @Tag("Normal")
     fun chooseLongestChaoticWord() {
-        chooseLongestChaoticWord("input/personalTest", "temp.txt")
-        assertFileContent("temp.txt", "a")
-        File("temp.txt").delete()
-
         chooseLongestChaoticWord("input/chaotic_in1.txt", "temp.txt")
         assertFileContent("temp.txt", "Карминовый, Некрасивый")
         File("temp.txt").delete()
@@ -339,19 +336,6 @@ Basic, Ruby, Swift.
             assertFileContent("temp.txt", res.trimIndent())
             File("temp.txt").delete()
         }
-
-        test(
-                12,
-                111,
-                """   12
-* 111
------
-   12
-+ 12
-+12
------
- 1332"""
-        )
 
         test(
             19935,

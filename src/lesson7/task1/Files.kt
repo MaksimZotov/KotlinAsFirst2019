@@ -320,7 +320,7 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
         for (i in 1..modifiedLines.lastIndex)
             if (modifiedLines[i].length == maxLength &&
                     modifiedLines[i].toSet().size == modifiedLines[i].length &&
-                    modifiedLines[i] != maxLine)
+                    indexOfMaxLine != i)
                 writer.write(", " + lines[i])
     }
     writer.close()
