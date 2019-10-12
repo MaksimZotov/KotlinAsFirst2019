@@ -194,7 +194,6 @@ fun lineByPoints(a: Point, b: Point): Line {
     val x = abs(a.x - b.x)
     val y = abs(a.y - b.y)
     val angle = atan(y / x)
-
     return Line(Point(a.x, a.y), angle)
 }
 
