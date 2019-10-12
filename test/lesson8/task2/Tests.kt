@@ -92,6 +92,7 @@ class Tests {
     @Test
     @Tag("Hard")
     fun bishopTrajectory() {
+        bishopTrajectory(square("b2"), square("b4")).assertBishopTrajectory(square("b2"), square("b4"), 2)
         assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
         assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
         assertEquals(listOf(square("g1"), square("f2"), square("h4")), bishopTrajectory(square("g1"), square("h4")))

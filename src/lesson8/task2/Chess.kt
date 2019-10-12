@@ -79,7 +79,7 @@ fun rookMoveNumber(start: Square, end: Square): Int {
 }
 
 fun checkSquare(square: Square): Boolean =
-        square.column in 1..8 || square.row in 1..8
+        square.column in 1..8 && square.row in 1..8
 
 
 /**
@@ -167,27 +167,18 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
         deltaColumn == deltaRow && deltaRow == 0 -> listOf(start)
         (deltaColumn + deltaRow) % 2 != 0 -> emptyList()
         deltaColumn == deltaRow -> listOf(start, end)
-        else -> when {
-            deltaColumn == 0 -> {
-                val curColumn = if (start.column * 2 < 9) start.column * 2 else start.column / 2
-                listOf(start, Square(curColumn, deltaRow / 2 + 1), end)
+        else -> {
+            var startSquare = start
+            var endSquare = end
+            if (start.row > end.row) {
+                startSquare = end
+                endSquare = start
             }
-            deltaRow == 0 -> {
-                val curRow = if (start.row * 2 < 9) start.row * 2 else start.row / 2
-                listOf(start, Square(deltaColumn / 2 + 1, curRow), end)
-            }
-            else -> {
-                var startSquare = start
-                var endSquare = end
-                if (start.row > end.row) {
-                    startSquare = end
-                    endSquare = start
-                }
-                var curSquare: Square = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
-                if (curSquare.column == -1)
-                    curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, -1)
-                listOf(start, curSquare, end)
-            }
+            var curSquare: Square = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
+            if (curSquare.column == -1)
+                curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, -1)
+            listOf(start, curSquare, end)
+
         }
     }
 }
