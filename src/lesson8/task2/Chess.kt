@@ -193,6 +193,7 @@ fun findSquareBetweenStartAndEnd(columnStart: Int, rowStart: Int, columnEnd: Int
             return Square(curColumn, curRow)
         curColumn += plusMinus
         curRow++
+
     }
     return Square(-1, -1)
 }
