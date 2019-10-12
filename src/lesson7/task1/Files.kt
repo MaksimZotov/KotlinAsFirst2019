@@ -134,11 +134,8 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
-    val inputLines = File(inputName).readLines().map {
-        val indexOfNoSpace = it.indexOfFirst { it != ' ' }
-        if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
-    }
-    if (inputLines.isNotEmpty()) {
+    if (File(inputName).readLines().isNotEmpty()) {
+        val inputLines = getModifiedLines(File(inputName).readLines())
         val maxLength = inputLines.maxBy { it.length }!!.length
         for (line in inputLines) {
             outputStream.write(" ".repeat((maxLength - line.length) / 2) + line)
@@ -146,6 +143,16 @@ fun centerFile(inputName: String, outputName: String) {
         }
     }
     outputStream.close()
+}
+
+fun getModifiedLines(inputLines: List<String>): List<String> {
+    val lines = inputLines.toMutableList()
+    for (i in lines.indices) {
+        val firstNoSpace = lines[i].indexOfFirst { it != ' ' }
+        val lastNoSpace = lines[i].indexOfLast { it != ' ' }
+        lines[i] = if (lastNoSpace != -1) lines[i].substring(firstNoSpace, lastNoSpace + 1) else lines[i]
+    }
+    return lines
 }
 
 /**
@@ -178,11 +185,8 @@ fun centerFile(inputName: String, outputName: String) {
 
 fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    val inputLines = File(inputName).readLines().map {
-        val indexOfNoSpace = it.indexOfFirst { it != ' ' }
-        if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
-    }
-    if (inputLines.isNotEmpty()) {
+    if (File(inputName).readLines().isNotEmpty()) {
+        val inputLines = getModifiedLines(File(inputName).readLines())
         val maxLength = inputLines.maxBy { it.length }!!.length
         for (line in inputLines) {
             val words = line.split(" ")
