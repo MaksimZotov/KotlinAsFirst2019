@@ -109,7 +109,8 @@ data class Segment(val begin: Point, val end: Point) {
  * Если в множестве менее двух точек, бросить IllegalArgumentException
  */
 fun diameter(vararg points: Point): Segment {
-    if (points.size < 2) throw  IllegalArgumentException()
+    if (points.size < 2)
+        throw  IllegalArgumentException()
     var p1 = points[0]
     var p2 = points[1]
     var max = p1.distance(p2)
@@ -180,8 +181,7 @@ class Line private constructor(val b: Double, val angle: Double) {
 fun lineBySegment(s: Segment): Line {
     val x = abs(s.end.x - s.begin.x)
     val y = abs(s.end.y - s.begin.y)
-    val c = sqrt(sqr(x) + sqr(y))
-    val angle = asin(y / c)
+    val angle = atan(y / x)
     return Line(Point(s.begin.x, s.begin.y), angle)
 }
 
@@ -193,8 +193,7 @@ fun lineBySegment(s: Segment): Line {
 fun lineByPoints(a: Point, b: Point): Line {
     val x = abs(a.x - b.x)
     val y = abs(a.y - b.y)
-    val c = sqrt(sqr(x) + sqr(y))
-    val angle = asin(y / c)
+    val angle = atan(y / x)
     return Line(Point(a.x, a.y), angle)
 }
 
@@ -207,10 +206,7 @@ fun bisectorByPoints(a: Point, b: Point): Line {
     val point = Point((a.x + b.x) / 2, (a.y + b.y) / 2)
     val x = abs(a.x - b.x)
     val y = abs(a.y - b.y)
-    val c = sqrt(sqr(x) + sqr(y))
-    var angle = (asin(y / c) + PI / 2) % (2 * PI)
-    if (angle >= PI) angle -= PI
-    if (angle < 0) angle += PI
+    val angle = (atan(y / x) + PI / 2) % PI
     return Line(point, angle)
 }
 

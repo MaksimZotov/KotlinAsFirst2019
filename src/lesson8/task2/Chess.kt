@@ -2,6 +2,7 @@
 
 package lesson8.task2
 
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
 
 /**
@@ -169,11 +170,31 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
                 listOf(start, Square(deltaColumn / 2 + 1, curRow), end)
             }
             else -> {
-                val betweenStartAndEnd = abs(end.column - start.column) - abs(end.row - start.row)
-                listOf(start, Square(start.column + abs(betweenStartAndEnd), start.row + abs(betweenStartAndEnd)), end)
+                var startSquare = start
+                var endSquare = end
+                if (start.row > end.row) {
+                    startSquare = end
+                    endSquare = start
+                }
+                var curSquare: Square = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
+                if (curSquare.column == -1)
+                    curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, -1)
+                listOf(start, curSquare, end)
             }
         }
     }
+}
+
+fun findSquareBetweenStartAndEnd(columnStart: Int, rowStart: Int, columnEnd: Int, rowEnd: Int, plusMinus: Int): Square {
+    var curColumn = columnStart
+    var curRow = rowStart
+    while (curColumn < 9 && curRow < 9) {
+        if (abs(columnEnd - curColumn) == abs(rowEnd - curRow))
+            return Square(curColumn, curRow)
+        curColumn += plusMinus
+        curRow++
+    }
+    return Square(-1, -1)
 }
 
 /**

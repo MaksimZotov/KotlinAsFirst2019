@@ -92,6 +92,9 @@ class Tests {
     @Test
     @Tag("Hard")
     fun bishopTrajectory() {
+        assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
+        assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
+        assertEquals(listOf(square("g1"), square("f2"), square("h4")), bishopTrajectory(square("g1"), square("h4")))
         assertEquals(listOf<Square>(), bishopTrajectory(square("a1"), square("g8")))
         assertEquals(listOf<Square>(), bishopTrajectory(square("c1"), square("f3")))
         assertEquals(listOf(square("d4")), bishopTrajectory(square("d4"), square("d4")))
