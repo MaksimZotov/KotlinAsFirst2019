@@ -189,7 +189,7 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         val inputLines = getModifiedLines(File(inputName).readLines())
         val maxLength = inputLines.maxBy { it.length }!!.length
         for (line in inputLines) {
-            val words = line.split(" ")
+            val words = line.split(" ").filter { it != "" }
             val countWords = words.count()
             val countSymbols = line.count { it != ' ' }
             val countSpaces = maxLength - countSymbols
