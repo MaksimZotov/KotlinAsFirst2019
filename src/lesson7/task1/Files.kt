@@ -138,10 +138,12 @@ fun centerFile(inputName: String, outputName: String) {
         val indexOfNoSpace = it.indexOfFirst { it != ' ' }
         if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
     }
-    val maxLength = inputLines.maxBy { it.length }!!.length
-    for (line in inputLines) {
-        outputStream.write(" ".repeat((maxLength - line.length) / 2) + line)
-        outputStream.newLine()
+    if (inputLines.isNotEmpty()) {
+        val maxLength = inputLines.maxBy { it.length }!!.length
+        for (line in inputLines) {
+            outputStream.write(" ".repeat((maxLength - line.length) / 2) + line)
+            outputStream.newLine()
+        }
     }
     outputStream.close()
 }
@@ -180,25 +182,27 @@ fun alignFileByWidth(inputName: String, outputName: String) {
         val indexOfNoSpace = it.indexOfFirst { it != ' ' }
         if (indexOfNoSpace != -1) it.substring(indexOfNoSpace) else it
     }
-    val maxLength = inputLines.maxBy { it.length }!!.length
-    for (line in inputLines) {
-        val words = line.split(" ")
-        val countWords = words.count()
-        val countSymbols = line.count { it != ' ' }
-        val countSpaces = maxLength - countSymbols
-        val currentSizeOfGap = if (countWords != 1) countSpaces / (countWords - 1) + 1 else 1
-        val currentLengthOfLine = currentSizeOfGap * (countWords - 1) + countSymbols
-        val dif = maxOf(0, currentLengthOfLine - maxLength)
-        for (i in words.indices) {
-            writer.write(words[i])
-            if (i != words.lastIndex) {
-                if (words.lastIndex - i > dif)
-                    writer.write(" ".repeat(currentSizeOfGap))
-                else
-                    writer.write(" ".repeat(currentSizeOfGap - 1))
+    if (inputLines.isNotEmpty()) {
+        val maxLength = inputLines.maxBy { it.length }!!.length
+        for (line in inputLines) {
+            val words = line.split(" ")
+            val countWords = words.count()
+            val countSymbols = line.count { it != ' ' }
+            val countSpaces = maxLength - countSymbols
+            val currentSizeOfGap = if (countWords != 1) countSpaces / (countWords - 1) + 1 else 1
+            val currentLengthOfLine = currentSizeOfGap * (countWords - 1) + countSymbols
+            val dif = maxOf(0, currentLengthOfLine - maxLength)
+            for (i in words.indices) {
+                writer.write(words[i])
+                if (i != words.lastIndex) {
+                    if (words.lastIndex - i > dif)
+                        writer.write(" ".repeat(currentSizeOfGap))
+                    else
+                        writer.write(" ".repeat(currentSizeOfGap - 1))
+                }
             }
+            writer.newLine()
         }
-        writer.newLine()
     }
     writer.close()
 }
@@ -262,18 +266,18 @@ fun top20Words(inputName: String): Map<String, Int> {
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
-    val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues {
-        it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("")
-    }
     val lowerDictionary = dictionary.mapKeys { it.key.toLowerCase() }.mapValues {
         it.value.mapIndexed { _, it -> it.toLowerCase() }.joinToString("")
+    }
+    val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues {
+        it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("")
     }
     val text = File(inputName).readText()
     val writer = File(outputName).printWriter()
     for (letter in text) {
         when {
-            upperDictionary.containsKey(letter) -> writer.print(upperDictionary[letter])
             lowerDictionary.containsKey(letter) -> writer.print(lowerDictionary[letter])
+            upperDictionary.containsKey(letter) -> writer.print(upperDictionary[letter])
             else -> writer.print(letter)
         }
     }
@@ -314,7 +318,9 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
         val indexOfMaxLine = modifiedLines.indexOf(maxLine)
         writer.write(lines[indexOfMaxLine])
         for (i in 1..modifiedLines.lastIndex)
-            if (modifiedLines[i].length == maxLength && modifiedLines[i].toSet().size == modifiedLines[i].length)
+            if (modifiedLines[i].length == maxLength &&
+                    modifiedLines[i].toSet().size == modifiedLines[i].length &&
+                    modifiedLines[i] != maxLine)
                 writer.write(", " + lines[i])
     }
     writer.close()

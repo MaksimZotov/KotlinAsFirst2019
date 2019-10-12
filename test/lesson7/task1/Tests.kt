@@ -101,6 +101,13 @@ Basic, Ruby, Swift.
     @Test
     @Tag("Normal")
     fun centerFile() {
+        centerFile("input/personalTest", "temp.txt")
+        assertFileContent(
+                "temp.txt",
+                """"""
+        )
+        File("temp.txt").delete()
+
         centerFile("input/center_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
@@ -114,12 +121,18 @@ Basic, Ruby, Swift.
         Вывести его в выходной файл с именем outputName, выровняв по центру."""
         )
         File("temp.txt").delete()
-
     }
 
     @Test
     @Tag("Hard")
     fun alignFileByWidth() {
+        alignFileByWidth("input/personalTest", "temp.txt")
+        assertFileContent(
+                "temp.txt",
+                """"""
+        )
+        File("temp.txt").delete()
+
         alignFileByWidth("input/width_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
@@ -211,6 +224,10 @@ Basic, Ruby, Swift.
     @Test
     @Tag("Normal")
     fun chooseLongestChaoticWord() {
+        chooseLongestChaoticWord("input/personalTest", "temp.txt")
+        assertFileContent("temp.txt", "a")
+        File("temp.txt").delete()
+
         chooseLongestChaoticWord("input/chaotic_in1.txt", "temp.txt")
         assertFileContent("temp.txt", "Карминовый, Некрасивый")
         File("temp.txt").delete()
