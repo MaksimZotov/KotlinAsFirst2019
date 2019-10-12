@@ -136,7 +136,7 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
     val deltaRow = abs(start.row - end.row)
     return when {
         deltaColumn == deltaRow && deltaRow == 0 -> 0
-        deltaColumn % 2 == 1 || deltaRow % 2 == 1 -> -1
+        (deltaColumn % 2 == 1) != (deltaRow % 2 == 1) -> -1
         deltaColumn == deltaRow -> 1
         else -> 2
     }
@@ -165,7 +165,7 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
     val deltaRow = abs(start.row - end.row)
     return when {
         deltaColumn == deltaRow && deltaRow == 0 -> listOf(start)
-        (deltaColumn + deltaRow) % 2 != 0 -> emptyList()
+        (deltaColumn % 2 == 1) != (deltaRow % 2 == 1) -> emptyList()
         deltaColumn == deltaRow -> listOf(start, end)
         else -> {
             var startSquare = start
@@ -174,9 +174,7 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
                 startSquare = end
                 endSquare = start
             }
-            var curSquare: Square = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
-            if (curSquare.column == -1)
-                curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, -1)
+            val curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
             listOf(start, curSquare, end)
 
         }
@@ -184,13 +182,19 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
 }
 
 fun findSquareBetweenStartAndEnd(columnStart: Int, rowStart: Int, columnEnd: Int, rowEnd: Int, plusMinus: Int): Square {
-    var curColumn = columnStart
-    var curRow = rowStart
-    while (curColumn < 9 && curRow < 9) {
-        if (abs(columnEnd - curColumn) == abs(rowEnd - curRow))
-            return Square(curColumn, curRow)
-        curColumn += plusMinus
-        curRow++
+    val list = listOf(-1, 1)
+    for (i in 1..2) {
+        val minus = if (i == 1) 1 else -1
+        for (j in 0..1) {
+            var curColumn = columnStart
+            var curRow = rowStart
+            while (curColumn in 1..8 && curRow in 1..8) {
+                if (abs(columnEnd - curColumn) == abs(rowEnd - curRow))
+                    return Square(curColumn, curRow)
+                curColumn += list[j] * minus
+                curRow += list[1 - j]
+            }
+        }
     }
     return Square(-1, -1)
 }

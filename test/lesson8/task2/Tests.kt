@@ -71,6 +71,7 @@ class Tests {
     @Test
     @Tag("Easy")
     fun bishopMoveNumber() {
+        assertEquals(1, bishopMoveNumber(square("a2"), square("b1")))
         assertEquals(-1, bishopMoveNumber(square("a1"), square("g8")))
         assertEquals(-1, bishopMoveNumber(square("c1"), square("f3")))
         assertEquals(0, bishopMoveNumber(square("d4"), square("d4")))
@@ -92,6 +93,7 @@ class Tests {
     @Test
     @Tag("Hard")
     fun bishopTrajectory() {
+        bishopTrajectory(square("b4"), square("h8")).assertBishopTrajectory(square("b4"), square("h8"), 2)
         bishopTrajectory(square("b2"), square("b4")).assertBishopTrajectory(square("b2"), square("b4"), 2)
         assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
         assertEquals(listOf(square("g5"), square("f4"), square("h2")), bishopTrajectory(square("g5"), square("h2")))
