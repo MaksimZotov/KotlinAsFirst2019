@@ -174,22 +174,22 @@ fun bishopTrajectory(start: Square, end: Square): List<Square> {
                 startSquare = end
                 endSquare = start
             }
-            val curSquare = findSquareBetweenStartAndEnd(startSquare.column, startSquare.row, endSquare.column, endSquare.row, 1)
+            val curSquare = findSquareBetweenStartAndEnd(startSquare, endSquare, 1)
             listOf(start, curSquare, end)
 
         }
     }
 }
 
-fun findSquareBetweenStartAndEnd(columnStart: Int, rowStart: Int, columnEnd: Int, rowEnd: Int, plusMinus: Int): Square {
+fun findSquareBetweenStartAndEnd(start: Square, end: Square, plusMinus: Int): Square {
     val list = listOf(-1, 1)
     for (i in 1..2) {
         val minus = if (i == 1) 1 else -1
         for (j in 0..1) {
-            var curColumn = columnStart
-            var curRow = rowStart
+            var curColumn = start.column
+            var curRow = start.row
             while (curColumn in 1..8 && curRow in 1..8) {
-                if (abs(columnEnd - curColumn) == abs(rowEnd - curRow))
+                if (abs(end.column - curColumn) == abs(end.row - curRow))
                     return Square(curColumn, curRow)
                 curColumn += list[j] * minus
                 curRow += list[1 - j]
