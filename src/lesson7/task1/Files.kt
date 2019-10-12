@@ -528,7 +528,7 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
     writer.println(" ".repeat(rhvSize) + firstMult)
     for (i in 2..rhvSize) {
         val curMult = lhv * (rhv / 10.0.pow(i - 1) % 10).toInt()
-        writer.println("+" + " ".repeat(rhvSize - i) + curMult)
+        writer.println("+" + " ".repeat(resSize - digitNumber(curMult) - i + 1) + curMult)
     }
     writer.println("-".repeat(resSize + 1))
     writer.println(" $res")

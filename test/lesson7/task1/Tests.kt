@@ -101,13 +101,6 @@ Basic, Ruby, Swift.
     @Test
     @Tag("Normal")
     fun centerFile() {
-        centerFile("input/personalTest", "temp.txt")
-        assertFileContent(
-                "temp.txt",
-                """"""
-        )
-        File("temp.txt").delete()
-
         centerFile("input/center_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
@@ -126,14 +119,6 @@ Basic, Ruby, Swift.
     @Test
     @Tag("Hard")
     fun alignFileByWidth() {
-        alignFileByWidth("input/personalTest", "temp.txt")
-        assertFileContent(
-                "temp.txt",
-                """оАбаб --- ОАБАБ
-оабаб         -"""
-        )
-        File("temp.txt").delete()
-
         alignFileByWidth("input/width_in1.txt", "temp.txt")
         assertFileContent(
             "temp.txt",
@@ -336,6 +321,20 @@ Basic, Ruby, Swift.
             assertFileContent("temp.txt", res.trimIndent())
             File("temp.txt").delete()
         }
+
+        test(
+                2,
+                1791,
+                """    2
+*1791
+-----
+    2
++ 18
++14
++2
+-----
+ 3582"""
+        )
 
         test(
             19935,
