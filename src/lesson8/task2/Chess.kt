@@ -2,6 +2,7 @@
 
 package lesson8.task2
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import kotlin.coroutines.suspendCoroutine
 import kotlin.math.abs
 
@@ -66,6 +67,8 @@ fun square(notation: String): Square {
  * Ладья может пройти через клетку (3, 3) или через клетку (6, 1) к клетке (6, 3).
  */
 fun rookMoveNumber(start: Square, end: Square): Int {
+    if (!checkSquare(start) || !checkSquare(end))
+        throw java.lang.IllegalArgumentException()
     val column = start.column == end.column
     val row = start.row == end.row
     return when {
@@ -74,6 +77,10 @@ fun rookMoveNumber(start: Square, end: Square): Int {
         else -> 2
     }
 }
+
+fun checkSquare(square: Square): Boolean =
+        square.column in 1..8 || square.row in 1..8
+
 
 /**
  * Средняя
@@ -123,7 +130,7 @@ fun rookTrajectory(start: Square, end: Square): List<Square> {
  * Слон может пройти через клетку (6, 4) к клетке (3, 7).
  */
 fun bishopMoveNumber(start: Square, end: Square): Int {
-    if (start.column !in 1..8 || end.column !in 1..8 || start.row !in 1..8 || end.row !in 1..8)
+    if (!checkSquare(start) || !checkSquare(end))
         throw java.lang.IllegalArgumentException()
     val deltaColumn = abs(start.column - end.column)
     val deltaRow = abs(start.row - end.row)
