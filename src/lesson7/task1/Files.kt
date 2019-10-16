@@ -258,20 +258,19 @@ fun top20Words(inputName: String): Map<String, Int> {
  */
 fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: String) {
     val lowerDictionary = dictionary.mapKeys { it.key.toLowerCase() }.mapValues {
-        it.value.mapIndexed { _, it -> it.toLowerCase() }.joinToString("")
+        it.value.toLowerCase()
     }
     val upperDictionary = dictionary.mapKeys { it.key.toUpperCase() }.mapValues {
         it.value.mapIndexed { i, it -> if (i != 0) it.toLowerCase() else it.toUpperCase() }.joinToString("")
     }
     val text = File(inputName).readText()
     val writer = File(outputName).printWriter()
-    for (letter in text) {
-        when {
-            lowerDictionary.containsKey(letter) -> writer.print(lowerDictionary[letter])
-            upperDictionary.containsKey(letter) -> writer.print(upperDictionary[letter])
+    for (letter in text)
+        when (letter) {
+            in lowerDictionary.keys -> writer.print(lowerDictionary[letter])
+            in upperDictionary.keys -> writer.print(upperDictionary[letter])
             else -> writer.print(letter)
         }
-    }
     writer.close()
 }
 
@@ -301,19 +300,18 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     val lines = File(inputName).readLines()
-    val writer = File(outputName).bufferedWriter()
-    val modifiedLines = lines.map { it.toLowerCase() }
-    val maxLine = modifiedLines.filter { it.toSet().size == it.length }.maxBy { it.length }
-    if (maxLine != null) {
-        val maxLength = maxLine!!.length
-        val indexOfMaxLine = modifiedLines.indexOf(maxLine)
-        writer.write(lines[indexOfMaxLine])
-        for (i in 1..modifiedLines.lastIndex)
-            if (modifiedLines[i].length == maxLength &&
-                    modifiedLines[i].toSet().size == modifiedLines[i].length &&
-                    indexOfMaxLine != i)
-                writer.write(", " + lines[i])
+    val list = mutableListOf<String>()
+    var maxLength = -1
+    for (item in lines) if (item.toLowerCase().length == item.toLowerCase().toSet().size) when {
+        item.length == maxLength -> list.add(item)
+        item.length > maxLength -> {
+            list.clear()
+            list.add(item)
+            maxLength = item.length
+        }
     }
+    val writer = File(outputName).bufferedWriter()
+    writer.write(list.joinToString(", "))
     writer.close()
 }
 
