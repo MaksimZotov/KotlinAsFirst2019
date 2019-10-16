@@ -90,9 +90,8 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 
-val correctSet = listOf('И', 'А', 'У', 'и', 'а', 'у')
-val incorrectSet = listOf('Ы', 'Я', 'Ю', 'ы', 'я', 'ю')
-val lettersToCheck = listOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
+val lettersToReplace = mapOf('Ы' to 'И', 'Я' to 'А', 'Ю' to 'У', 'ы' to 'и', 'я' to 'а', 'ю' to 'у')
+val lettersToCheck = setOf('Ж', 'Ч', 'Ш', 'Щ', 'ж', 'ч', 'ш', 'щ')
 
 fun sibilants(inputName: String, outputName: String) {
     val text = File(inputName).readText()
@@ -101,13 +100,9 @@ fun sibilants(inputName: String, outputName: String) {
         var nextLetter = text[0]
         for (i in 1..text.lastIndex) {
             writer.print(nextLetter)
-            nextLetter = text[i]
-            for (j in lettersToCheck.indices) {
-                if (text[i - 1] == lettersToCheck[j])
-                    for (k in incorrectSet.indices)
-                        if (text[i] == incorrectSet[k])
-                            nextLetter = correctSet[k]
-            }
+            nextLetter =
+                    if (text[i - 1] !in lettersToCheck || lettersToReplace[text[i]] == null) text[i]
+                    else lettersToReplace[text[i]]!!
         }
         writer.print(text.last())
     }
@@ -134,8 +129,9 @@ fun sibilants(inputName: String, outputName: String) {
  */
 fun centerFile(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
-    if (File(inputName).readLines().isNotEmpty()) {
-        val inputLines = getModifiedLines(File(inputName).readLines())
+    var inputLines = File(inputName).readLines()
+    if (inputLines.isNotEmpty()) {
+        inputLines = inputLines.map { it.trim() }
         val maxLength = inputLines.maxBy { it.length }!!.length
         for (line in inputLines) {
             outputStream.write(" ".repeat((maxLength - line.length) / 2) + line)
@@ -143,16 +139,6 @@ fun centerFile(inputName: String, outputName: String) {
         }
     }
     outputStream.close()
-}
-
-fun getModifiedLines(inputLines: List<String>): List<String> {
-    val lines = inputLines.toMutableList()
-    for (i in lines.indices) {
-        val firstNoSpace = lines[i].indexOfFirst { it != ' ' }
-        val lastNoSpace = lines[i].indexOfLast { it != ' ' }
-        lines[i] = if (lastNoSpace != -1) lines[i].substring(firstNoSpace, lastNoSpace + 1) else lines[i]
-    }
-    return lines
 }
 
 /**
@@ -185,11 +171,12 @@ fun getModifiedLines(inputLines: List<String>): List<String> {
 
 fun alignFileByWidth(inputName: String, outputName: String) {
     val writer = File(outputName).bufferedWriter()
-    if (File(inputName).readLines().isNotEmpty()) {
-        val inputLines = getModifiedLines(File(inputName).readLines())
+    var inputLines = File(inputName).readLines()
+    if (inputLines.isNotEmpty()) {
+        inputLines = inputLines.map { it.trim() }
         val maxLength = inputLines.maxBy { it.length }!!.length
         for (line in inputLines) {
-            val words = line.split(" ").filter { it != "" }
+            val words = line.split(" ").filter { it.isNotEmpty() }
             val countWords = words.count()
             val countSymbols = line.count { it != ' ' }
             val countSpaces = maxLength - countSymbols

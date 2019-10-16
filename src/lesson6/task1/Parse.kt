@@ -74,14 +74,14 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-var mounths = arrayOf("января", "февраля", "марта", "апреля", "мая", "июня",
+val months = arrayOf("января", "февраля", "марта", "апреля", "мая", "июня",
         "июля", "августа", "сентября", "октября", "ноября", "декабря")
 
 fun dateStrToDigit(str: String): String {
     val strList = str.split(" ")
     try {
         val day = strList[0].toInt()
-        val mounth = mounths.indexOf(strList[1]) + 1
+        val mounth = months.indexOf(strList[1]) + 1
         val year = strList[2].toInt()
         if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
             return ""
@@ -109,7 +109,7 @@ fun dateDigitToStr(digital: String): String {
         val year = strList[2].toInt()
         if (day < 1 || daysInMonth(mounth, year) < day || strList.size != 3 || mounth !in 1..12)
             return ""
-        return String.format("%d %s %d", day, mounths[mounth - 1], year)
+        return String.format("%d %s %d", day, months[mounth - 1], year)
     } catch (e: Exception) {
         return ""
     }
@@ -169,17 +169,16 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    return if (Regex("""\d+ \+""").find(jumps) != null) {
-        val list = jumps.split(' ')
-        var max = 0
-        for (i in 0 until list.lastIndex)
-            if (list[i + 1] == "+")
-                max = maxOf(max, list[i].toInt())
-        max
-    } else
-        -1
-}
+fun bestHighJump(jumps: String): Int =
+        if (Regex("""\d+ \+""").find(jumps) != null) {
+            val list = jumps.split(' ')
+            var max = 0
+            for (i in 0 until list.lastIndex)
+                if (list[i + 1] == "+")
+                    max = maxOf(max, list[i].toInt())
+            max
+        } else
+            -1
 
 /**
  * Сложная
