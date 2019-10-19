@@ -251,12 +251,33 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 
-// Не доделал
-fun minContainingCircle(vararg points: Point): Circle = when {
+fun minContainingCircle(vararg points: Point): Circle {
+    TODO()
+    /*
     points.isEmpty() -> throw IllegalArgumentException()
     points.size == 1 -> Circle(points[0], 0.0)
     else -> {
-        Circle(Point(0.0, 0.0), 0.0)
+        val byDiameter = circleByDiameter(diameter(*points))
+        val byThreePoints = maxCircleByThreePoints(*points)
+        if (byDiameter.radius > byThreePoints.radius)
+            byDiameter
+        else
+            byThreePoints
     }
+     */
 }
+
+fun maxCircleByThreePoints(vararg points: Point): Circle {
+    if (points.size < 2) throw IllegalArgumentException()
+    var max = circleByDiameter(Segment(points[0], points[1]))
+    for (i in 0..points.lastIndex - 2)
+        for (j in (i + 1)..points.lastIndex - 1)
+            for (k in (j + 1)..points.lastIndex) {
+                val cur = circleByThreePoints(points[i], points[j], points[k])
+                if (cur.radius > max.radius)
+                    max = cur
+            }
+    return max
+}
+
 
