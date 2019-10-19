@@ -197,7 +197,7 @@ fun lineByPoints(a: Point, b: Point): Line =
  * Построить серединный перпендикуляр по отрезку или по двум точкам
  */
 fun bisectorByPoints(a: Point, b: Point): Line =
-        Line(Point((a.x + b.x) / 2, (a.y + b.y) / 2), (atan((b.y - a.y) / (b.x - a.x)) + PI / 2) % PI)
+        Line(Point((a.x + b.x) / 2, (a.y + b.y) / 2), (3 * PI / 2 + atan((b.y - a.y) / (b.x - a.x))) % PI)
 
 /**
  * Средняя
@@ -235,7 +235,7 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
  */
 fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val center = bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c))
-    val radius = center.distance(c)
+    val radius = center.distance(b) / 2
     return Circle(center, radius)
 }
 
@@ -266,7 +266,7 @@ fun minContainingCircle(vararg points: Point): Circle {
     }
      */
 }
-
+/*
 fun maxCircleByThreePoints(vararg points: Point): Circle {
     if (points.size < 2) throw IllegalArgumentException()
     var max = circleByDiameter(Segment(points[0], points[1]))
@@ -279,5 +279,5 @@ fun maxCircleByThreePoints(vararg points: Point): Circle {
             }
     return max
 }
-
+*/
 
