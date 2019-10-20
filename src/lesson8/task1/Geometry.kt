@@ -159,8 +159,9 @@ class Line private constructor(val b: Double, val angle: Double) {
      * Для этого необходимо составить и решить систему из двух уравнений (каждое для своей прямой)
      */
     fun crossPoint(other: Line): Point {
+        if (angle == other.angle) throw Exception("Нет общей точки или прямые совпадают")
         val x = (other.b * cos(angle) - b * cos(other.angle)) / sin(angle - other.angle)
-        val y = x * tan(other.angle) + other.b / cos(other.angle)
+        val y = if (other.angle == PI / 2) x * tan(angle) + b / cos(angle) else x * tan(other.angle) + other.b / cos(other.angle)
         return Point(x, y)
     }
 
@@ -235,7 +236,7 @@ fun findNearestCirclePair(vararg circles: Circle): Pair<Circle, Circle> {
  */
 fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
     val center = bisectorByPoints(a, b).crossPoint(bisectorByPoints(b, c))
-    val radius = center.distance(b) / 2
+    val radius = center.distance(a)
     return Circle(center, radius)
 }
 
@@ -251,33 +252,44 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 
-fun minContainingCircle(vararg points: Point): Circle {
-    TODO()
-    /*
+fun minContainingCircle(vararg points: Point): Circle = when {
     points.isEmpty() -> throw IllegalArgumentException()
     points.size == 1 -> Circle(points[0], 0.0)
     else -> {
-        val byDiameter = circleByDiameter(diameter(*points))
-        val byThreePoints = maxCircleByThreePoints(*points)
-        if (byDiameter.radius > byThreePoints.radius)
-            byDiameter
-        else
-            byThreePoints
+        val byDiameter = minCircleByDiameter(*points)
+        val byThreePoints = minCircleByThreePoints(*points)
+        if (byDiameter.radius < byThreePoints.radius) byDiameter
+        else byThreePoints
     }
-     */
 }
-/*
-fun maxCircleByThreePoints(vararg points: Point): Circle {
+
+fun minCircleByDiameter(vararg points: Point): Circle {
     if (points.size < 2) throw IllegalArgumentException()
-    var max = circleByDiameter(Segment(points[0], points[1]))
+    var min = Circle(Point(0.0, 0.0), Double.MAX_VALUE)
+    for (i in 0..points.lastIndex - 1)
+        for (j in (i + 1)..points.lastIndex) {
+            val cur = circleByDiameter(Segment(points[i], points[j]))
+            if (cur.radius < min.radius && circleContainsPoints(cur, *points))
+                min = cur
+        }
+    return min
+}
+
+fun minCircleByThreePoints(vararg points: Point): Circle {
+    if (points.size < 2) throw IllegalArgumentException()
+    var min = Circle(Point(0.0, 0.0), Double.MAX_VALUE)
     for (i in 0..points.lastIndex - 2)
         for (j in (i + 1)..points.lastIndex - 1)
             for (k in (j + 1)..points.lastIndex) {
                 val cur = circleByThreePoints(points[i], points[j], points[k])
-                if (cur.radius > max.radius)
-                    max = cur
+                if (cur.radius < min.radius && circleContainsPoints(cur, *points))
+                    min = cur
             }
-    return max
+    return min
 }
-*/
+
+fun circleContainsPoints(circle: Circle, vararg points: Point): Boolean {
+    for (i in points.indices) if (!circle.contains(points[i])) return false
+    return true
+}
 
