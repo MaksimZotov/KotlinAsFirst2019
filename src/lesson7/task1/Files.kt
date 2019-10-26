@@ -546,6 +546,57 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val writer = File(outputName).printWriter()
+
+    val res = lhv / rhv
+    val resSize = digitNumber(res)
+    val resList = mutableListOf<Int>()
+    for (i in 0 until resSize)
+        resList.add(res / 10.0.pow(resSize - i - 1).toInt() % 10)
+
+    val lhvSize = digitNumber(lhv)
+    val lhvList = mutableListOf<Int>()
+    for (i in 0 until lhvSize)
+        lhvList.add(lhv / 10.0.pow(lhvSize - i - 1).toInt() % 10)
+    var indToAdd = 0
+
+    var sizeOfGap = 0
+
+    // a - то, из чего вычитаем, b - то, что вычитаем: 199 / 22 -> a = 199, b = 22 * 9 = 198
+    var a = 0
+    var b = resList[0] * rhv
+    for (i in 0..lhvSize) {
+        a = a * 10 + lhvList[i]
+        if (a >= b) break
+    }
+    var aSize = digitNumber(a)
+    var bSize = digitNumber(b)
+    writer.println(" $lhv | $rhv")
+    sizeOfGap += aSize - bSize
+    writer.println(" ".repeat(sizeOfGap) + "-" + resList[0] * rhv + " ".repeat(lhvSize - aSize + 3) + res)
+    writer.println("-".repeat(bSize + 1))
+    sizeOfGap += bSize
+    indToAdd += aSize
+    a -= b
+    writer.print(" ".repeat(sizeOfGap) + a)
+
+    for (i in 1 until resSize) {
+        if (a == 0) sizeOfGap++
+        a = a * 10 + lhvList[indToAdd]
+        b = rhv * resList[i]
+        aSize = digitNumber(a)
+        bSize = digitNumber(b)
+        writer.println(lhvList[indToAdd])
+        sizeOfGap += aSize - bSize - 1
+        writer.println(" ".repeat(sizeOfGap) + "-" + b)
+        writer.println(" ".repeat(sizeOfGap) + "-".repeat(bSize + 1))
+        if (aSize == bSize) sizeOfGap++
+        sizeOfGap += aSize - digitNumber(a - b)
+        indToAdd++
+        a -= b
+        writer.print(" ".repeat(sizeOfGap) + a)
+    }
+
+    writer.close()
 }
 
