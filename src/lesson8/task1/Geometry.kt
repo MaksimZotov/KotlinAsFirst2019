@@ -296,5 +296,6 @@ fun minCircleByThreePoints(vararg points: Point): Circle {
 fun circleContainsPoints(circle: Circle, vararg points: Point): Boolean {
     for (i in points.indices) if (!circle.contains(points[i])) return false
     return true
+
 }
 
