@@ -560,8 +560,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         lhvList.add(lhv / 10.0.pow(lhvSize - i - 1).toInt() % 10)
     var indToAdd = 0
 
-    var sizeOfGap = 0
-
     // a - то, из чего вычитаем, b - то, что вычитаем: 199 / 22 -> a = 199, b = 22 * 9 = 198
     var a = 0
     var b = resList[0] * rhv
@@ -571,8 +569,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     }
     var aSize = digitNumber(a)
     var bSize = digitNumber(b)
-    writer.println(" $lhv | $rhv")
-    sizeOfGap += aSize - bSize
+
+    var sizeOfGap = aSize - bSize
+    if (aSize - bSize > 0) {
+        writer.println("$lhv | $rhv")
+        sizeOfGap--
+    } else
+        writer.println(" $lhv | $rhv")
     writer.println(" ".repeat(sizeOfGap) + "-" + resList[0] * rhv + " ".repeat(lhvSize - aSize + 3) + res)
     writer.println("-".repeat(bSize + 1))
     sizeOfGap += bSize
