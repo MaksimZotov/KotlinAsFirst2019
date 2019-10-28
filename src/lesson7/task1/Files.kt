@@ -598,12 +598,18 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.println(lhvList[indToAdd])
         sizeOfGap += aSize - bSize - 1
         writer.println(" ".repeat(sizeOfGap) + "-" + b)
-        writer.println(" ".repeat(sizeOfGap) + "-".repeat(bSize + 1))
-        if (aSize == bSize) sizeOfGap++
-        sizeOfGap += aSize - digitNumber(a - b)
+        if (b != 0) {
+            writer.println(" ".repeat(sizeOfGap) + "-".repeat(bSize + 1))
+            if (aSize == bSize) sizeOfGap++
+            sizeOfGap += aSize - digitNumber(a - b)
+            a -= b
+            writer.print(" ".repeat(sizeOfGap) + a)
+        } else {
+            sizeOfGap -= aSize - bSize - 1
+            writer.println(" ".repeat(sizeOfGap) + "-".repeat(aSize))
+            writer.print(" ".repeat(sizeOfGap) + a)
+        }
         indToAdd++
-        a -= b
-        writer.print(" ".repeat(sizeOfGap) + a)
     }
 
     writer.close()
