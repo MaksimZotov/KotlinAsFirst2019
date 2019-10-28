@@ -605,8 +605,14 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             a -= b
             writer.print(" ".repeat(sizeOfGap) + a)
         } else {
-            sizeOfGap -= aSize - bSize - 1
-            writer.println(" ".repeat(sizeOfGap) + "-".repeat(aSize))
+            if (a == 0) {
+                sizeOfGap -= aSize - bSize
+                writer.println(" ".repeat(sizeOfGap) + "-".repeat(2))
+                sizeOfGap++
+            } else {
+                sizeOfGap -= aSize - bSize - 1
+                writer.println(" ".repeat(sizeOfGap) + "-".repeat(aSize))
+            }
             writer.print(" ".repeat(sizeOfGap) + a)
         }
         indToAdd++
