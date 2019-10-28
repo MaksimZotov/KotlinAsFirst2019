@@ -549,6 +549,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     val writer = File(outputName).printWriter()
 
     val res = lhv / rhv
+    if (res == 0 && lhv > 9) {
+        val lhvSize = digitNumber(lhv)
+        writer.println("$lhv | $rhv\n" + " ".repeat(lhvSize - 2) + "-0   " + 0 + "\n" + "-".repeat(lhvSize) + "\n" + lhv)
+        writer.close()
+        return
+    }
     val resSize = digitNumber(res)
     val resList = mutableListOf<Int>()
     for (i in 0 until resSize)
@@ -578,9 +584,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         writer.println(" $lhv | $rhv")
     writer.println(" ".repeat(sizeOfGap) + "-" + resList[0] * rhv + " ".repeat(lhvSize - aSize + 3) + res)
     writer.println("-".repeat(bSize + 1))
-    sizeOfGap += bSize
     indToAdd += aSize
     a -= b
+    sizeOfGap += bSize - digitNumber(a) + 1
     writer.print(" ".repeat(sizeOfGap) + a)
 
     for (i in 1 until resSize) {

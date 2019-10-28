@@ -253,7 +253,9 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * соединяющий две самые удалённые точки в данном множестве.
  */
 
-fun minContainingCircle(vararg points: Point): Circle = when {
+fun minContainingCircle(vararg points: Point): Circle = TODO()
+/*
+when {
     points.isEmpty() -> throw IllegalArgumentException()
     points.size == 1 -> Circle(points[0], 0.0)
     else -> {
@@ -263,7 +265,9 @@ fun minContainingCircle(vararg points: Point): Circle = when {
         else byThreePoints
     }
 }
+*/
 
+/*
 fun minCircleByDiameter(vararg points: Point): Circle {
     if (points.size < 2) throw IllegalArgumentException()
     var min = Circle(Point(0.0, 0.0), Double.MAX_VALUE)
@@ -297,4 +301,4 @@ fun circleContainsPoints(circle: Circle, vararg points: Point): Boolean {
     for (i in points.indices) if (!circle.contains(points[i])) return false
     return true
 }
-
+*/
