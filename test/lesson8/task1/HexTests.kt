@@ -34,6 +34,7 @@ class HexTests {
     @Test
     @Tag("Easy")
     fun hexSegmentValid() {
+        assertFalse(HexSegment(HexPoint(-557, -558), HexPoint(-557, -558)).isValid())
         assertTrue(HexSegment(HexPoint(1, 3), HexPoint(5, 3)).isValid())
         assertTrue(HexSegment(HexPoint(3, 1), HexPoint(3, 6)).isValid())
         assertTrue(HexSegment(HexPoint(1, 5), HexPoint(4, 2)).isValid())
