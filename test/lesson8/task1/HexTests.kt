@@ -11,6 +11,7 @@ class HexTests {
     @Test
     @Tag("Normal")
     fun hexPointDistance() {
+        assertEquals(719, HexPoint(-341, -999).distance(HexPoint(-1000, -280)))
         assertEquals(7, HexPoint(8, 0).distance(HexPoint(1, 3)))
         assertEquals(5, HexPoint(6, 1).distance(HexPoint(1, 4)))
     }
@@ -18,12 +19,14 @@ class HexTests {
     @Test
     @Tag("Normal")
     fun hexagonDistance() {
+        assertEquals(0, Hexagon(HexPoint(-558, -927), 604).distance(Hexagon(HexPoint(781, -1000), 864)))
         assertEquals(2, Hexagon(HexPoint(1, 3), 1).distance(Hexagon(HexPoint(6, 2), 2)))
     }
 
     @Test
     @Tag("Trivial")
     fun hexagonContains() {
+        assertFalse(Hexagon(HexPoint(-999, -68), 310).contains(HexPoint(-736, -1000)))
         assertTrue(Hexagon(HexPoint(3, 3), 1).contains(HexPoint(2, 3)))
         assertFalse(Hexagon(HexPoint(3, 3), 1).contains(HexPoint(4, 4)))
     }
@@ -39,7 +42,7 @@ class HexTests {
 
     @Test
     @Tag("Normal")
-    fun hexSegmentDirection() {
+    fun hexSegmentDirection() { assertEquals(INCORRECT, HexSegment(HexPoint(-260, -999), HexPoint(-1000, -169)).direction())
         assertEquals(RIGHT, HexSegment(HexPoint(1, 3), HexPoint(5, 3)).direction())
         assertEquals(UP_RIGHT, HexSegment(HexPoint(3, 1), HexPoint(3, 6)).direction())
         assertEquals(DOWN_RIGHT, HexSegment(HexPoint(1, 5), HexPoint(4, 2)).direction())

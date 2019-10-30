@@ -4,6 +4,8 @@ package lesson8.task1
 
 import kotlinx.html.Dir
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Точка (гекс) на шестиугольной сетке.
@@ -39,9 +41,27 @@ data class HexPoint(val x: Int, val y: Int) {
      * Расстояние вычисляется как число единичных отрезков в пути между двумя гексами.
      * Например, путь межу гексами 16 и 41 (см. выше) может проходить через 25, 34, 43 и 42 и имеет длину 5.
      */
-    fun distance(other: HexPoint): Int = when {
-        y <= other.y -> if (x > other.x) abs(x - other.x) else abs(x - other.x) + abs(y - other.y)
-        else -> if (x > other.x) abs(x - other.x) + abs(y - other.y) else abs(x - other.x)
+    fun distance(other: HexPoint): Int {
+        var result = 0
+        var x1 = x
+        var x2 = other.x
+        var y1 = y
+        var y2 = other.y
+        val yFromMoreYTo = y1 > y2
+        if (yFromMoreYTo) {
+            var t = x1
+            x1 = x2
+            x2 = t
+            t = y1
+            y1 = y2
+            y2 = t
+        }
+        while (true) {
+            if (x1 == x2 && y1 == y2) return result
+            x1 += if (x1 > x2) -1 else if (y1 == y2 && x1 < x2) +1 else 0
+            if (y1 != y2) y1++
+            result++
+        }
     }
 
     override fun toString(): String = "$y.$x"
@@ -65,14 +85,18 @@ data class Hexagon(val center: HexPoint, val radius: Int) {
      * и другим шестиугольником B с центром в 26 и радиуоом 2 равно 2
      * (расстояние между точками 32 и 24)
      */
-    fun distance(other: Hexagon): Int = center.distance(other.center) - radius - other.radius
+    fun distance(other: Hexagon): Int {
+        val result = center.distance(other.center) - radius - other.radius
+        return if (result > 0) result else 0
+    }
 
     /**
      * Тривиальная
      *
      * Вернуть true, если заданная точка находится внутри или на границе шестиугольника
      */
-    fun contains(point: HexPoint): Boolean = point.distance(center) <= radius
+    fun contains(point: HexPoint): Boolean =
+            point.distance(center) <= radius
 }
 
 /**
@@ -96,14 +120,18 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
      * Для "правильного" отрезка выбирается одно из первых шести направлений,
      * для "неправильного" -- INCORRECT.
      */
-    fun direction(): Direction = when {
-        begin.y == end.y && begin.x < end.x -> Direction.RIGHT
-        begin.y < end.y && begin.x == end.x -> Direction.UP_RIGHT
-        begin.y < end.y && begin.x > end.x -> Direction.UP_LEFT
-        begin.y == end.y && begin.x > end.x -> Direction.LEFT
-        begin.y > end.y && begin.x == end.x -> Direction.DOWN_LEFT
-        begin.y > end.y && begin.x < end.x -> Direction.DOWN_RIGHT
-        else -> Direction.INCORRECT
+    fun direction(): Direction {
+        if (begin.y == end.y) {
+            if (begin.x < end.x) return Direction.RIGHT
+            if (begin.x > end.x) return Direction.LEFT
+        } else if (begin.y < end.y) {
+            if (begin.x == end.x) return Direction.UP_RIGHT
+            if (end.y - begin.y == begin.x - end.x) return Direction.UP_LEFT
+        } else if (begin.y > end.y) {
+            if (begin.x == end.x) return Direction.DOWN_LEFT
+            if (begin.y - end.y == end.x - begin.x) return Direction.DOWN_RIGHT
+        }
+        return Direction.INCORRECT
     }
 
     override fun equals(other: Any?) =
