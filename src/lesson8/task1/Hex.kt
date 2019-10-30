@@ -42,13 +42,11 @@ data class HexPoint(val x: Int, val y: Int) {
      * Например, путь межу гексами 16 и 41 (см. выше) может проходить через 25, 34, 43 и 42 и имеет длину 5.
      */
     fun distance(other: HexPoint): Int {
-        var result = 0
         var x1 = x
         var x2 = other.x
         var y1 = y
         var y2 = other.y
-        val yFromMoreYTo = y1 > y2
-        if (yFromMoreYTo) {
+        if (y1 > y2) {
             var t = x1
             x1 = x2
             x2 = t
@@ -56,11 +54,10 @@ data class HexPoint(val x: Int, val y: Int) {
             y1 = y2
             y2 = t
         }
-        while (true) {
-            if (x1 == x2 && y1 == y2) return result
-            x1 += if (x1 > x2) -1 else if (y1 == y2 && x1 < x2) +1 else 0
-            if (y1 != y2) y1++
-            result++
+        return when {
+            x1 > x2 + y2 - y1 -> x1 - x2
+            x1 >= x2 -> y2 - y1
+            else -> y2 - y1 + x2 - x1
         }
     }
 
@@ -112,8 +109,7 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
      * А, например, 13-26 не является "правильным" отрезком.
      */
     fun isValid(): Boolean =
-            (begin.x == end.x || begin.y == end.y || abs(begin.x - end.x) == abs(begin.y - end.y)) &&
-                    (begin.x != end.x || begin.y != end.y)
+            (begin.x != end.x || begin.y != end.y) && (begin.x == end.x || begin.y == end.y || begin.x - end.x == end.y - begin.y)
 
     /**
      * Средняя
@@ -197,7 +193,7 @@ enum class Direction {
      * INCORRECT не параллельно никакому направлению, в том числе другому INCORRECT.
      */
     fun isParallel(other: Direction): Boolean {
-        if (this == INCORRECT) return false
+        if (this == INCORRECT || other == INCORRECT) return false
         val dif = abs(values().indexOf(this) - values().indexOf(other))
         return dif == 3 || dif == 0
     }
