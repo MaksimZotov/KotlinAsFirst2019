@@ -31,10 +31,10 @@ class HexTests {
     @Test
     @Tag("Easy")
     fun hexSegmentValid() {
-        //assertTrue(HexSegment(HexPoint(1, 3), HexPoint(5, 3)).isValid())
+        assertTrue(HexSegment(HexPoint(1, 3), HexPoint(5, 3)).isValid())
         assertTrue(HexSegment(HexPoint(3, 1), HexPoint(3, 6)).isValid())
-        //assertTrue(HexSegment(HexPoint(1, 5), HexPoint(4, 2)).isValid())
-        //assertFalse(HexSegment(HexPoint(3, 1), HexPoint(6, 2)).isValid())
+        assertTrue(HexSegment(HexPoint(1, 5), HexPoint(4, 2)).isValid())
+        assertFalse(HexSegment(HexPoint(3, 1), HexPoint(6, 2)).isValid())
     }
 
     @Test

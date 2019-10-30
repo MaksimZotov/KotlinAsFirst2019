@@ -2,6 +2,7 @@
 
 package lesson8.task1
 
+import kotlinx.html.Dir
 import kotlin.math.abs
 
 /**
@@ -95,7 +96,15 @@ class HexSegment(val begin: HexPoint, val end: HexPoint) {
      * Для "правильного" отрезка выбирается одно из первых шести направлений,
      * для "неправильного" -- INCORRECT.
      */
-    fun direction(): Direction = TODO()
+    fun direction(): Direction = when {
+        begin.y == end.y && begin.x < end.x -> Direction.RIGHT
+        begin.y < end.y && begin.x == end.x -> Direction.UP_RIGHT
+        begin.y < end.y && begin.x > end.x -> Direction.UP_LEFT
+        begin.y == end.y && begin.x > end.x -> Direction.LEFT
+        begin.y > end.y && begin.x == end.x -> Direction.DOWN_LEFT
+        begin.y > end.y && begin.x < end.x -> Direction.DOWN_RIGHT
+        else -> Direction.INCORRECT
+    }
 
     override fun equals(other: Any?) =
             other is HexSegment && (begin == other.begin && end == other.end || end == other.begin && begin == other.end)
