@@ -259,16 +259,9 @@ fun minContainingCircle(vararg points: Point): Circle = when {
     else -> {
         val diameterForCircle = diameter(*points)
         val circleByTwo = circleByDiameter(diameterForCircle)
-        var dist = circleByTwo.radius
-        var point: Point? = null
-        for (item in points) {
-            val localDist = item.distance(circleByTwo.center)
-            if (localDist > dist) {
-                dist = localDist
-                point = item
-            }
-        }
-        if (point == null) circleByTwo else circleByThreePoints(diameterForCircle.begin, diameterForCircle.end, point)
+        val point = points.maxBy { it.distance(circleByTwo.center) }
+        if (point!!.distance(circleByTwo.center) < circleByTwo.radius) circleByTwo
+        else circleByThreePoints(diameterForCircle.begin, diameterForCircle.end, point)
     }
 }
 
