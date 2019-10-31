@@ -257,44 +257,18 @@ fun minContainingCircle(vararg points: Point): Circle = when {
     points.isEmpty() -> throw IllegalArgumentException()
     points.size == 1 -> Circle(points[0], 0.0)
     else -> {
-        val byDiameter = minCircleByDiameter(*points)
-        val byThreePoints = minCircleByThreePoints(*points)
-        if (byDiameter.radius < byThreePoints.radius) byDiameter
-        else byThreePoints
-    }
-}
-
-fun minCircleByDiameter(vararg points: Point): Circle {
-    if (points.size < 2) throw IllegalArgumentException()
-    var min = Circle(Point(0.0, 0.0), Double.MAX_VALUE)
-    for (i in 0..points.lastIndex - 1)
-        for (j in (i + 1)..points.lastIndex) {
-            val cur = circleByDiameter(Segment(points[i], points[j]))
-            if (cur.radius < min.radius && circleContainsPoints(cur, *points))
-                min = cur
-        }
-    return min
-}
-
-fun minCircleByThreePoints(vararg points: Point): Circle {
-    if (points.size < 2) throw IllegalArgumentException()
-    var min = Circle(Point(0.0, 0.0), Double.MAX_VALUE)
-    for (i in 0..points.lastIndex - 2)
-        for (j in (i + 1)..points.lastIndex - 1)
-            for (k in (j + 1)..points.lastIndex) {
-                val cur = try {
-                    circleByThreePoints(points[i], points[j], points[k])
-                } catch (e: Exception) {
-                    Circle(Point(0.0, 0.0), Double.MAX_VALUE)
-                }
-                if (cur.radius < min.radius && circleContainsPoints(cur, *points))
-                    min = cur
+        val diameterForCircle = diameter(*points)
+        val circleByTwo = circleByDiameter(diameterForCircle)
+        var dist = circleByTwo.radius
+        var point: Point? = null
+        for (item in points) {
+            val localDist = item.distance(circleByTwo.center)
+            if (localDist > dist) {
+                dist = localDist
+                point = item
             }
-    return min
-}
-
-fun circleContainsPoints(circle: Circle, vararg points: Point): Boolean {
-    for (i in points.indices) if (!circle.contains(points[i])) return false
-    return true
+        }
+        if (point == null) circleByTwo else circleByThreePoints(diameterForCircle.begin, diameterForCircle.end, point)
+    }
 }
 
