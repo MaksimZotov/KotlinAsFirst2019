@@ -217,6 +217,25 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun minContainingCircle() {
+        /*
+        val p1 = Point(0.6159292745481549, 0.0)
+        val p2 = Point(0.9486970598214549, 5e-324)
+        val p3 = Point(0.0, 2.220446049250313e-16)
+        val p4 = Point(0.22951603712721125, 0.12197628617107004)
+        val p5 = Point(0.0, 0.664123129594217)
+        val p6 = Point(0.6296594400303314, 0.7374972802545293)
+        val p7 = Point(0.4913846860875659, 5e-324)
+        val p8 = Point(-632.0, 2.220446049250313e-16)
+        val p9 = Point(0.7290449186280404, 0.38327717362519376)
+        val p10 = Point(0.9590222011845686, 2.220446049250313e-16)
+        val p11 = Point(-632.0, 0.0)
+        val p12 = Point(0.595561930614961, 0.8487159190092346)
+        val result = minContainingCircle(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12)
+        assertEquals(316.4795111005923, result.radius, 0.02)
+        for (p in listOf(p1, p2, p3, p4, p5, p6)) {
+            assertTrue(result.contains(p))
+        }
+
         val p01 = Point(0.0, -2.220446049250313e-16)
         val p02 = Point(-632.0, 0.0)
         val result0 = minContainingCircle(p01, p02)
@@ -224,7 +243,7 @@ class Tests {
         for (p in listOf(p01, p02)) {
             assertTrue(result0.contains(p))
         }
-
+        */
         val p1 = Point(0.0, 0.0)
         val p2 = Point(1.0, 4.0)
         val p3 = Point(-2.0, 2.0)
