@@ -405,7 +405,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             i++
             continue
         }
-        if (text[i] - 'a' == -87 && i + 2 < text.lastIndex && text[i + 2] - 'a' == -87) {
+        if (i + 2 < text.lastIndex && text[i] == '\n' && text[i + 2] == '\n') {
             writer.print("</p><p>")
             i++
             continue
