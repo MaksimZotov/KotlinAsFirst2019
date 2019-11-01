@@ -2,9 +2,11 @@
 
 package lesson9.task2
 
+import lesson8.task1.hexagonByThreePoints
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
+import java.lang.IllegalArgumentException
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -70,37 +72,37 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     var leftGap = 0
     var upGap = 0
     var downGap = 0
-    var whereGo = 0 // 0 - right, 1 - down, 2 - left, 3 - up
+    var direction = "right"
     while (true) {
         count++
         matrix[row, column] = count
         if (count == height * width) return matrix
-        when (whereGo) {
-            0 -> {
+        when (direction) {
+            "right" -> {
                 if (width != 1) column++ else row++
                 if (column >= width - 1 - rightGap) {
-                    whereGo = 1
+                    direction = "down"
                     rightGap++
                 }
             }
-            1 -> {
+            "down" -> {
                 row++
                 if (row >= height - 1 - downGap) {
-                    whereGo = 2
+                    direction = "left"
                     downGap++
                 }
             }
-            2 -> {
+            "left" -> {
                 column--
                 if (column <= leftGap) {
-                    whereGo = 3
+                    direction = "up"
                     leftGap++
                 }
             }
-            3 -> {
+            "up" -> {
                 row--
                 if (row <= upGap + 1) {
-                    whereGo = 0
+                    direction = "right"
                     upGap++
                 }
             }
@@ -132,42 +134,42 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     var leftGap = 0
     var upGap = 0
     var downGap = 0
-    var whereGo = 0 // 0 - right, 1 - down, 2 - left, 3 - up
+    var direction = "right"
     var nextNumber = false
     while (true) {
         count++
         matrix[row, column] = number
         if (count == height * width) return matrix
-        when (whereGo) {
-            0 -> {
+        when (direction) {
+            "right" -> {
                 if (nextNumber) {
                     number++
                     nextNumber = false
                 }
                 if (width != 1) column++ else row++
                 if (column >= width - 1 - rightGap) {
-                    whereGo = 1
+                    direction = "down"
                     rightGap++
                 }
             }
-            1 -> {
+            "down" -> {
                 row++
                 if (row >= height - 1 - downGap) {
-                    whereGo = 2
+                    direction = "left"
                     downGap++
                 }
             }
-            2 -> {
+            "left" -> {
                 column--
                 if (column <= leftGap) {
-                    whereGo = 3
+                    direction = "up"
                     leftGap++
                 }
             }
-            3 -> {
+            "up" -> {
                 row--
                 if (row <= upGap + 1) {
-                    whereGo = 0
+                    direction = "right"
                     upGap++
                     nextNumber = true
                 }
@@ -190,7 +192,31 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
  * 10 13 16 18
  * 14 17 19 20
  */
-fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
+fun generateSnake(height: Int, width: Int): Matrix<Int> {
+    val matrix = MatrixImpl(height, width, 0)
+    var count = 1
+    for (i in 1..width) {
+        var row = 0
+        var column = i - 1
+        while (column >= 0) {
+            matrix[row, column] = count
+            row++
+            column--
+            count++
+        }
+    }
+    for (i in 1 until height) {
+        var row = i
+        var column = width - 1
+        while (column >= 0 && row < height) {
+            matrix[row, column] = count
+            row++
+            column--
+            count++
+        }
+    }
+    return matrix
+}
 
 /**
  * Средняя
@@ -203,7 +229,19 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> = TODO()
  * 4 5 6      8 5 2
  * 7 8 9      9 6 3
  */
-fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
+fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
+    if (matrix.height != matrix.width) throw IllegalArgumentException()
+    val list = mutableListOf(mutableListOf<E>())
+    for (i in 0 until matrix.height) {
+        list.add(mutableListOf())
+        for (j in 0 until matrix.width)
+            list[i].add(matrix[i, j])
+    }
+    for (i in 0 until matrix.height)
+        for (j in 0 until matrix.width)
+            matrix[i, j] = list[matrix.height - 1 - j][i]
+    return matrix
+}
 
 /**
  * Сложная

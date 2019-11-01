@@ -219,7 +219,13 @@ fun findSquareBetweenStartAndEnd(start: Square, end: Square, plusMinus: Int): Sq
  * Пример: kingMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Король может последовательно пройти через клетки (4, 2) и (5, 2) к клетке (6, 3).
  */
-fun kingMoveNumber(start: Square, end: Square): Int = TODO()
+fun kingMoveNumber(start: Square, end: Square): Int {
+    if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
+    val rowDif = abs(start.row - end.row)
+    val columnDif = abs(start.column - end.column)
+    return if (rowDif < columnDif) columnDif
+    else rowDif
+}
 
 /**
  * Сложная

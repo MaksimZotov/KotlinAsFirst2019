@@ -180,6 +180,10 @@ class Tests {
     @Test
     @Tag("Normal")
     fun rotate() {
+        assertEquals(
+                createMatrix(3, 3, listOf(listOf(7, 4, 1), listOf(8, 5, 2), listOf(9, 6, 3))),
+                rotate(createMatrix(3, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))))
+        )
         val m = createMatrix(1, 1, listOf(listOf(("single"))))
         assertEquals(m, rotate(m))
         assertEquals(

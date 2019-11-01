@@ -368,26 +368,26 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val text = File(inputName).readText()
     val writer = File(outputName).printWriter()
-    val font = Array(3) { false } // 0 - курсив, 1 - полужирный, 2 - зачеркнутый
+    val font = mutableMapOf("*" to false, "**" to false, "~~" to false)
     var i = -1
     writer.print("<html><body><p>")
     while (i < text.lastIndex) {
         i++
         if (text[i] == '*') {
             if (text[i + 1] != '*') {
-                if (!font[0]) {
-                    font[0] = true
+                if (!font["*"]!!) {
+                    font["*"] = true
                     writer.print("<i>")
                 } else {
-                    font[0] = false
+                    font["*"] = false
                     writer.println("</i>")
                 }
             } else {
-                if (!font[1]) {
-                    font[1] = true
+                if (!font["**"]!!) {
+                    font["**"] = true
                     writer.print("<b>")
                 } else {
-                    font[1] = false
+                    font["**"] = false
                     writer.print("</b>")
                 }
                 i++
@@ -395,11 +395,11 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
             continue
         }
         if (text[i] == '~' && text[i + 1] == '~') {
-            if (!font[2]) {
-                font[2] = true
+            if (!font["~~"]!!) {
+                font["~~"] = true
                 writer.print("<s>")
             } else {
-                font[2] = false
+                font["~~"] = false
                 writer.print("</s>")
             }
             i++
