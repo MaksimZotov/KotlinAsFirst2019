@@ -224,6 +224,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val words = text.toLowerCase().split(Regex("""[^а-яА-Яa-zA-ZёЁ]+"""))
     for (word in words) map[word] = map.getOrDefault(word, 0) + 1
     return map.toList().sortedByDescending { it.second }.filterIndexed { i, _ -> i < 20 }.toMap()
+
 }
 
 /**
