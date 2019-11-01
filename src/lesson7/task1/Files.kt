@@ -366,7 +366,54 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    val text = File(inputName).readText()
+    val writer = File(outputName).printWriter()
+    val font = Array(3) { false } // 0 - курсив, 1 - полужирный, 2 - зачеркнутый
+    var i = -1
+    writer.print("<html><body><p>")
+    while (i < text.lastIndex) {
+        i++
+        if (text[i] == '*') {
+            if (text[i + 1] != '*') {
+                if (!font[0]) {
+                    font[0] = true
+                    writer.print("<i>")
+                } else {
+                    font[0] = false
+                    writer.println("</i>")
+                }
+            } else {
+                if (!font[1]) {
+                    font[1] = true
+                    writer.print("<b>")
+                } else {
+                    font[1] = false
+                    writer.print("</b>")
+                }
+                i++
+            }
+            continue
+        }
+        if (text[i] == '~' && text[i + 1] == '~') {
+            if (!font[2]) {
+                font[2] = true
+                writer.print("<s>")
+            } else {
+                font[2] = false
+                writer.print("</s>")
+            }
+            i++
+            continue
+        }
+        if (text[i] - 'a' == -87 && i + 2 < text.lastIndex && text[i + 2] - 'a' == -87) {
+            writer.print("</p><p>")
+            i++
+            continue
+        }
+        writer.print(text[i])
+    }
+    writer.print("</p></body></html>")
+    writer.close()
 }
 
 /**
