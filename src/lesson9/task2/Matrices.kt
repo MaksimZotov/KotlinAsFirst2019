@@ -77,7 +77,7 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
         if (count == height * width) return matrix
         when (whereGo) {
             0 -> {
-                column++
+                if (width != 1) column++ else row++
                 if (column >= width - 1 - rightGap) {
                     whereGo = 1
                     rightGap++
