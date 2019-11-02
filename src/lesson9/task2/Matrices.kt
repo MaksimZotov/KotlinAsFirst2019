@@ -375,7 +375,26 @@ fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> {
  * Вернуть тройку (Triple) -- (да/нет, требуемый сдвиг по высоте, требуемый сдвиг по ширине).
  * Если наложение невозможно, то первый элемент тройки "нет" и сдвиги могут быть любыми.
  */
-fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> = TODO()
+fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> {
+    var count = 0
+    for (i in 0 until key.height)
+        for (j in 0 until key.width)
+            if (key[i, j] == 1)
+                count++
+    for (i in 0 until lock.height)
+        for (j in 0 until lock.width) {
+            var localCount = 0
+            if (key.height + i <= lock.height)
+                for (l in 0 until key.height)
+                    if (key.width + j <= lock.width)
+                        for (k in 0 until key.width)
+                            if (lock[i + l, j + k] == 0 && key[l, k] == 1)
+                                localCount++
+            if (localCount == count)
+                return Triple(true, i, j)
+        }
+    return Triple(false, -1, -1)
+}
 
 /**
  * Простая

@@ -351,8 +351,15 @@ class Tests {
         )
         assertEquals(
             Triple(true, 0, 1), canOpenLock(
-                key = createMatrix(2, 2, listOf(listOf(1, 0), listOf(0, 1))),
-                lock = createMatrix(3, 3, listOf(listOf(1, 0, 1), listOf(0, 1, 0), listOf(1, 1, 1)))
+                key = createMatrix(2, 2, listOf(
+                        listOf(1, 0),
+                        listOf(0, 1))
+                ),
+                lock = createMatrix(3, 3, listOf(
+                        listOf(1, 0, 1),
+                        listOf(0, 1, 0),
+                        listOf(1, 1, 1))
+                )
             )
         )
         assertFalse(
