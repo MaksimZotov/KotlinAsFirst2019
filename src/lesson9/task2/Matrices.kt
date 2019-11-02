@@ -376,20 +376,23 @@ fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> {
  * Если наложение невозможно, то первый элемент тройки "нет" и сдвиги могут быть любыми.
  */
 fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> {
-    var count = 0
+    var count0 = 0
+    var count1 = 0
     for (i in 0 until key.height)
         for (j in 0 until key.width)
-            if (key[i, j] == 1) count++
-    if (count == 0) return Triple(false, 0, 0)
+            if (key[i, j] == 0) count0++ else count1++
     for (i in 0 until lock.height)
         for (j in 0 until lock.width) {
-            var localCount = 0
+            var localCount0 = 0
+            var localCount1 = 0
             if (key.height + i <= lock.height)
                 for (l in 0 until key.height)
                     if (key.width + j <= lock.width)
-                        for (k in 0 until key.width)
-                            if (lock[i + l, j + k] == 0 && key[l, k] == 1) localCount++
-            if (localCount == count) return Triple(true, i, j)
+                        for (k in 0 until key.width) {
+                            if (lock[i + l, j + k] == 1 && key[l, k] == 0) localCount0++
+                            if (lock[i + l, j + k] == 0 && key[l, k] == 1) localCount1++
+                        }
+            if (localCount0 == count0 && localCount1 == count1) return Triple(true, i, j)
         }
     return Triple(false, 0, 0)
 }

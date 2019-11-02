@@ -370,15 +370,19 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     val writer = File(outputName).printWriter()
     val font = mutableMapOf("*" to false, "**" to false, "~~" to false)
     var lastLineWasEmpty = false
+    var wasLineNotEmpty = false
     writer.print("<html><body><p>")
     for (line in lines) {
         if (line.isEmpty()) {
-            if (!lastLineWasEmpty) {
+            if (!lastLineWasEmpty && wasLineNotEmpty) {
                 writer.print("</p><p>")
                 lastLineWasEmpty = true
             }
             continue
-        } else lastLineWasEmpty = false
+        } else {
+            lastLineWasEmpty = false
+            wasLineNotEmpty = true
+        }
         var i = -1
         while (i < line.lastIndex) {
             i++
