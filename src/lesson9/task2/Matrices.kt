@@ -195,25 +195,25 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
 fun generateSnake(height: Int, width: Int): Matrix<Int> {
     val matrix = MatrixImpl(height, width, 0)
     var count = 1
-    for (i in 1..width) {
-        var row = 0
-        var column = i - 1
-        while (column >= 0) {
-            matrix[row, column] = count
-            row++
-            column--
-            count++
-        }
-    }
-    for (i in 1 until height) {
-        var row = i
-        var column = width - 1
+    var row = -1
+    var column = -1
+    fun goOnDiagonal() {
         while (column >= 0 && row < height) {
             matrix[row, column] = count
             row++
             column--
             count++
         }
+    }
+    for (i in 1..width) {
+        row = 0
+        column = i - 1
+        goOnDiagonal()
+    }
+    for (i in 1 until height) {
+        row = i
+        column = width - 1
+        goOnDiagonal()
     }
     return matrix
 }
@@ -343,7 +343,12 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
  * Инвертировать заданную матрицу.
  * При инвертировании знак каждого элемента матрицы следует заменить на обратный
  */
-operator fun Matrix<Int>.unaryMinus(): Matrix<Int> = TODO(this.toString())
+operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
+    for (i in 0 until this.height)
+        for (j in 0 until this.width)
+            this[i, j] *= -1
+    return this
+}
 
 /**
  * Средняя
