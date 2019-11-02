@@ -366,6 +366,7 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
+    /*
     val lines = File(inputName).readLines()
     val writer = File(outputName).printWriter()
     val font = mutableMapOf("*" to false, "**" to false, "~~" to false)
@@ -415,6 +416,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
     }
     writer.print("</p></body></html>")
     writer.close()
+    */
 }
 
 /**
@@ -517,15 +519,25 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
+    /*
     val lines = File(inputName).readLines()
     val writer = File(outputName).printWriter()
-    var curGap = 0
+    val level = Array(6) { "" }
     writer.print("<html><body>")
     for (line in lines) {
+        val curGap = line.count() - line.trim().count()
+        val curLevel = curGap / 4
+        if (level[curLevel] != "") {
+            level[curLevel] = when (line[0]) {
+                '*' -> "<ul>"
+                in '0'..'9' -> "<ol>"
 
+            }
+        }
     }
     writer.print("</body></html>")
     writer.close()
+     */
 }
 
 /**

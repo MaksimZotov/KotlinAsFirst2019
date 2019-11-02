@@ -231,16 +231,11 @@ fun generateSnake(height: Int, width: Int): Matrix<Int> {
  */
 fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
     if (matrix.height != matrix.width) throw IllegalArgumentException()
-    val list = mutableListOf(mutableListOf<E>())
-    for (i in 0 until matrix.height) {
-        list.add(mutableListOf())
-        for (j in 0 until matrix.width)
-            list[i].add(matrix[i, j])
-    }
+    val matrixResult = MatrixImpl(matrix.height, matrix.height, matrix[0, 0])
     for (i in 0 until matrix.height)
-        for (j in 0 until matrix.width)
-            matrix[i, j] = list[matrix.height - 1 - j][i]
-    return matrix
+        for (j in 0 until matrix.height)
+            matrixResult[i, j] = matrix[matrix.height - 1 - j, i]
+    return matrixResult
 }
 
 /**
@@ -256,7 +251,22 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
  * 1 2 3
  * 3 1 2
  */
-fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
+fun isLatinSquare(matrix: Matrix<Int>): Boolean {
+    if (matrix.height != matrix.width) return false
+    val n = matrix.height
+    val digitsHeight = Array(n) { false }
+    val digitsWidth = Array(n) { false }
+    for (i in 0 until n) {
+        for (j in 0 until n) {
+            if (matrix[i, j] in 1..n) digitsHeight[matrix[i, j] - 1] = true else return false
+            if (matrix[j, i] in 1..n) digitsWidth[matrix[j, i] - 1] = true else return false
+        }
+        if (digitsHeight.any { !it } || digitsWidth.any { !it }) return false
+        digitsHeight.map { false }
+        digitsWidth.map { false }
+    }
+    return true
+}
 
 /**
  * Средняя
@@ -275,7 +285,16 @@ fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
  *
  * 42 ===> 0
  */
-fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> = TODO()
+fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> {
+    val matrixResult = MatrixImpl(matrix.height, matrix.width, 0)
+    for (i in 0 until matrix.height)
+        for (j in 0 until matrix.width)
+            for (k in i - 1..i + 1)
+                for (l in j - 1..j + 1)
+                    if (k in 0 until matrix.height && l in 0 until matrix.width && (k != i || l != j))
+                        matrixResult[i, j] += matrix[k, l]
+    return matrixResult
+}
 
 /**
  * Средняя
