@@ -366,51 +366,52 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    val text = File(inputName).readText()
+    val lines = File(inputName).readLines()
     val writer = File(outputName).printWriter()
     val font = mutableMapOf("*" to false, "**" to false, "~~" to false)
-    var i = -1
     writer.print("<html><body><p>")
-    while (i < text.lastIndex) {
-        i++
-        if (text[i] == '*') {
-            if (text[i + 1] != '*') {
-                if (!font["*"]!!) {
-                    font["*"] = true
-                    writer.print("<i>")
+    for (line in lines) {
+        if (line.isEmpty()) {
+            writer.print("</p><p>")
+            continue
+        }
+        var i = -1
+        while (i < line.lastIndex) {
+            i++
+            if (line[i] == '*') {
+                if (line[i + 1] != '*') {
+                    if (!font["*"]!!) {
+                        font["*"] = true
+                        writer.print("<i>")
+                    } else {
+                        font["*"] = false
+                        writer.println("</i>")
+                    }
                 } else {
-                    font["*"] = false
-                    writer.println("</i>")
+                    if (!font["**"]!!) {
+                        font["**"] = true
+                        writer.print("<b>")
+                    } else {
+                        font["**"] = false
+                        writer.print("</b>")
+                    }
+                    i++
                 }
-            } else {
-                if (!font["**"]!!) {
-                    font["**"] = true
-                    writer.print("<b>")
+                continue
+            }
+            if (line[i] == '~' && line[i + 1] == '~') {
+                if (!font["~~"]!!) {
+                    font["~~"] = true
+                    writer.print("<s>")
                 } else {
-                    font["**"] = false
-                    writer.print("</b>")
+                    font["~~"] = false
+                    writer.print("</s>")
                 }
                 i++
+                continue
             }
-            continue
+            writer.print(line[i])
         }
-        if (text[i] == '~' && text[i + 1] == '~') {
-            if (!font["~~"]!!) {
-                font["~~"] = true
-                writer.print("<s>")
-            } else {
-                font["~~"] = false
-                writer.print("</s>")
-            }
-            i++
-            continue
-        }
-        if (i + 2 < text.lastIndex && text[i] == '\n' && text[i + 2] == '\n') {
-            writer.print("</p><p>")
-            i++
-            continue
-        }
-        writer.print(text[i])
     }
     writer.print("</p></body></html>")
     writer.close()
