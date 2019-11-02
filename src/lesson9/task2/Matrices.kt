@@ -379,8 +379,8 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
     var count = 0
     for (i in 0 until key.height)
         for (j in 0 until key.width)
-            if (key[i, j] == 1)
-                count++
+            if (key[i, j] == 1) count++
+    if (count == 0) return Triple(false, -1, -1)
     for (i in 0 until lock.height)
         for (j in 0 until lock.width) {
             var localCount = 0
@@ -388,10 +388,8 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
                 for (l in 0 until key.height)
                     if (key.width + j <= lock.width)
                         for (k in 0 until key.width)
-                            if (lock[i + l, j + k] == 0 && key[l, k] == 1)
-                                localCount++
-            if (localCount == count)
-                return Triple(true, i, j)
+                            if (lock[i + l, j + k] == 0 && key[l, k] == 1) localCount++
+            if (localCount == count) return Triple(true, i, j)
         }
     return Triple(false, -1, -1)
 }
