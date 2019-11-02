@@ -379,7 +379,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         while (i < line.lastIndex) {
             i++
             if (line[i] == '*') {
-                if (line[i + 1] != '*') {
+                if (i + 1 > line.lastIndex || line[i + 1] != '*') {
                     if (!font["*"]!!) {
                         font["*"] = true
                         writer.print("<i>")
@@ -399,7 +399,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                 }
                 continue
             }
-            if (line[i] == '~' && line[i + 1] == '~') {
+            if (line[i] == '~' && i + 1 <= line.lastIndex && line[i + 1] == '~') {
                 if (!font["~~"]!!) {
                     font["~~"] = true
                     writer.print("<s>")
@@ -517,7 +517,15 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlLists(inputName: String, outputName: String) {
-    TODO()
+    val lines = File(inputName).readLines()
+    val writer = File(outputName).printWriter()
+    var curGap = 0
+    writer.print("<html><body>")
+    for (line in lines) {
+
+    }
+    writer.print("</body></html>")
+    writer.close()
 }
 
 /**
