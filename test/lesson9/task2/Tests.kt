@@ -241,11 +241,11 @@ class Tests {
     @Test
     @Tag("Normal")
     fun sumNeighbours() {
-        /*assertEquals(createMatrix(1, 1, listOf(listOf(0))), sumNeighbours(createMatrix(1, 1, listOf(listOf(42)))))
+        assertEquals(createMatrix(1, 1, listOf(listOf(0))), sumNeighbours(createMatrix(1, 1, listOf(listOf(42)))))
         assertEquals(
             createMatrix(2, 2, listOf(listOf(9, 8), listOf(7, 6))),
             sumNeighbours(createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4))))
-        )*/
+        )
         assertEquals(
             createMatrix(
                 4, 3, listOf(
@@ -276,8 +276,11 @@ class Tests {
             findHoles(
                 createMatrix(
                     5, 4, listOf(
-                        listOf(1, 0, 1, 0), listOf(0, 0, 1, 0), listOf(1, 0, 0, 0),
-                        listOf(0, 0, 1, 0), listOf(0, 0, 0, 0)
+                        listOf(1, 0, 1, 0),
+                        listOf(0, 0, 1, 0),
+                        listOf(1, 0, 0, 0),
+                        listOf(0, 0, 1, 0),
+                        listOf(0, 0, 0, 0)
                     )
                 )
             )

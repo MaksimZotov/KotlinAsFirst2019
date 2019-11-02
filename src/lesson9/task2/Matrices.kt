@@ -2,6 +2,7 @@
 
 package lesson9.task2
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import lesson8.task1.hexagonByThreePoints
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
@@ -254,16 +255,14 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> {
 fun isLatinSquare(matrix: Matrix<Int>): Boolean {
     if (matrix.height != matrix.width) return false
     val n = matrix.height
-    val digitsHeight = Array(n) { false }
-    val digitsWidth = Array(n) { false }
     for (i in 0 until n) {
+        val digitsHeight = Array(n) { false }
+        val digitsWidth = Array(n) { false }
         for (j in 0 until n) {
             if (matrix[i, j] in 1..n) digitsHeight[matrix[i, j] - 1] = true else return false
             if (matrix[j, i] in 1..n) digitsWidth[matrix[j, i] - 1] = true else return false
         }
         if (digitsHeight.any { !it } || digitsWidth.any { !it }) return false
-        digitsHeight.map { false }
-        digitsWidth.map { false }
     }
     return true
 }
@@ -311,7 +310,21 @@ fun sumNeighbours(matrix: Matrix<Int>): Matrix<Int> {
  * 0 0 1 0
  * 0 0 0 0
  */
-fun findHoles(matrix: Matrix<Int>): Holes = TODO()
+fun findHoles(matrix: Matrix<Int>): Holes {
+    val rows = mutableListOf<Int>()
+    val columns = mutableListOf<Int>()
+    for (i in 0 until matrix.height) {
+        val digitsWidth = Array(matrix.width) { false }
+        for (j in 0 until matrix.width) if (matrix[i, j] == 0) digitsWidth[j] = true
+        if (digitsWidth.all { it }) rows.add(i)
+    }
+    for (i in 0 until matrix.width) {
+        val digitsHeight = Array(matrix.height) { false }
+        for (j in 0 until matrix.height) if (matrix[j, i] == 0) digitsHeight[j] = true
+        if (digitsHeight.all { it }) columns.add(i)
+    }
+    return Holes(rows, columns)
+}
 
 /**
  * Класс для описания местонахождения "дырок" в матрице
