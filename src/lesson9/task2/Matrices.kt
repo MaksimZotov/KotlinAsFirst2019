@@ -345,7 +345,15 @@ data class Holes(val rows: List<Int>, val columns: List<Int>)
  *
  * К примеру, центральный элемент 12 = 1 + 2 + 4 + 5, элемент в левом нижнем углу 12 = 1 + 4 + 7 и так далее.
  */
-fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> = TODO()
+fun sumSubMatrix(matrix: Matrix<Int>): Matrix<Int> {
+    val matrixResult = MatrixImpl(matrix.height, matrix.width, 0)
+    for (i in 0 until matrix.height)
+        for (j in 0 until matrix.width)
+            for (k in 0..i)
+                for (l in 0..j)
+                    matrixResult[i, j] += matrix[k, l]
+    return matrixResult
+}
 
 /**
  * Сложная
@@ -376,8 +384,8 @@ fun canOpenLock(key: Matrix<Int>, lock: Matrix<Int>): Triple<Boolean, Int, Int> 
  * При инвертировании знак каждого элемента матрицы следует заменить на обратный
  */
 operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
-    for (i in 0 until this.height)
-        for (j in 0 until this.width)
+    for (i in 0 until height)
+        for (j in 0 until width)
             this[i, j] *= -1
     return this
 }
@@ -390,7 +398,17 @@ operator fun Matrix<Int>.unaryMinus(): Matrix<Int> {
  * В противном случае бросить IllegalArgumentException.
  * Подробно про порядок умножения см. статью Википедии "Умножение матриц".
  */
-operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> = TODO(this.toString())
+operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
+    if (height != other.width || width != other.height) throw IllegalArgumentException()
+    val matrixResult = MatrixImpl(height, other.width, 0)
+    for (i in 0 until height)
+        for (j in 0 until other.width) {
+            var curCell = 0
+            for (r in 0 until width) curCell += this[i, r] * other[r, j]
+            matrixResult[i, j] = curCell
+        }
+    return matrixResult
+}
 
 /**
  * Сложная
