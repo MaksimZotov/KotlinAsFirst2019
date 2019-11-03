@@ -8,6 +8,7 @@ import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
 import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -457,7 +458,44 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
  * 0  4 13  6
  * 3 10 11  8
  */
-fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> = TODO()
+fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
+    if (moves.any { it !in 1..15 }) throw IllegalStateException()
+    if (moves.isEmpty()) return matrix
+    var curI = -1
+    var curJ = -1
+    var moveFound = false
+    for (i in 0 until matrix.height) {
+        if (moveFound) break
+        for (j in 0 until matrix.width)
+            if (matrix[i, j] == moves[0]) {
+                for ((k, l) in listOf(i - 1 to j, i + 1 to j, i to j - 1, i to j + 1))
+                    if (k in 0 until matrix.height && l in 0 until matrix.width && matrix[k, l] == 0) {
+                        curI = i
+                        curJ = j
+                        matrix[k, l] = moves[0]
+                        matrix[curI, curJ] = 0
+                        moveFound = true
+                        break
+                    }
+                if (!moveFound) throw IllegalStateException()
+                else break
+            }
+    }
+    for (i in 1..moves.lastIndex) {
+        moveFound = false
+        for ((k, l) in listOf(curI - 1 to curJ, curI + 1 to curJ, curI to curJ - 1, curI to curJ + 1))
+            if (k in 0 until matrix.height && l in 0 until matrix.width && matrix[k, l] == moves[i]) {
+                matrix[k, l] = 0
+                matrix[curI, curJ] = moves[i]
+                curI = k
+                curJ = l
+                moveFound = true
+                break
+            }
+        if (!moveFound) throw IllegalStateException()
+    }
+    return matrix
+}
 
 /**
  * Очень сложная
