@@ -281,16 +281,14 @@ fun pathBetweenHexes(from: HexPoint, to: HexPoint): List<HexPoint> {
 fun hexagonByThreePoints(a: HexPoint, b: HexPoint, c: HexPoint): Hexagon? {
     val maxDistance = maxOf(a.distance(b), a.distance(c), b.distance(c))
     val hexPoints = listOf(a, b, c)
-    val maxY = hexPoints.maxBy { it.y }!!.y
-    val minY = maxY - maxDistance
-    val minX = hexPoints.minBy { it.x }!!.x
-    val maxX = minX + maxDistance
-    val hexPointLeftUp = HexPoint(minX, maxY)
+    val leftUp = a.x - maxDistance to a.y + maxDistance
+    val rightDown = a.x + maxDistance to a.y - maxDistance
+    val hexPointLeftUp = HexPoint(leftUp.first, leftUp.second)
     var center = hexPointLeftUp
     var minDistance = maxDistance
-    for (y in maxY downTo minY) {
-        var x = minX
-        while (x < maxX) {
+    for (y in leftUp.second downTo rightDown.second) {
+        var x = leftUp.first
+        while (x < rightDown.first) {
             x++
             val curHexPoint = HexPoint(x, y)
             val curDistance = a.distance(curHexPoint)
