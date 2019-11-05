@@ -278,7 +278,25 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Пример: knightMoveNumber(Square(3, 1), Square(6, 3)) = 3.
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
-fun knightMoveNumber(start: Square, end: Square): Int = TODO()
+
+val typesOfMoves = arrayListOf(2 to 1, 2 to -1, -2 to 1, -2 to -1, 1 to 2, 1 to -2, -1 to 2, -1 to -2)
+
+fun knightMoveNumber(start: Square, end: Square): Int {
+    if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
+    var mainCount = 7
+    fun move(column: Int, row: Int, count: Int) {
+        if (count < 7 && column in 1..8 && row in 1..8) {
+            if (column == end.column && row == end.row && count < mainCount) {
+                mainCount = count
+                return
+            }
+            val curCount = count + 1
+            for (move in typesOfMoves) move(column + move.first, row + move.second, curCount)
+        }
+    }
+    move(start.column, start.row, 0)
+    return mainCount
+}
 
 /**
  * Очень сложная
@@ -300,4 +318,19 @@ fun knightMoveNumber(start: Square, end: Square): Int = TODO()
  *
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun knightTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun knightTrajectory(start: Square, end: Square): List<Square> {
+    if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
+    var mainList = MutableList(8) { Square(0, 0) }
+    fun move(column: Int, row: Int, list: MutableList<Square>) {
+        if (list.size < 8 && column in 1..8 && row in 1..8) {
+            list.add(Square(column, row))
+            if (column == end.column && row == end.row && list.size < mainList.size) {
+                mainList = list
+                return
+            }
+            for (move in typesOfMoves) move(column + move.first, row + move.second, list.toMutableList())
+        }
+    }
+    move(start.column, start.row, mutableListOf())
+    return mainList
+}
