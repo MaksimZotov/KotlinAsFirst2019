@@ -291,7 +291,7 @@ fun knightMoveNumber(start: Square, end: Square): Int {
                 return
             }
             val curCount = count + 1
-            for (move in typesOfMoves) move(column + move.first, row + move.second, curCount)
+            for ((first, second) in typesOfMoves) move(column + first, row + second, curCount)
         }
     }
     move(start.column, start.row, 0)
@@ -328,7 +328,7 @@ fun knightTrajectory(start: Square, end: Square): List<Square> {
                 mainList = list
                 return
             }
-            for (move in typesOfMoves) move(column + move.first, row + move.second, list.toMutableList())
+            for ((first, second) in typesOfMoves) move(column + first, row + second, list.toMutableList())
         }
     }
     move(start.column, start.row, mutableListOf())
