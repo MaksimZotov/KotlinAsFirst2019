@@ -3,6 +3,7 @@
 package lesson8.task1
 
 import kotlinx.html.Dir
+import java.lang.IllegalStateException
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
@@ -313,7 +314,17 @@ fun hexagonByThreePoints(a: HexPoint, b: HexPoint, c: HexPoint): Hexagon? {
  *
  * Пример: 13, 32, 45, 18 -- шестиугольник радиусом 3 (с центром, например, в 15)
  */
-fun minContainingHexagon(vararg points: HexPoint): Hexagon = TODO()
+fun minContainingHexagon(vararg points: HexPoint): Hexagon = when {
+    points.isEmpty() -> throw IllegalArgumentException()
+    points.size == 1 -> Hexagon(points[0], 0)
+    else -> {
+        val leftUp = points.minBy { it.x }!!.x to points.maxBy { it.y }!!.y
+        val rightDown = points.maxBy { it.x }!!.x to points.minBy { it.y }!!.y
+        val center = HexPoint((leftUp.first + rightDown.first) / 2, (leftUp.second + rightDown.second) / 2)
+        val radius = points.maxBy { it.distance(center) }!!.distance(center)
+        Hexagon(center, radius)
+    }
+}
 
 
 

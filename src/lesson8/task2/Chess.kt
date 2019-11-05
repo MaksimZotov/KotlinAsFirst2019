@@ -279,7 +279,7 @@ fun kingTrajectory(start: Square, end: Square): List<Square> {
  * Конь может последовательно пройти через клетки (5, 2) и (4, 4) к клетке (6, 3).
  */
 
-val typesOfMoves = arrayListOf(2 to 1, 2 to -1, -2 to 1, -2 to -1, 1 to 2, 1 to -2, -1 to 2, -1 to -2)
+val typesOfMoves = arrayOf(2 to 1, 2 to -1, -2 to 1, -2 to -1, 1 to 2, 1 to -2, -1 to 2, -1 to -2)
 
 fun knightMoveNumber(start: Square, end: Square): Int {
     if (!checkSquare(start) || !checkSquare(end)) throw IllegalArgumentException()
