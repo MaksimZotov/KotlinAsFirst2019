@@ -7,8 +7,11 @@ import lesson8.task1.hexagonByThreePoints
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
+import sun.awt.geom.Crossings
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
+import java.text.FieldPosition
+import kotlin.math.abs
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -536,4 +539,85 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  *
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
+
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
+    val targets = arrayListOf(0 to 0, 0 to 1, 0 to 2, 0 to 3, 1 to 0, 1 to 1, 1 to 2, 1 to 3,
+            2 to 0, 2 to 1, 2 to 2, 2 to 3, 3 to 0, 3 to 1, 3 to 2)
+    var posCurNum = -1 to -1
+    var posZero = -1 to -1
+    var posMainTarget = -1 to -1
+    var posLocalTarget = -1 to -1
+    val wayFromZeroToLocalTarget = mutableListOf<Pair<Int, Int>>()
+
+    fun indexesOf(element: Int): Pair<Int, Int> {
+        for (i in 0 until matrix.height)
+            for (j in 0 until matrix.width)
+                if (matrix[i, j] == element) return i to j
+        throw IllegalArgumentException()
+    }
+
+    fun setPosLocalTarget() {
+        posLocalTarget = if (posCurNum.second != posMainTarget.second)
+            posCurNum.first to posCurNum.second + (posMainTarget.second - posCurNum.second) / abs(posMainTarget.second - posCurNum.second)
+        else
+            posCurNum.first + (posMainTarget.first - posCurNum.first) / abs(posMainTarget.first - posCurNum.first) to posCurNum.second
+    }
+
+    fun setTrajectoryFromZeroToLocalTarget() {
+        val way = wayFromZeroToLocalTarget
+        var posCur = posZero
+        while (true) {
+            way.add(posCur)
+            if (posCur.first != posLocalTarget.first) {
+                val nextPair = posCur.first + (posLocalTarget.first - posCur.first) / abs(posLocalTarget.first - posCur.first) to posCur.second
+                posCur = nextPair
+            } else {
+                val nextPair = posCur.first + (posLocalTarget.first - posCur.first) / abs(posLocalTarget.first - posCur.first) to posCur.second
+                posCur = nextPair
+            }
+            if (posCur == posLocalTarget) {
+                way.add(posCur)
+                break
+            }
+        }
+    }
+
+    fun moveFromZeroToLocalTarget() {
+        val way = wayFromZeroToLocalTarget
+        for (i in 0 until way.lastIndex) {
+            val temp = matrix[way[i + 1].first, way[i + 1].second]
+            matrix[way[i + 1].first, way[i + 1].second] = 0
+            matrix[way[i].first, way[i].second] = temp
+            showMatrix(matrix)
+        }
+    }
+
+    fun swapPosCurNumAndPosZero() {
+        val temp = matrix[posCurNum.first, posCurNum.second]
+        matrix[posZero.first, posZero.second] = temp
+        matrix[posCurNum.first, posCurNum.second] = 0
+    }
+
+    posZero = indexesOf(0)
+    for (curNum in 1..15) {
+        posCurNum = indexesOf(curNum)
+        posMainTarget = targets[curNum - 1]
+        while (posCurNum != posMainTarget) {
+            setPosLocalTarget()
+            setTrajectoryFromZeroToLocalTarget()
+            moveFromZeroToLocalTarget()
+            swapPosCurNumAndPosZero()
+        }
+    }
+    return listOf()
+}
+
+fun showMatrix(matrix: Matrix<Int>) {
+    for (i in 0 until matrix.height) {
+        for (j in 0 until matrix.width) {
+            print(matrix[i, j].toString() + ", ")
+        }
+        println()
+    }
+    println()
+}
