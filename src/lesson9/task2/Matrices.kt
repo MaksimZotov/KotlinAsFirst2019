@@ -540,8 +540,11 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
+
+/*
 val targets = arrayListOf(0 to 0, 0 to 1, 0 to 2, 0 to 3, 1 to 0, 1 to 1, 1 to 2, 1 to 3, 2 to 0, 2 to 1, 2 to 2, 2 to 3, 3 to 0, 3 to 1, 3 to 2)
-val wayFromZeroToLocalTarget = mutableListOf<Pair<Int, Int>>()
+var wayFromZeroToLocalTarget = mutableListOf<Pair<Int, Int>>()
 var posNum = -1 to -1
 var posZero = -1 to -1
 var posMainTarget = -1 to -1
@@ -554,15 +557,31 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         posNum = indexesOf(matrix, num)
         posMainTarget = targets[num - 1]
         wayFromZeroToLocalTarget.clear()
+        setPosLocalTarget()
+        setTrajectoryFromZeroToFirstLocalTarget()
+        moveFromZeroToLocalTarget(matrix)
+        swapPosCurNumAndPosZero(matrix)
         while (posNum != posMainTarget) {
-            setPosLocalTarget()
-            setTrajectoryFromZeroToLocalTarget()
+            setTrajectoryFromZeroToSecondOrMoreLocalTarget()
             moveFromZeroToLocalTarget(matrix)
             swapPosCurNumAndPosZero(matrix)
-            showMatrix(matrix)
         }
+        showMatrix(matrix)
     }
     return listOf()
+}
+
+fun setTrajectoryFromZeroToSecondOrMoreLocalTarget() {
+    wayFromZeroToLocalTarget = if (posZero.second < posLocalTarget.second) when {
+        posZero.second == 1 -> mutableListOf(posZero.first to posZero.second, posZero.first - 1 to 1,
+                posZero.first - 1 to 0, posLocalTarget.first to posLocalTarget.second)
+        posZero.second == 3 -> mutableListOf(posZero.first to posZero.second, posZero.first - 1 to posZero.second,
+                posZero.first - 1 to posZero.second + 1, posZero.first - 1 to posZero.second + 2, posLocalTarget.first to posLocalTarget.second)
+        else -> mutableListOf(posZero.first to posZero.second, posZero.first + 1 to posZero.second,
+                posZero.first + 1 to posZero.second + 1, posZero.first + 1 to posZero.second + 2, posLocalTarget.first to posLocalTarget.second)
+    } else
+        mutableListOf(posZero.first to posZero.second, posZero.first to posZero.second - 1,
+                posZero.first - 1 to posZero.second - 1, posZero.first - 2 to posZero.second - 1, posLocalTarget.first to posLocalTarget.second)
 }
 
 fun indexesOf(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
@@ -579,7 +598,7 @@ fun setPosLocalTarget() {
         posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
 }
 
-fun setTrajectoryFromZeroToLocalTarget() {
+fun setTrajectoryFromZeroToFirstLocalTarget() {
     val way = wayFromZeroToLocalTarget
     var posCur = posZero
     while (true) {
@@ -627,3 +646,4 @@ fun showMatrix(matrix: Matrix<Int>) {
     }
     println()
 }
+ */
