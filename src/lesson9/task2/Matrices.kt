@@ -590,12 +590,16 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             matrix[way[i].first, way[i].second] = temp
             showMatrix(matrix)
         }
+        posZero = way[way.lastIndex]
     }
 
     fun swapPosCurNumAndPosZero() {
-        val temp = matrix[posCurNum.first, posCurNum.second]
-        matrix[posZero.first, posZero.second] = temp
+        val tempNum = matrix[posCurNum.first, posCurNum.second]
+        matrix[posZero.first, posZero.second] = tempNum
         matrix[posCurNum.first, posCurNum.second] = 0
+        val tempPair = posCurNum
+        posCurNum = posZero
+        posZero = tempPair
     }
 
     posZero = indexesOf(0)
