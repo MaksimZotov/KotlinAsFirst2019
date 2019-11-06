@@ -548,15 +548,18 @@ var posMainTarget = -1 to -1
 var posLocalTarget = -1 to -1
 
 fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
+    showMatrix(matrix)
     posZero = indexesOf(matrix, 0)
     for (num in 1..15) {
         posNum = indexesOf(matrix, num)
         posMainTarget = targets[num - 1]
+        wayFromZeroToLocalTarget.clear()
         while (posNum != posMainTarget) {
             setPosLocalTarget()
             setTrajectoryFromZeroToLocalTarget()
             moveFromZeroToLocalTarget(matrix)
             swapPosCurNumAndPosZero(matrix)
+            showMatrix(matrix)
         }
     }
     return listOf()
@@ -585,7 +588,7 @@ fun setTrajectoryFromZeroToLocalTarget() {
             val nextPair = posCur.first + (posLocalTarget.first - posCur.first) / abs(posLocalTarget.first - posCur.first) to posCur.second
             posCur = nextPair
         } else {
-            val nextPair = posCur.first + (posLocalTarget.first - posCur.first) / abs(posLocalTarget.first - posCur.first) to posCur.second
+            val nextPair = posCur.first to posCur.second + (posLocalTarget.second - posCur.second) / abs(posLocalTarget.second - posCur.second)
             posCur = nextPair
         }
         if (posCur == posLocalTarget) {
