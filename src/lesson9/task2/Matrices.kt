@@ -68,6 +68,9 @@ operator fun Matrix<Int>.plus(other: Matrix<Int>): Matrix<Int> {
  * 10 11 12  5
  *  9  8  7  6
  */
+
+enum class Direction { Right, Down, Left, Up }
+
 fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     val matrix = MatrixImpl(height, width, 0)
     var count = 0
@@ -77,37 +80,37 @@ fun generateSpiral(height: Int, width: Int): Matrix<Int> {
     var leftGap = 0
     var upGap = 0
     var downGap = 0
-    var direction = "right"
+    var direction = Direction.Right
     while (true) {
         count++
         matrix[row, column] = count
         if (count == height * width) return matrix
         when (direction) {
-            "right" -> {
+            Direction.Right -> {
                 if (width != 1) column++ else row++
                 if (column >= width - 1 - rightGap) {
-                    direction = "down"
+                    direction = Direction.Down
                     rightGap++
                 }
             }
-            "down" -> {
+            Direction.Down -> {
                 row++
                 if (row >= height - 1 - downGap) {
-                    direction = "left"
+                    direction = Direction.Left
                     downGap++
                 }
             }
-            "left" -> {
+            Direction.Left -> {
                 column--
                 if (column <= leftGap) {
-                    direction = "up"
+                    direction = Direction.Up
                     leftGap++
                 }
             }
-            "up" -> {
+            Direction.Up -> {
                 row--
                 if (row <= upGap + 1) {
-                    direction = "right"
+                    direction = Direction.Right
                     upGap++
                 }
             }
@@ -139,42 +142,42 @@ fun generateRectangles(height: Int, width: Int): Matrix<Int> {
     var leftGap = 0
     var upGap = 0
     var downGap = 0
-    var direction = "right"
+    var direction = Direction.Right
     var nextNumber = false
     while (true) {
         count++
         matrix[row, column] = number
         if (count == height * width) return matrix
         when (direction) {
-            "right" -> {
+            Direction.Right -> {
                 if (nextNumber) {
                     number++
                     nextNumber = false
                 }
                 if (width != 1) column++ else row++
                 if (column >= width - 1 - rightGap) {
-                    direction = "down"
+                    direction = Direction.Down
                     rightGap++
                 }
             }
-            "down" -> {
+            Direction.Down -> {
                 row++
                 if (row >= height - 1 - downGap) {
-                    direction = "left"
+                    direction = Direction.Left
                     downGap++
                 }
             }
-            "left" -> {
+            Direction.Left -> {
                 column--
                 if (column <= leftGap) {
-                    direction = "up"
+                    direction = Direction.Up
                     leftGap++
                 }
             }
-            "up" -> {
+            Direction.Up -> {
                 row--
                 if (row <= upGap + 1) {
-                    direction = "right"
+                    direction = Direction.Right
                     upGap++
                     nextNumber = true
                 }
