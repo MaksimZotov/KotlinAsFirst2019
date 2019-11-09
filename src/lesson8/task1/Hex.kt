@@ -314,7 +314,8 @@ fun hexagonByThreePoints(a: HexPoint, b: HexPoint, c: HexPoint): Hexagon? {
  *
  * Пример: 13, 32, 45, 18 -- шестиугольник радиусом 3 (с центром, например, в 15)
  */
-fun minContainingHexagon(vararg points: HexPoint): Hexagon = when {
+fun minContainingHexagon(vararg points: HexPoint): Hexagon = TODO()
+/*when {
     points.isEmpty() -> throw IllegalArgumentException()
     points.size == 1 -> Hexagon(points[0], 0)
     else -> {
@@ -325,6 +326,6 @@ fun minContainingHexagon(vararg points: HexPoint): Hexagon = when {
         Hexagon(center, radius)
     }
 }
-
+*/
 
 
