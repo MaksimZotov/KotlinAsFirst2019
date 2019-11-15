@@ -493,6 +493,7 @@ class Tests {
                 listOf(10, 11, 13, 15)
         )
         ).assertSolution()*/
+
         createMatrix(
                 4, 4, listOf(
                 listOf(5, 7, 9, 2),

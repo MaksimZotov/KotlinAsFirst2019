@@ -571,7 +571,6 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             val temp = posCurNum
             posCurNum = posLocalTarget
             posZero = temp
-            showMatrix(matrix)
         }
     }
     return list
@@ -582,20 +581,23 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
                                        posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
     val way = mutableListOf<Pair<Int, Int>>()
     var zero = posZero
+
     while (true) {
         way.add(zero)
-        if (zero.second != posTarget.second) {
-            val next = zero.first to zero.second + (posTarget.second - zero.second) / abs(posTarget.second - zero.second)
+        if (zero.second != posTarget.second && zero.second <= posTarget.second) {
+            val next = zero.first to zero.second + (posTarget.second - posZero.second) / abs(posTarget.second - posZero.second)
             zero = if (engaged[next] == false)
                 next
             else
-                zero.first + (posTarget.second - zero.second) / abs(posTarget.second - zero.second) to zero.second
+                zero.first + (posTarget.second - posZero.second) / abs(posTarget.second - posZero.second) to zero.second
+            if (zero.first == -1) zero = 1 to zero.second
         } else {
-            val next = zero.first + (posTarget.first - zero.first) / abs(posTarget.first - zero.first) to zero.second
+            val next = zero.first + (posTarget.first - posZero.first) / abs(posTarget.first - posZero.first) to zero.second
             zero = if (engaged[next] == false)
                 next
             else
-                zero.first to zero.second + (posTarget.first - zero.first) / abs(posTarget.first - zero.first)
+                zero.first to zero.second + (posTarget.first - posZero.first) / abs(posTarget.first - posZero.first)
+            if (zero.second == -1) zero = zero.first to 1
         }
         if (zero == posTarget) {
             way.add(zero)
