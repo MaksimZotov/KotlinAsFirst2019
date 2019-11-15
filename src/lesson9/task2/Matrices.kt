@@ -549,22 +549,18 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
             2 to 0 to false, 2 to 1 to false, 2 to 2 to false, 2 to 3 to false,
             3 to 0 to false, 3 to 1 to false, 3 to 2 to false)
-    var posCurNum: Pair<Int, Int>
-    var posZero: Pair<Int, Int>
-    var posMainTarget: Pair<Int, Int>
+    var curNum = -1
+    var posCurNum = -1 to -1
+    var posZero = indexesOf(matrix, 0)
+    var posMainTarget = -1 to -1
     var posLocalTarget: Pair<Int, Int>
-    for (curNum in 1..15) {
-        posCurNum = indexesOf(matrix, curNum)
-        posZero = indexesOf(matrix, 0)
-        posMainTarget = targets[curNum - 1]
+    fun moveFromCurPosToTarget() {
         while (posMainTarget != posCurNum) {
             showMatrix(matrix)
             posLocalTarget = setPosLocalTarget(posCurNum, posMainTarget)
             engaged[posCurNum] = true
             val trajectory = getTrajectoryFromZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
             moveFromZeroToLocalTarget(matrix, trajectory)
-            // На этом моменте 0 стоит на месте локального таргета, с 0 соседствует posCurNum
-            // Теперь нужно лишь поменять местами 0 и posCurNum
             matrix[posLocalTarget.first, posLocalTarget.second] = curNum
             matrix[posCurNum.first, posCurNum.second] = 0
             engaged[posCurNum] = false
@@ -574,9 +570,14 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         }
         engaged[posMainTarget] = true
     }
+    for (i in 1..15) {
+        curNum = i
+        posCurNum = indexesOf(matrix, curNum)
+        posMainTarget = targets[curNum - 1]
+        moveFromCurPosToTarget()
+    }
     return list
 }
-
 
 fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
                                        posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
@@ -589,21 +590,17 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
             if (forIncrement == 0) forIncrement = posTarget.second - zero.second
             if (forIncrement == 0) break
             val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
-            zero = if (engaged[next] == false)
-                next
-            else
-                zero.first + (forIncrement) / abs(forIncrement) to zero.second
+            zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
             if (zero.first == -1) zero = 1 to zero.second
         } else {
             var forIncrement = posTarget.first - posZero.first
             if (forIncrement == 0) forIncrement = posTarget.first - zero.first
             if (forIncrement == 0) break
             val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
-            zero = if (engaged[next] == false)
-                next
-            else
-                zero.first to zero.second + (forIncrement) / abs(forIncrement)
+            zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
+            if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
             if (zero.second == -1) zero = zero.first to 1
+            if (zero.first == -1) zero = 1 to zero.second
         }
         if (zero == posTarget) {
             way.add(zero)
@@ -623,129 +620,20 @@ fun moveFromZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
 }
 
 fun indexesOf(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
-    for (i in 0 until matrix.height)
-        for (j in 0 until matrix.width)
-            if (matrix[i, j] == element) return i to j
+    for (i in 0 until matrix.height) for (j in 0 until matrix.width) if (matrix[i, j] == element) return i to j
     throw IllegalArgumentException()
 }
 
-fun setPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>): Pair<Int, Int> = if (posNum.second != posMainTarget.second)
-    posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
-else
-    posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
+fun setPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>): Pair<Int, Int> =
+        if (posNum.second != posMainTarget.second)
+            posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
+        else
+            posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
 
 fun showMatrix(matrix: Matrix<Int>) {
     for (i in 0 until matrix.height) {
-        for (j in 0 until matrix.width) {
-            print(matrix[i, j].toString() + ", ")
-        }
+        for (j in 0 until matrix.width) print(matrix[i, j].toString() + ", ")
         println()
     }
     println()
 }
-
-/*
-val targets = arrayListOf(0 to 0, 0 to 1, 0 to 2, 0 to 3, 1 to 0, 1 to 1, 1 to 2, 1 to 3, 2 to 0, 2 to 1, 2 to 2, 2 to 3, 3 to 0, 3 to 1, 3 to 2)
-var wayFromZeroToLocalTarget = mutableListOf<Pair<Int, Int>>()
-var posNum = -1 to -1
-var posZero = -1 to -1
-var posMainTarget = -1 to -1
-var posLocalTarget = -1 to -1
-
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
-    showMatrix(matrix)
-    posZero = indexesOf(matrix, 0)
-    for (num in 1..15) {
-        posNum = indexesOf(matrix, num)
-        posMainTarget = targets[num - 1]
-        wayFromZeroToLocalTarget.clear()
-        setPosLocalTarget()
-        setTrajectoryFromZeroToFirstLocalTarget()
-        moveFromZeroToLocalTarget(matrix)
-        swapPosCurNumAndPosZero(matrix)
-        while (posNum != posMainTarget) {
-            setTrajectoryFromZeroToSecondOrMoreLocalTarget()
-            moveFromZeroToLocalTarget(matrix)
-            swapPosCurNumAndPosZero(matrix)
-        }
-        showMatrix(matrix)
-    }
-    return listOf()
-}
-
-fun setTrajectoryFromZeroToSecondOrMoreLocalTarget() {
-    wayFromZeroToLocalTarget = if (posZero.second < posLocalTarget.second) when {
-        posZero.second == 1 -> mutableListOf(posZero.first to posZero.second, posZero.first - 1 to 1,
-                posZero.first - 1 to 0, posLocalTarget.first to posLocalTarget.second)
-        posZero.second == 3 -> mutableListOf(posZero.first to posZero.second, posZero.first - 1 to posZero.second,
-                posZero.first - 1 to posZero.second + 1, posZero.first - 1 to posZero.second + 2, posLocalTarget.first to posLocalTarget.second)
-        else -> mutableListOf(posZero.first to posZero.second, posZero.first + 1 to posZero.second,
-                posZero.first + 1 to posZero.second + 1, posZero.first + 1 to posZero.second + 2, posLocalTarget.first to posLocalTarget.second)
-    } else
-        mutableListOf(posZero.first to posZero.second, posZero.first to posZero.second - 1,
-                posZero.first - 1 to posZero.second - 1, posZero.first - 2 to posZero.second - 1, posLocalTarget.first to posLocalTarget.second)
-}
-
-fun indexesOf(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
-    for (i in 0 until matrix.height)
-        for (j in 0 until matrix.width)
-            if (matrix[i, j] == element) return i to j
-    throw IllegalArgumentException()
-}
-
-fun setPosLocalTarget() {
-    posLocalTarget = if (posNum.second != posMainTarget.second)
-        posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
-    else
-        posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
-}
-
-fun setTrajectoryFromZeroToFirstLocalTarget() {
-    val way = wayFromZeroToLocalTarget
-    var posCur = posZero
-    while (true) {
-        way.add(posCur)
-        if (posCur.first != posLocalTarget.first) {
-            val nextPair = posCur.first + (posLocalTarget.first - posCur.first) / abs(posLocalTarget.first - posCur.first) to posCur.second
-            posCur = nextPair
-        } else {
-            val nextPair = posCur.first to posCur.second + (posLocalTarget.second - posCur.second) / abs(posLocalTarget.second - posCur.second)
-            posCur = nextPair
-        }
-        if (posCur == posLocalTarget) {
-            way.add(posCur)
-            break
-        }
-    }
-}
-
-fun moveFromZeroToLocalTarget(matrix: Matrix<Int>) {
-    val way = wayFromZeroToLocalTarget
-    for (i in 0 until way.lastIndex) {
-        val temp = matrix[way[i + 1].first, way[i + 1].second]
-        matrix[way[i + 1].first, way[i + 1].second] = 0
-        matrix[way[i].first, way[i].second] = temp
-        showMatrix(matrix)
-    }
-    posZero = way[way.lastIndex]
-}
-
-fun swapPosCurNumAndPosZero(matrix: Matrix<Int>) {
-    val tempNum = matrix[posNum.first, posNum.second]
-    matrix[posZero.first, posZero.second] = tempNum
-    matrix[posNum.first, posNum.second] = 0
-    val tempPair = posNum
-    posNum = posZero
-    posZero = tempPair
-}
-
-fun showMatrix(matrix: Matrix<Int>) {
-    for (i in 0 until matrix.height) {
-        for (j in 0 until matrix.width) {
-            print(matrix[i, j].toString() + ", ")
-        }
-        println()
-    }
-    println()
-}
- */
