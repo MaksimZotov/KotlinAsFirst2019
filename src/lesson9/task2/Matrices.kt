@@ -2,6 +2,7 @@
 
 package lesson9.task2
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
@@ -541,23 +542,16 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
 
 fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val list = mutableListOf<Int>()
-    val targets = arrayOf(0 to 0, 0 to 1, 0 to 2, 0 to 3,
-            1 to 0, 1 to 1, 1 to 2, 1 to 3,
-            2 to 0, 2 to 1, 2 to 2, 2 to 3,
-            3 to 0, 3 to 1, 3 to 2)
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
             2 to 0 to false, 2 to 1 to false, 2 to 2 to false, 2 to 3 to false,
             3 to 0 to false, 3 to 1 to false, 3 to 2 to false)
-    var curNum = -1
-    var posCurNum = -1 to -1
     var posZero = indexesOf(matrix, 0)
-    var posMainTarget = -1 to -1
-    var posLocalTarget: Pair<Int, Int>
-    fun moveFromCurPosToTarget() {
+    fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>) {
+        var posCurNum = indexesOf(matrix, curNum)
         while (posMainTarget != posCurNum) {
             showMatrix(matrix)
-            posLocalTarget = setPosLocalTarget(posCurNum, posMainTarget)
+            val posLocalTarget = setPosLocalTarget(posCurNum, posMainTarget)
             engaged[posCurNum] = true
             val trajectory = getTrajectoryFromZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
             moveFromZeroToLocalTarget(matrix, trajectory)
@@ -570,11 +564,13 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         }
         engaged[posMainTarget] = true
     }
-    for (i in 1..15) {
-        curNum = i
-        posCurNum = indexesOf(matrix, curNum)
-        posMainTarget = targets[curNum - 1]
-        moveFromCurPosToTarget()
+    for ((first, second) in listOf(1 to (0 to 0), 2 to (0 to 1), 3 to (0 to 3), 4 to (1 to 3), 3 to (0 to 2), 4 to (0 to 3),
+            5 to (1 to 0), 9 to (3 to 0), 13 to (3 to 1), 9 to (2 to 0), 13 to (3 to 0),
+            6 to (1 to 1), 7 to (1 to 3), 8 to (2 to 3), 7 to (1 to 2), 8 to (1 to 3),
+            10 to (3 to 1), 14 to (3 to 2), 10 to (2 to 1), 14 to (3 to 1),
+            11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))) {
+        if (first in listOf(3, 7, 11, 9, 10)) moveCurNumToTarget(first, 3 to 3)
+        moveCurNumToTarget(first, second)
     }
     return list
 }
