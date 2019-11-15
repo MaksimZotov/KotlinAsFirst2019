@@ -572,6 +572,7 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             posCurNum = posLocalTarget
             posZero = temp
         }
+        engaged[posMainTarget] = true
     }
     return list
 }
@@ -581,12 +582,12 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
                                        posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
     val way = mutableListOf<Pair<Int, Int>>()
     var zero = posZero
-
     while (true) {
         way.add(zero)
-        if (zero.second != posTarget.second && zero.second <= posTarget.second) {
+        if (zero.second != posTarget.second && zero.first <= posTarget.first) {
             var forIncrement = posTarget.second - posZero.second
             if (forIncrement == 0) forIncrement = posTarget.second - zero.second
+            if (forIncrement == 0) break
             val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
             zero = if (engaged[next] == false)
                 next
@@ -596,6 +597,7 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
         } else {
             var forIncrement = posTarget.first - posZero.first
             if (forIncrement == 0) forIncrement = posTarget.first - zero.first
+            if (forIncrement == 0) break
             val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
             zero = if (engaged[next] == false)
                 next
