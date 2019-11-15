@@ -583,7 +583,9 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
         // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
-        if (listOfMoving[i] in listForCheck && getPos(matrix, listOfMoving[i].first) == listOfMoving[i + 1].second) {
+        if (listOfMoving[i] in listForCheck && (getPos(matrix, listOfMoving[i].first) in listOf(listOfMoving[i + 1].second,
+                                listOfMoving[i + 1].second.first + 1 to listOfMoving[i + 1].second.second,
+                                listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
             engaged[listOfMoving[i - 1].second] = false
             moveCurNumToTarget(listOfMoving[i].first, 3 to 3)
             engaged[3 to 3] = false
