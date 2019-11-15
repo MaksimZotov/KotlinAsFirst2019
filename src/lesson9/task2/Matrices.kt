@@ -545,16 +545,19 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
             2 to 0 to false, 2 to 1 to false, 2 to 2 to false, 2 to 3 to false,
-            3 to 0 to false, 3 to 1 to false, 3 to 2 to false)
-    var posZero = indexesOf(matrix, 0)
+            3 to 0 to false, 3 to 1 to false, 3 to 2 to false, 3 to 3 to false)
+    var posZero = getPos(matrix, 0)
     fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>) {
-        var posCurNum = indexesOf(matrix, curNum)
+        var posCurNum = getPos(matrix, curNum)
         while (posMainTarget != posCurNum) {
             showMatrix(matrix)
-            val posLocalTarget = setPosLocalTarget(posCurNum, posMainTarget)
-            engaged[posCurNum] = true
-            val trajectory = getTrajectoryFromZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
-            moveFromZeroToLocalTarget(matrix, trajectory)
+            val posLocalTarget = getPosLocalTarget(posCurNum, posMainTarget) // соседняя с curNum ячейка (next hop),
+            engaged[posCurNum] = true                                        // через которую лежит путь к основному таргету
+            val trajectory = getTrajectoryZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
+            moveZeroToLocalTarget(matrix, trajectory)
+            // на этом моменте 0 находиться на месте локального таргета
+            // теперь нужно лишь поменять позиции 0 и curNum, т.е. в локальный таргет
+            // поместить curNum, а в ячеку, где ранее был curNum, поместить 0
             matrix[posLocalTarget.first, posLocalTarget.second] = curNum
             matrix[posCurNum.first, posCurNum.second] = 0
             engaged[posCurNum] = false
@@ -564,19 +567,36 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         }
         engaged[posMainTarget] = true
     }
-    for ((first, second) in listOf(1 to (0 to 0), 2 to (0 to 1), 3 to (0 to 3), 4 to (1 to 3), 3 to (0 to 2), 4 to (0 to 3),
+    // здесь идея в том, что предпоследние снизу/сверху вначале перемещаются в самый низ/верх, затем те,
+    // что должны быть на последнем месте, встают перед предпоследними, и уже лишь после этого все
+    // встают на свои места
+    // получается так, что вначале ячейки заполняются по горизонтали, потом по вертикали - как резултат,
+    // размер из n*n становится (n-1)*(n-1)
+    // и так до конца
+    val listOfMoving = listOf(1 to (0 to 0), 2 to (0 to 1), 3 to (0 to 3), 4 to (1 to 3), 3 to (0 to 2), 4 to (0 to 3),
             5 to (1 to 0), 9 to (3 to 0), 13 to (3 to 1), 9 to (2 to 0), 13 to (3 to 0),
             6 to (1 to 1), 7 to (1 to 3), 8 to (2 to 3), 7 to (1 to 2), 8 to (1 to 3),
             10 to (3 to 1), 14 to (3 to 2), 10 to (2 to 1), 14 to (3 to 1),
-            11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))) {
-        if (first in listOf(3, 7, 11, 9, 10)) moveCurNumToTarget(first, 3 to 3)
-        moveCurNumToTarget(first, second)
+            11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))
+    val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2)) // позже станет ясно, для чего список
+    for (i in listOfMoving.indices) {
+        // обработка случая, когда предпоследний встал на место последнего,
+        // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
+        // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
+        if (listOfMoving[i] in listForCheck && getPos(matrix, listOfMoving[i].first) == listOfMoving[i + 1].second) {
+            engaged[listOfMoving[i - 1].second] = false
+            moveCurNumToTarget(listOfMoving[i].first, 3 to 3)
+            engaged[3 to 3] = false
+            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second)
+        }
+        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second)
     }
     return list
 }
 
-fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
-                                       posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
+// Нужно переделать либо додумать варианты
+fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
+                                   posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
     val way = mutableListOf<Pair<Int, Int>>()
     var zero = posZero
     while (true) {
@@ -606,7 +626,7 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
     return way
 }
 
-fun moveFromZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
+fun moveZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
     for (i in 0 until way.lastIndex) {
         val temp = matrix[way[i + 1].first, way[i + 1].second]
         matrix[way[i + 1].first, way[i + 1].second] = 0
@@ -615,12 +635,12 @@ fun moveFromZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
     }
 }
 
-fun indexesOf(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
+fun getPos(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
     for (i in 0 until matrix.height) for (j in 0 until matrix.width) if (matrix[i, j] == element) return i to j
     throw IllegalArgumentException()
 }
 
-fun setPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>): Pair<Int, Int> =
+fun getPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>): Pair<Int, Int> =
         if (posNum.second != posMainTarget.second)
             posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
         else

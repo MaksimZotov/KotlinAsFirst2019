@@ -504,14 +504,5 @@ class Tests {
                 listOf(10, 11, 13, 15)
         )
         ).assertSolution()
-
-        createMatrix(
-                4, 4, listOf(
-                listOf(1, 2, 5, 14),
-                listOf(7, 12, 3, 4),
-                listOf(6, 9, 0, 8),
-                listOf(10, 11, 13, 15)
-        )
-        ).assertSolution()
     }
 }
