@@ -585,18 +585,22 @@ fun getTrajectoryFromZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<In
     while (true) {
         way.add(zero)
         if (zero.second != posTarget.second && zero.second <= posTarget.second) {
-            val next = zero.first to zero.second + (posTarget.second - posZero.second) / abs(posTarget.second - posZero.second)
+            var forIncrement = posTarget.second - posZero.second
+            if (forIncrement == 0) forIncrement = posTarget.second - zero.second
+            val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
             zero = if (engaged[next] == false)
                 next
             else
-                zero.first + (posTarget.second - posZero.second) / abs(posTarget.second - posZero.second) to zero.second
+                zero.first + (forIncrement) / abs(forIncrement) to zero.second
             if (zero.first == -1) zero = 1 to zero.second
         } else {
-            val next = zero.first + (posTarget.first - posZero.first) / abs(posTarget.first - posZero.first) to zero.second
+            var forIncrement = posTarget.first - posZero.first
+            if (forIncrement == 0) forIncrement = posTarget.first - zero.first
+            val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
             zero = if (engaged[next] == false)
                 next
             else
-                zero.first to zero.second + (posTarget.first - posZero.first) / abs(posTarget.first - posZero.first)
+                zero.first to zero.second + (forIncrement) / abs(forIncrement)
             if (zero.second == -1) zero = zero.first to 1
         }
         if (zero == posTarget) {
