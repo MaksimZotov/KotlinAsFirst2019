@@ -3,12 +3,14 @@
 package lesson9.task2
 
 import com.sun.org.apache.xpath.internal.operations.Bool
+import lesson8.task1.hexagonByThreePoints
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
 import lesson9.task1.createMatrix
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import kotlin.math.abs
+import kotlin.math.max
 
 // Все задачи в этом файле требуют наличия реализации интерфейса "Матрица" в Matrix.kt
 
@@ -542,10 +544,7 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
 
 fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val list = mutableListOf<Int>()
-    val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
-            1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
-            2 to 0 to false, 2 to 1 to false, 2 to 2 to false, 2 to 3 to false,
-            3 to 0 to false, 3 to 1 to false, 3 to 2 to false, 3 to 3 to false)
+    val engaged = createEngaged(matrix)
     var posZero = getPos(matrix, 0)
     fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>, fillHorizontal: Boolean) {
         var posCurNum = getPos(matrix, curNum)
@@ -574,13 +573,11 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     // получается так, что вначале ячейки заполняются по горизонтали, потом по вертикали - как резултат,
     // размер из n*n становится (n-1)*(n-1)
     // и так до конца
-    val listOfMoving = listOf(1 to (0 to 0), 2 to (0 to 1), 3 to (0 to 3), 4 to (1 to 3), 3 to (0 to 2), 4 to (0 to 3),
-            5 to (1 to 0), 9 to (3 to 0), 13 to (3 to 1), 9 to (2 to 0), 13 to (3 to 0),
-            6 to (1 to 1), 7 to (1 to 3), 8 to (2 to 3), 7 to (1 to 2), 8 to (1 to 3),
-            10 to (3 to 1), 14 to (3 to 2), 10 to (2 to 1), 14 to (3 to 1),
-            11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))
-    // позже станет ясно, для чего список
-    val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2))
+    val forMoving = movingAndCheckAndHorizontal(matrix)
+    val listOfMoving = forMoving.first
+    val listForCheck = forMoving.second
+    val listForHorizontal = forMoving.third
+    val n = matrix.height
     for (i in listOfMoving.indices) {
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
@@ -589,24 +586,80 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
                         listOfMoving[i + 1].second.first + 1 to listOfMoving[i + 1].second.second,
                         listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
             engaged[listOfMoving[i - 1].second] = false
-            moveCurNumToTarget(listOfMoving[i].first, 3 to 3, fillHorizontal(listOfMoving[i].first))
-            moveCurNumToTarget(listOfMoving[i - 1].first, 2 to 2, fillHorizontal(listOfMoving[i - 1].first))
-            engaged[3 to 3] = false
-            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second, fillHorizontal(listOfMoving[i - 1].first))
+            moveCurNumToTarget(
+                    listOfMoving[i].first, n - 1 to n - 1, listOfMoving[i].first in listForHorizontal
+            )
+            moveCurNumToTarget(
+                    listOfMoving[i - 1].first, n - 2 to n - 2, listOfMoving[i].first in listForHorizontal
+            )
+            engaged[n - 1 to n - 1] = false
+            moveCurNumToTarget(
+                    listOfMoving[i - 1].first, listOfMoving[i - 1].second, listOfMoving[i].first in listForHorizontal
+            )
+            // тут смысл в том, что мы последний и предпоследний перемещаем в правый нижний угол таким образом,
+            // чтобы при повторной попытке их расставить последний не встал снова на место предпоследнего
+            // i - это последний, i - 1 - предпоследний
         }
-        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second, fillHorizontal(listOfMoving[i].first))
+        moveCurNumToTarget(
+                listOfMoving[i].first, listOfMoving[i].second, listOfMoving[i].first in listForHorizontal
+        )
     }
     return list
 }
 
-fun fillHorizontal(number: Int): Boolean = number in 1..4 || number in 6..8 || number in 11..12
+fun createEngaged(matrix: Matrix<Int>): MutableMap<Pair<Int, Int>, Boolean> {
+    val map = mutableMapOf<Pair<Int, Int>, Boolean>()
+    val n = matrix.height
+    for (i in 0 until n)
+        for (j in 0 until n)
+            map[i to j] = false
+    return map
+}
+
+fun movingAndCheckAndHorizontal(matrix: Matrix<Int>):
+        Triple<List<Pair<Int, Pair<Int, Int>>>, List<Pair<Int, Pair<Int, Int>>>, List<Int>> {
+    val listOfMoving = mutableListOf<Pair<Int, Pair<Int, Int>>>()
+    val listForCheck = mutableListOf<Pair<Int, Pair<Int, Int>>>()
+    val listForHorizontal = mutableListOf<Int>()
+    val n = matrix.height
+    for (i in 0..n - 3) {
+        for (j in i + 1 until n) {
+            if (j != n - 1) {
+                listOfMoving.add(i * n + j to (i to j - 1))
+                listForHorizontal.add(i * n + j)
+                continue
+            }
+            listOfMoving.add(i * n + j to (i to j))
+            listOfMoving.add(i * n + j + 1 to (i + 1 to j))
+            listOfMoving.add(i * n + j to (i to j - 1))
+            listOfMoving.add(i * n + j + 1 to (i to j))
+            listForCheck.add(i * n + j + 1 to (i + 1 to j))
+            listForHorizontal.add(i * n + j)
+            listForHorizontal.add(i * n + j + 1)
+        }
+        for (j in i + 2 until n) {
+            if (j != n - 1) {
+                listOfMoving.add((j - 1) * n + i + 1 to (j - 1 to i))
+                continue
+            }
+            listOfMoving.add((j - 1) * n + i + 1 to (j to i))
+            listOfMoving.add((j) * n + i + 1 to (j to i + 1))
+            listForCheck.add((j) * n + i + 1 to (j to i + 1))
+            listOfMoving.add((j - 1) * n + i + 1 to (j - 1 to i))
+            listOfMoving.add((j) * n + i + 1 to (j to i))
+        }
+    }
+    return Triple(listOfMoving, listForCheck, listForHorizontal)
+}
 
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
                                    posZero: Pair<Int, Int>, target: Pair<Int, Int>): List<Pair<Int, Int>> {
     var trajectory = mutableListOf<Pair<Int, Int>>()
     var found = false
     fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
-        if (!way.contains(pos) && count <= 6 && !found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
+        val n = matrix.height
+        if (!way.contains(pos) && count < 2 * n && !found && pos.first in 0 until n
+                && pos.second in 0 until n && engaged[pos] == false) {
             val count = count + 1
             way.add(pos)
             if (pos == target) {
