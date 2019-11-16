@@ -640,7 +640,7 @@ fun movingAndCheckAndHorizontal(matrix: Matrix<Int>):
             listForHorizontal.add(i * n + j)
             listForHorizontal.add(i * n + j + 1)
         }
-        for (j in i + 1 until n) {
+        for (j in i + 2 until n) {
             if (j != n - 1) {
                 listOfMoving.add((j - 1) * n + i + 1 to (j - 1 to i))
                 continue
