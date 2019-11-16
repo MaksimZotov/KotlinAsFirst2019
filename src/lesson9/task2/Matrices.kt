@@ -581,7 +581,6 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))
     val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2)) // позже станет ясно, для чего список
     for (i in listOfMoving.indices) {
-        if (i <= 10) continue
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
         // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
@@ -603,16 +602,26 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
 
 // Нужно переделать либо додумать варианты
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
-                                   posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>,
+                                   posZero: Pair<Int, Int>, target: Pair<Int, Int>,
                                    fillHorizontal: Boolean): List<Pair<Int, Int>> {
-    val way = mutableListOf<Pair<Int, Int>>()
-    var zero = posZero
-    if (fillHorizontal) {
-
-    } else {
-
+    var trajectory = mutableListOf<Pair<Int, Int>>()
+    var found = false
+    fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>) {
+        if (!found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
+            way.add(pos)
+            if (pos == target) {
+                found = true
+                trajectory = way
+            } else {
+                goToNeighbors(pos.first + 1 to pos.second, way.toMutableList())
+                goToNeighbors(pos.first - 1 to pos.second, way.toMutableList())
+                goToNeighbors(pos.first to pos.second + 1, way.toMutableList())
+                goToNeighbors(pos.first to pos.second - 1, way.toMutableList())
+            }
+        }
     }
-    return way
+    goToNeighbors(posZero, mutableListOf())
+    return trajectory
 }
 
 fun moveZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
