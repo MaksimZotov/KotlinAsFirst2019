@@ -710,5 +710,6 @@ fun showMatrix(matrix: Matrix<Int>) {
         for (j in 0 until matrix.width) print(matrix[i, j].toString() + ", ")
         println()
     }
+
     println()
 }
