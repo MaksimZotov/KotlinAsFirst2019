@@ -540,8 +540,7 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
-/*{
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val list = mutableListOf<Int>()
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
@@ -555,7 +554,7 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
             // соседняя с curNum ячейка (next hop), через которую лежит путь к основному таргету
             val posLocalTarget = getPosLocalTarget(posCurNum, posMainTarget, fillHorizontal)
             engaged[posCurNum] = true
-            val trajectory = getTrajectoryZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget, fillHorizontal)
+            val trajectory = getTrajectoryZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
             moveZeroToLocalTarget(matrix, trajectory)
             // на этом моменте 0 находиться на месте локального таргета
             // теперь нужно лишь поменять позиции 0 и curNum, т.е. в локальный таргет
@@ -589,22 +588,19 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
                         listOfMoving[i + 1].second.first + 1 to listOfMoving[i + 1].second.second,
                         listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
             engaged[listOfMoving[i - 1].second] = false
-            var fillHorizontal = listOfMoving[i].first in 1..4 || listOfMoving[i].first in 6..8 || listOfMoving[i].first in 11..12
-            moveCurNumToTarget(listOfMoving[i].first, 3 to 3, fillHorizontal)
+            moveCurNumToTarget(listOfMoving[i].first, 3 to 3, fillHorizontal(listOfMoving[i].first))
             engaged[3 to 3] = false
-            fillHorizontal = listOfMoving[i - 1].first in 1..4 || listOfMoving[i - 1].first in 6..8 || listOfMoving[i - 1].first in 11..12
-            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second, fillHorizontal)
+            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second, fillHorizontal(listOfMoving[i - 1].first))
         }
-        val fillHorizontal = listOfMoving[i].first in 1..4 || listOfMoving[i].first in 6..8 || listOfMoving[i].first in 11..12
-        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second, fillHorizontal)
+        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second, fillHorizontal(listOfMoving[i].first))
     }
     return list
 }
 
-// Нужно переделать либо додумать варианты
+fun fillHorizontal(number: Int): Boolean = number in 1..4 || number in 6..8 || number in 11..12
+
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
-                                   posZero: Pair<Int, Int>, target: Pair<Int, Int>,
-                                   fillHorizontal: Boolean): List<Pair<Int, Int>> {
+                                   posZero: Pair<Int, Int>, target: Pair<Int, Int>): List<Pair<Int, Int>> {
     var trajectory = mutableListOf<Pair<Int, Int>>()
     var found = false
     fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
@@ -660,4 +656,4 @@ fun showMatrix(matrix: Matrix<Int>) {
         println()
     }
     println()
-}*/
+}
