@@ -581,6 +581,7 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))
     val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2)) // позже станет ясно, для чего список
     for (i in listOfMoving.indices) {
+        if (i <= 10) continue
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
         // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
@@ -607,55 +608,9 @@ fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, I
     val way = mutableListOf<Pair<Int, Int>>()
     var zero = posZero
     if (fillHorizontal) {
-        while (true) {
-            way.add(zero)
-            if (zero.second != posTarget.second && zero.first <= posTarget.first) {
-                var forIncrement = posTarget.second - posZero.second
-                if (forIncrement == 0) forIncrement = posTarget.second - zero.second
-                if (forIncrement == 0) break
-                val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
-                zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
-                if (zero.first == -1) zero = 1 to zero.second
-            } else {
-                var forIncrement = posTarget.first - posZero.first
-                if (forIncrement == 0) forIncrement = posTarget.first - zero.first
-                if (forIncrement == 0) break
-                val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
-                zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
-                if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
-                if (zero.second == -1) zero = zero.first to 1
-                if (zero.first == -1) zero = 1 to zero.second
-            }
-            if (zero == posTarget) {
-                way.add(zero)
-                break
-            }
-        }
+
     } else {
-        while (true) {
-            way.add(zero)
-            if (zero.second != posTarget.second && zero.first <= posTarget.first) {
-                var forIncrement = posTarget.second - posZero.second
-                if (forIncrement == 0) forIncrement = posTarget.second - zero.second
-                if (forIncrement == 0) break
-                val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
-                zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
-                if (zero.first == -1) zero = 1 to zero.second
-            } else {
-                var forIncrement = posTarget.first - posZero.first
-                if (forIncrement == 0) forIncrement = posTarget.first - zero.first
-                if (forIncrement == 0) break
-                val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
-                zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
-                if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
-                if (zero.second == -1) zero = zero.first to 1
-                if (zero.first == -1) zero = 1 to zero.second
-            }
-            if (zero == posTarget) {
-                way.add(zero)
-                break
-            }
-        }
+
     }
     return way
 }
