@@ -540,7 +540,8 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
+/*{
     val list = mutableListOf<Int>()
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
@@ -606,21 +607,22 @@ fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, I
                                    fillHorizontal: Boolean): List<Pair<Int, Int>> {
     var trajectory = mutableListOf<Pair<Int, Int>>()
     var found = false
-    fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>) {
-        if (!found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
+    fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
+        if (!way.contains(pos) && count < 6 && !found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
+            val count = count + 1
             way.add(pos)
             if (pos == target) {
                 found = true
                 trajectory = way
             } else {
-                goToNeighbors(pos.first + 1 to pos.second, way.toMutableList())
-                goToNeighbors(pos.first - 1 to pos.second, way.toMutableList())
-                goToNeighbors(pos.first to pos.second + 1, way.toMutableList())
-                goToNeighbors(pos.first to pos.second - 1, way.toMutableList())
+                goToNeighbors(pos.first + 1 to pos.second, way.toMutableList(), count)
+                goToNeighbors(pos.first - 1 to pos.second, way.toMutableList(), count)
+                goToNeighbors(pos.first to pos.second + 1, way.toMutableList(), count)
+                goToNeighbors(pos.first to pos.second - 1, way.toMutableList(), count)
             }
         }
     }
-    goToNeighbors(posZero, mutableListOf())
+    goToNeighbors(posZero, mutableListOf(), 0)
     return trajectory
 }
 
@@ -658,4 +660,4 @@ fun showMatrix(matrix: Matrix<Int>) {
         println()
     }
     println()
-}
+}*/
