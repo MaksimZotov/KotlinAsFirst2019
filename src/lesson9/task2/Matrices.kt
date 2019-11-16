@@ -540,8 +540,7 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
-/*{
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val list = mutableListOf<Int>()
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
@@ -591,6 +590,7 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
                         listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
             engaged[listOfMoving[i - 1].second] = false
             moveCurNumToTarget(listOfMoving[i].first, 3 to 3, fillHorizontal(listOfMoving[i].first))
+            moveCurNumToTarget(listOfMoving[i - 1].first, 2 to 2, fillHorizontal(listOfMoving[i - 1].first))
             engaged[3 to 3] = false
             moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second, fillHorizontal(listOfMoving[i - 1].first))
         }
@@ -658,4 +658,4 @@ fun showMatrix(matrix: Matrix<Int>) {
         println()
     }
     println()
-}*/
+}
