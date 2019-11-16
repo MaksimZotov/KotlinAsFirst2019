@@ -540,7 +540,8 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
-fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
+fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> = TODO()
+/*{
     val list = mutableListOf<Int>()
     val engaged = mutableMapOf(0 to 0 to false, 0 to 1 to false, 0 to 2 to false, 0 to 3 to false,
             1 to 0 to false, 1 to 1 to false, 1 to 2 to false, 1 to 3 to false,
@@ -579,7 +580,8 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             6 to (1 to 1), 7 to (1 to 3), 8 to (2 to 3), 7 to (1 to 2), 8 to (1 to 3),
             10 to (3 to 1), 14 to (3 to 2), 10 to (2 to 1), 14 to (3 to 1),
             11 to (2 to 2), 12 to (2 to 3), 15 to (3 to 2))
-    val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2)) // позже станет ясно, для чего список
+    // позже станет ясно, для чего список
+    val listForCheck = listOf(4 to (1 to 3), 13 to (3 to 1), 8 to (2 to 3), 14 to (3 to 2))
     for (i in listOfMoving.indices) {
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
@@ -656,4 +658,4 @@ fun showMatrix(matrix: Matrix<Int>) {
         println()
     }
     println()
-}
+}*/
