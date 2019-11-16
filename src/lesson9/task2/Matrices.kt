@@ -606,7 +606,7 @@ fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, I
     var trajectory = mutableListOf<Pair<Int, Int>>()
     var found = false
     fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
-        if (!way.contains(pos) && count < 6 && !found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
+        if (!way.contains(pos) && count <= 6 && !found && pos.first in 0..3 && pos.second in 0..3 && engaged[pos] == false) {
             val count = count + 1
             way.add(pos)
             if (pos == target) {
