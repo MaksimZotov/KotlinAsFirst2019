@@ -616,6 +616,9 @@ fun createEngaged(matrix: Matrix<Int>): MutableMap<Pair<Int, Int>, Boolean> {
     return map
 }
 
+// moving - последовательность Pair цифра to координата, в которую цифру надо переместить
+// check - предпоследние справа/снизу цифры и соответствующие им координаты последних цифр справа/снизу
+// horizontal - цифры, которые заполняются по горизонтали
 fun movingAndCheckAndHorizontal(matrix: Matrix<Int>):
         Triple<List<Pair<Int, Pair<Int, Int>>>, List<Pair<Int, Pair<Int, Int>>>, List<Int>> {
     val listOfMoving = mutableListOf<Pair<Int, Pair<Int, Int>>>()
