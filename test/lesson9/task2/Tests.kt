@@ -22,8 +22,8 @@ class Tests {
     fun transpose() {
         assertEquals(createMatrix(1, 1, listOf(listOf(1))), transpose(createMatrix(1, 1, listOf(listOf(1)))))
         assertEquals(
-            createMatrix(3, 4, listOf(listOf(1, 4, 6, 3), listOf(2, 5, 5, 2), listOf(3, 6, 4, 1))),
-            transpose(createMatrix(4, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(6, 5, 4), listOf(3, 2, 1))))
+                createMatrix(3, 4, listOf(listOf(1, 4, 6, 3), listOf(2, 5, 5, 2), listOf(3, 6, 4, 1))),
+                transpose(createMatrix(4, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(6, 5, 4), listOf(3, 2, 1))))
         )
     }
 
@@ -31,16 +31,16 @@ class Tests {
     @Tag("Example")
     fun plus() {
         assertEquals(
-            createMatrix(1, 1, listOf(listOf(3))),
-            createMatrix(1, 1, listOf(listOf(1))) + createMatrix(1, 1, listOf(listOf(2)))
+                createMatrix(1, 1, listOf(listOf(3))),
+                createMatrix(1, 1, listOf(listOf(1))) + createMatrix(1, 1, listOf(listOf(2)))
         )
         assertEquals(
-            createMatrix(2, 2, listOf(listOf(2, 5), listOf(8, 11))),
-            createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4))) + createMatrix(
-                2,
-                2,
-                listOf(listOf(1, 3), listOf(5, 7))
-            )
+                createMatrix(2, 2, listOf(listOf(2, 5), listOf(8, 11))),
+                createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4))) + createMatrix(
+                        2,
+                        2,
+                        listOf(listOf(1, 3), listOf(5, 7))
+                )
         )
     }
 
@@ -68,23 +68,23 @@ class Tests {
 
         assertEquals(createMatrix(1, 1, listOf(listOf(1))), generateSpiral(1, 1))
         assertEquals(
-            createMatrix(
-                2, 2,
-                listOf(
-                    listOf(1, 2),
-                    listOf(4, 3)
-                )
-            ), generateSpiral(2, 2)
+                createMatrix(
+                        2, 2,
+                        listOf(
+                                listOf(1, 2),
+                                listOf(4, 3)
+                        )
+                ), generateSpiral(2, 2)
         )
         assertEquals(
-            createMatrix(
-                3, 4,
-                listOf(
-                    listOf(1, 2, 3, 4),
-                    listOf(10, 11, 12, 5),
-                    listOf(9, 8, 7, 6)
-                )
-            ), generateSpiral(3, 4)
+                createMatrix(
+                        3, 4,
+                        listOf(
+                                listOf(1, 2, 3, 4),
+                                listOf(10, 11, 12, 5),
+                                listOf(9, 8, 7, 6)
+                        )
+                ), generateSpiral(3, 4)
         )
         assertEquals(
                 createMatrix(
@@ -104,36 +104,36 @@ class Tests {
     fun generateRectangles() {
         assertEquals(createMatrix(1, 1, listOf(listOf(1))), generateRectangles(1, 1))
         assertEquals(
-            createMatrix(
-                2, 2,
-                listOf(
-                    listOf(1, 1),
-                    listOf(1, 1)
-                )
-            ), generateRectangles(2, 2)
+                createMatrix(
+                        2, 2,
+                        listOf(
+                                listOf(1, 1),
+                                listOf(1, 1)
+                        )
+                ), generateRectangles(2, 2)
         )
         assertEquals(
-            createMatrix(
-                4, 3,
-                listOf(
-                    listOf(1, 1, 1),
-                    listOf(1, 2, 1),
-                    listOf(1, 2, 1),
-                    listOf(1, 1, 1)
-                )
-            ), generateRectangles(4, 3)
+                createMatrix(
+                        4, 3,
+                        listOf(
+                                listOf(1, 1, 1),
+                                listOf(1, 2, 1),
+                                listOf(1, 2, 1),
+                                listOf(1, 1, 1)
+                        )
+                ), generateRectangles(4, 3)
         )
         assertEquals(
-            createMatrix(
-                5, 6,
-                listOf(
-                    listOf(1, 1, 1, 1, 1, 1),
-                    listOf(1, 2, 2, 2, 2, 1),
-                    listOf(1, 2, 3, 3, 2, 1),
-                    listOf(1, 2, 2, 2, 2, 1),
-                    listOf(1, 1, 1, 1, 1, 1)
-                )
-            ), generateRectangles(5, 6)
+                createMatrix(
+                        5, 6,
+                        listOf(
+                                listOf(1, 1, 1, 1, 1, 1),
+                                listOf(1, 2, 2, 2, 2, 1),
+                                listOf(1, 2, 3, 3, 2, 1),
+                                listOf(1, 2, 2, 2, 2, 1),
+                                listOf(1, 1, 1, 1, 1, 1)
+                        )
+                ), generateRectangles(5, 6)
         )
 
     }
@@ -160,36 +160,36 @@ class Tests {
         )
         assertEquals(createMatrix(1, 1, listOf(listOf(1))), generateSnake(1, 1))
         assertEquals(
-            createMatrix(
-                2, 2,
-                listOf(
-                    listOf(1, 2),
-                    listOf(3, 4)
-                )
-            ), generateSnake(2, 2)
+                createMatrix(
+                        2, 2,
+                        listOf(
+                                listOf(1, 2),
+                                listOf(3, 4)
+                        )
+                ), generateSnake(2, 2)
         )
         assertEquals(
-            createMatrix(
-                4, 2,
-                listOf(
-                    listOf(1, 2),
-                    listOf(3, 4),
-                    listOf(5, 6),
-                    listOf(7, 8)
-                )
-            ), generateSnake(4, 2)
+                createMatrix(
+                        4, 2,
+                        listOf(
+                                listOf(1, 2),
+                                listOf(3, 4),
+                                listOf(5, 6),
+                                listOf(7, 8)
+                        )
+                ), generateSnake(4, 2)
         )
         assertEquals(
-            createMatrix(
-                5, 4,
-                listOf(
-                    listOf(1, 2, 4, 7),
-                    listOf(3, 5, 8, 11),
-                    listOf(6, 9, 12, 15),
-                    listOf(10, 13, 16, 18),
-                    listOf(14, 17, 19, 20)
-                )
-            ), generateSnake(5, 4)
+                createMatrix(
+                        5, 4,
+                        listOf(
+                                listOf(1, 2, 4, 7),
+                                listOf(3, 5, 8, 11),
+                                listOf(6, 9, 12, 15),
+                                listOf(10, 13, 16, 18),
+                                listOf(14, 17, 19, 20)
+                        )
+                ), generateSnake(5, 4)
         )
 
     }
@@ -204,24 +204,24 @@ class Tests {
         val m = createMatrix(1, 1, listOf(listOf(("single"))))
         assertEquals(m, rotate(m))
         assertEquals(
-            createMatrix(
-                2, 2, listOf(
-                    listOf("alpha", "beta"),
-                    listOf("gamma", "delta")
-                )
-            ),
-            rotate(
                 createMatrix(
-                    2, 2, listOf(
-                        listOf("beta", "delta"),
-                        listOf("alpha", "gamma")
-                    )
+                        2, 2, listOf(
+                        listOf("alpha", "beta"),
+                        listOf("gamma", "delta")
                 )
-            )
+                ),
+                rotate(
+                        createMatrix(
+                                2, 2, listOf(
+                                listOf("beta", "delta"),
+                                listOf("alpha", "gamma")
+                        )
+                        )
+                )
         )
         assertEquals(
-            createMatrix(3, 3, listOf(listOf(7, 4, 1), listOf(8, 5, 2), listOf(9, 6, 3))),
-            rotate(createMatrix(3, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))))
+                createMatrix(3, 3, listOf(listOf(7, 4, 1), listOf(8, 5, 2), listOf(9, 6, 3))),
+                rotate(createMatrix(3, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))))
         )
     }
 
@@ -243,24 +243,24 @@ class Tests {
     fun sumNeighbours() {
         assertEquals(createMatrix(1, 1, listOf(listOf(0))), sumNeighbours(createMatrix(1, 1, listOf(listOf(42)))))
         assertEquals(
-            createMatrix(2, 2, listOf(listOf(9, 8), listOf(7, 6))),
-            sumNeighbours(createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4))))
+                createMatrix(2, 2, listOf(listOf(9, 8), listOf(7, 6))),
+                sumNeighbours(createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4))))
         )
         assertEquals(
-            createMatrix(
-                4, 3, listOf(
-                    listOf(11, 19, 13), listOf(19, 31, 19),
-                    listOf(19, 31, 19), listOf(13, 19, 11)
-                )
-            ),
-            sumNeighbours(
                 createMatrix(
-                    4, 3, listOf(
-                        listOf(1, 2, 3), listOf(4, 5, 6),
-                        listOf(6, 5, 4), listOf(3, 2, 1)
-                    )
+                        4, 3, listOf(
+                        listOf(11, 19, 13), listOf(19, 31, 19),
+                        listOf(19, 31, 19), listOf(13, 19, 11)
                 )
-            )
+                ),
+                sumNeighbours(
+                        createMatrix(
+                                4, 3, listOf(
+                                listOf(1, 2, 3), listOf(4, 5, 6),
+                                listOf(6, 5, 4), listOf(3, 2, 1)
+                        )
+                        )
+                )
         )
     }
 
@@ -272,18 +272,18 @@ class Tests {
         assertEquals(Holes(listOf(), listOf()), findHoles(createMatrix(2, 2, listOf(listOf(0, 1), listOf(1, 0)))))
         assertEquals(Holes(listOf(), listOf(0)), findHoles(createMatrix(2, 2, listOf(listOf(0, 1), listOf(0, 1)))))
         assertEquals(
-            Holes(listOf(4), listOf(1, 3)),
-            findHoles(
-                createMatrix(
-                    5, 4, listOf(
-                        listOf(1, 0, 1, 0),
-                        listOf(0, 0, 1, 0),
-                        listOf(1, 0, 0, 0),
-                        listOf(0, 0, 1, 0),
-                        listOf(0, 0, 0, 0)
-                    )
+                Holes(listOf(4), listOf(1, 3)),
+                findHoles(
+                        createMatrix(
+                                5, 4, listOf(
+                                listOf(1, 0, 1, 0),
+                                listOf(0, 0, 1, 0),
+                                listOf(1, 0, 0, 0),
+                                listOf(0, 0, 1, 0),
+                                listOf(0, 0, 0, 0)
+                        )
+                        )
                 )
-            )
         )
     }
 
@@ -292,16 +292,16 @@ class Tests {
     fun sumSubMatrix() {
         assertEquals(createMatrix(1, 1, listOf(listOf(0))), sumSubMatrix(createMatrix(1, 1, listOf(listOf(0)))))
         assertEquals(
-            createMatrix(1, 5, listOf(listOf(1, 3, 6, 8, 9))),
-            sumSubMatrix(createMatrix(1, 5, listOf(listOf(1, 2, 3, 2, 1))))
+                createMatrix(1, 5, listOf(listOf(1, 3, 6, 8, 9))),
+                sumSubMatrix(createMatrix(1, 5, listOf(listOf(1, 2, 3, 2, 1))))
         )
         assertEquals(
-            createMatrix(2, 2, listOf(listOf(2, 6), listOf(3, 10))),
-            sumSubMatrix(createMatrix(2, 2, listOf(listOf(2, 4), listOf(1, 3))))
+                createMatrix(2, 2, listOf(listOf(2, 6), listOf(3, 10))),
+                sumSubMatrix(createMatrix(2, 2, listOf(listOf(2, 4), listOf(1, 3))))
         )
         assertEquals(
-            createMatrix(3, 3, listOf(listOf(1, 3, 6), listOf(5, 12, 21), listOf(12, 27, 45))),
-            sumSubMatrix(createMatrix(3, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))))
+                createMatrix(3, 3, listOf(listOf(1, 3, 6), listOf(5, 12, 21), listOf(12, 27, 45))),
+                sumSubMatrix(createMatrix(3, 3, listOf(listOf(1, 2, 3), listOf(4, 5, 6), listOf(7, 8, 9))))
         )
     }
 
@@ -310,8 +310,8 @@ class Tests {
     fun unaryMinus() {
         assertEquals(createMatrix(1, 1, listOf(listOf(3))), -createMatrix(1, 1, listOf(listOf(-3))))
         assertEquals(
-            createMatrix(2, 2, listOf(listOf(-1, -2), listOf(-3, -4))),
-            -createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4)))
+                createMatrix(2, 2, listOf(listOf(-1, -2), listOf(-3, -4))),
+                -createMatrix(2, 2, listOf(listOf(1, 2), listOf(3, 4)))
         )
         assertEquals(createMatrix(1, 3, listOf(listOf(-4, -6, -8))), -createMatrix(1, 3, listOf(listOf(4, 6, 8))))
     }
@@ -320,17 +320,17 @@ class Tests {
     @Tag("Normal")
     fun times() {
         assertEquals(
-            createMatrix(1, 1, listOf(listOf(2))),
-            createMatrix(1, 1, listOf(listOf(1))) * createMatrix(1, 1, listOf(listOf(2)))
+                createMatrix(1, 1, listOf(listOf(2))),
+                createMatrix(1, 1, listOf(listOf(1))) * createMatrix(1, 1, listOf(listOf(2)))
         )
         assertEquals(
-            createMatrix(1, 1, listOf(listOf(19))),
-            createMatrix(1, 3, listOf(listOf(2, 3, 5))) * createMatrix(3, 1, listOf(listOf(4), listOf(2), listOf(1)))
+                createMatrix(1, 1, listOf(listOf(19))),
+                createMatrix(1, 3, listOf(listOf(2, 3, 5))) * createMatrix(3, 1, listOf(listOf(4), listOf(2), listOf(1)))
         )
         assertEquals(
-            createMatrix(2, 2, listOf(listOf(23, -2), listOf(8, -18))),
-            createMatrix(2, 3, listOf(listOf(3, 5, 1), listOf(2, -2, 4))) *
-                    createMatrix(3, 2, listOf(listOf(4, 1), listOf(2, 0), listOf(1, -5)))
+                createMatrix(2, 2, listOf(listOf(23, -2), listOf(8, -18))),
+                createMatrix(2, 3, listOf(listOf(3, 5, 1), listOf(2, -2, 4))) *
+                        createMatrix(3, 2, listOf(listOf(4, 1), listOf(2, 0), listOf(1, -5)))
         )
     }
 
@@ -338,19 +338,19 @@ class Tests {
     @Tag("Hard")
     fun canOpenLock() {
         assertFalse(
-            canOpenLock(
-                key = createMatrix(1, 1, listOf(listOf(1))),
-                lock = createMatrix(1, 1, listOf(listOf(1)))
-            ).first
+                canOpenLock(
+                        key = createMatrix(1, 1, listOf(listOf(1))),
+                        lock = createMatrix(1, 1, listOf(listOf(1)))
+                ).first
         )
         assertEquals(
-            Triple(true, 0, 0), canOpenLock(
+                Triple(true, 0, 0), canOpenLock(
                 key = createMatrix(1, 1, listOf(listOf(1))),
                 lock = createMatrix(1, 1, listOf(listOf(0)))
-            )
+        )
         )
         assertEquals(
-            Triple(true, 0, 1), canOpenLock(
+                Triple(true, 0, 1), canOpenLock(
                 key = createMatrix(2, 2, listOf(
                         listOf(1, 0),
                         listOf(0, 1))
@@ -360,13 +360,13 @@ class Tests {
                         listOf(0, 1, 0),
                         listOf(1, 1, 1))
                 )
-            )
+        )
         )
         assertFalse(
-            canOpenLock(
-                key = createMatrix(2, 2, listOf(listOf(1, 1), listOf(1, 0))),
-                lock = createMatrix(3, 3, listOf(listOf(1, 0, 1), listOf(0, 1, 0), listOf(1, 1, 1)))
-            ).first
+                canOpenLock(
+                        key = createMatrix(2, 2, listOf(listOf(1, 1), listOf(1, 0))),
+                        lock = createMatrix(3, 3, listOf(listOf(1, 0, 1), listOf(0, 1, 0), listOf(1, 1, 1)))
+                ).first
         )
     }
 
@@ -374,51 +374,51 @@ class Tests {
     @Tag("Hard")
     fun fifteenGameMoves() {
         val start = createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(1, 2, 3, 4),
                 listOf(5, 6, 7, 8),
                 listOf(9, 10, 11, 12),
                 listOf(13, 14, 15, 0)
-            )
+        )
         )
         assertEquals(start, fifteenGameMoves(start, listOf()))
         assertEquals(
-            start, fifteenGameMoves(
+                start, fifteenGameMoves(
                 createMatrix(
-                    4, 4, listOf(
+                        4, 4, listOf(
                         listOf(1, 2, 3, 4),
                         listOf(5, 6, 7, 8),
                         listOf(9, 10, 11, 12),
                         listOf(0, 13, 14, 15)
-                    )
+                )
                 ), listOf(13, 14, 15)
-            )
+        )
         )
         assertEquals(
-            start, fifteenGameMoves(
+                start, fifteenGameMoves(
                 createMatrix(
-                    4, 4, listOf(
+                        4, 4, listOf(
                         listOf(1, 2, 3, 0), listOf(5, 6, 7, 4),
                         listOf(9, 10, 11, 8), listOf(13, 14, 15, 12)
-                    )
+                )
                 ),
                 listOf(4, 8, 12)
-            )
+        )
         )
         assertEquals(
-            createMatrix(
-                4, 4, listOf(
-                    listOf(5, 7, 9, 1), listOf(2, 12, 14, 15),
-                    listOf(0, 4, 13, 6), listOf(3, 10, 11, 8)
-                )
-            ),
-            fifteenGameMoves(
                 createMatrix(
-                    4, 4, listOf(
-                        listOf(5, 7, 9, 1), listOf(2, 12, 14, 15), listOf(3, 4, 6, 8), listOf(10, 11, 13, 0)
-                    )
-                ), listOf(8, 6, 13, 11, 10, 3)
-            )
+                        4, 4, listOf(
+                        listOf(5, 7, 9, 1), listOf(2, 12, 14, 15),
+                        listOf(0, 4, 13, 6), listOf(3, 10, 11, 8)
+                )
+                ),
+                fifteenGameMoves(
+                        createMatrix(
+                                4, 4, listOf(
+                                listOf(5, 7, 9, 1), listOf(2, 12, 14, 15), listOf(3, 4, 6, 8), listOf(10, 11, 13, 0)
+                        )
+                        ), listOf(8, 6, 13, 11, 10, 3)
+                )
         )
         try {
             fifteenGameMoves(start, listOf(1))
@@ -443,18 +443,18 @@ class Tests {
         val copy = copy()
         val moves = fifteenGameSolution(this)
         val start1 = createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(1, 2, 3, 4),
                 listOf(5, 6, 7, 8),
                 listOf(9, 10, 11, 12),
                 listOf(13, 14, 15, 0)
-            )
+        )
         )
         val start2 = createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(1, 2, 3, 4), listOf(5, 6, 7, 8),
                 listOf(9, 10, 11, 12), listOf(13, 15, 14, 0)
-            )
+        )
         )
         val result = fifteenGameMoves(copy, moves)
         assertTrue(result == start1 || result == start2) { "Result position is not a solution position: $result" }
@@ -462,32 +462,55 @@ class Tests {
 
     @Test
     @Tag("Impossible")
-    fun fifteenGameSolution() {/*
+    fun fifteenGameSolution() {
+        // верно расставляет, пока размерность не равна 2*3
         createMatrix(
-            4, 4, listOf(
+                6, 6, listOf(
+                listOf(22, 35, 11, 17, 23, 8),
+                listOf(30, 0, 12, 34, 24, 2),
+                listOf(32, 7, 13, 33, 25, 14),
+                listOf(4, 29, 31, 6, 26, 3),
+                listOf(28, 9, 15, 21, 27, 19),
+                listOf(20, 10, 16, 1, 5, 18)
+        )
+        ).assertSolution()
+
+        // успешно обрабатывается, но опять же пока размерность не становиться 2*3
+        createMatrix(
+                4, 4, listOf(
+                listOf(1, 2, 4, 3),
+                listOf(5, 6, 7, 8),
+                listOf(13, 10, 11, 12),
+                listOf(9, 14, 15, 0)
+        )
+        ).assertSolution()
+
+        // в остальных тестах аналогично
+        createMatrix(
+                4, 4, listOf(
                 listOf(1, 2, 3, 4), listOf(5, 6, 7, 8),
                 listOf(9, 10, 11, 12), listOf(13, 14, 15, 0)
-            )
+        )
         ).assertSolution()
         createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(1, 2, 3, 4), listOf(5, 6, 7, 8),
                 listOf(9, 10, 11, 12), listOf(13, 15, 14, 0)
-            )
+        )
         ).assertSolution()
         createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(5, 7, 9, 2),
                 listOf(1, 12, 14, 15),
                 listOf(3, 4, 6, 8),
                 listOf(10, 11, 13, 0)
-            )
+        )
         ).assertSolution()
         createMatrix(
-            4, 4, listOf(
+                4, 4, listOf(
                 listOf(0, 1, 2, 3), listOf(4, 5, 6, 7),
                 listOf(8, 9, 10, 11), listOf(12, 13, 14, 15)
-            )
+        )
         ).assertSolution()
         createMatrix(
                 4, 4, listOf(
@@ -513,17 +536,6 @@ class Tests {
                 listOf(6, 1, 13, 8),
                 listOf(3, 4, 0, 15),
                 listOf(10, 11, 14, 12)
-        )
-        ).assertSolution()*/
-
-        createMatrix(
-                6, 6, listOf(
-                listOf(22, 35, 11, 17, 23, 8),
-                listOf(30, 0, 12, 34, 24, 2),
-                listOf(32, 7, 13, 33, 25, 14),
-                listOf(4, 29, 31, 6, 26, 3),
-                listOf(28, 9, 15, 21, 27, 19),
-                listOf(20, 10, 16, 1, 5, 18)
         )
         ).assertSolution()
     }
