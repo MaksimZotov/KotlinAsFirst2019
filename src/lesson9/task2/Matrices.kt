@@ -547,13 +547,14 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             2 to 0 to false, 2 to 1 to false, 2 to 2 to false, 2 to 3 to false,
             3 to 0 to false, 3 to 1 to false, 3 to 2 to false, 3 to 3 to false)
     var posZero = getPos(matrix, 0)
-    fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>) {
+    fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>, fillHorizontal: Boolean) {
         var posCurNum = getPos(matrix, curNum)
         while (posMainTarget != posCurNum) {
             showMatrix(matrix)
-            val posLocalTarget = getPosLocalTarget(posCurNum, posMainTarget) // соседняя с curNum ячейка (next hop),
-            engaged[posCurNum] = true                                        // через которую лежит путь к основному таргету
-            val trajectory = getTrajectoryZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget)
+            // соседняя с curNum ячейка (next hop), через которую лежит путь к основному таргету
+            val posLocalTarget = getPosLocalTarget(posCurNum, posMainTarget, fillHorizontal)
+            engaged[posCurNum] = true
+            val trajectory = getTrajectoryZeroToLocalTarget(matrix, engaged, posZero, posLocalTarget, fillHorizontal)
             moveZeroToLocalTarget(matrix, trajectory)
             // на этом моменте 0 находиться на месте локального таргета
             // теперь нужно лишь поменять позиции 0 и curNum, т.е. в локальный таргет
@@ -587,42 +588,73 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
                         listOfMoving[i + 1].second.first + 1 to listOfMoving[i + 1].second.second,
                         listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
             engaged[listOfMoving[i - 1].second] = false
-            moveCurNumToTarget(listOfMoving[i].first, 3 to 3)
+            var fillHorizontal = listOfMoving[i].first in 1..4 || listOfMoving[i].first in 6..8 || listOfMoving[i].first in 11..12
+            moveCurNumToTarget(listOfMoving[i].first, 3 to 3, fillHorizontal)
             engaged[3 to 3] = false
-            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second)
+            fillHorizontal = listOfMoving[i - 1].first in 1..4 || listOfMoving[i - 1].first in 6..8 || listOfMoving[i - 1].first in 11..12
+            moveCurNumToTarget(listOfMoving[i - 1].first, listOfMoving[i - 1].second, fillHorizontal)
         }
-        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second)
+        val fillHorizontal = listOfMoving[i].first in 1..4 || listOfMoving[i].first in 6..8 || listOfMoving[i].first in 11..12
+        moveCurNumToTarget(listOfMoving[i].first, listOfMoving[i].second, fillHorizontal)
     }
     return list
 }
 
 // Нужно переделать либо додумать варианты
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
-                                   posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>): List<Pair<Int, Int>> {
+                                   posZero: Pair<Int, Int>, posTarget: Pair<Int, Int>,
+                                   fillHorizontal: Boolean): List<Pair<Int, Int>> {
     val way = mutableListOf<Pair<Int, Int>>()
     var zero = posZero
-    while (true) {
-        way.add(zero)
-        if (zero.second != posTarget.second && zero.first <= posTarget.first) {
-            var forIncrement = posTarget.second - posZero.second
-            if (forIncrement == 0) forIncrement = posTarget.second - zero.second
-            if (forIncrement == 0) break
-            val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
-            zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
-            if (zero.first == -1) zero = 1 to zero.second
-        } else {
-            var forIncrement = posTarget.first - posZero.first
-            if (forIncrement == 0) forIncrement = posTarget.first - zero.first
-            if (forIncrement == 0) break
-            val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
-            zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
-            if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
-            if (zero.second == -1) zero = zero.first to 1
-            if (zero.first == -1) zero = 1 to zero.second
-        }
-        if (zero == posTarget) {
+    if (fillHorizontal) {
+        while (true) {
             way.add(zero)
-            break
+            if (zero.second != posTarget.second && zero.first <= posTarget.first) {
+                var forIncrement = posTarget.second - posZero.second
+                if (forIncrement == 0) forIncrement = posTarget.second - zero.second
+                if (forIncrement == 0) break
+                val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
+                zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
+                if (zero.first == -1) zero = 1 to zero.second
+            } else {
+                var forIncrement = posTarget.first - posZero.first
+                if (forIncrement == 0) forIncrement = posTarget.first - zero.first
+                if (forIncrement == 0) break
+                val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
+                zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
+                if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
+                if (zero.second == -1) zero = zero.first to 1
+                if (zero.first == -1) zero = 1 to zero.second
+            }
+            if (zero == posTarget) {
+                way.add(zero)
+                break
+            }
+        }
+    } else {
+        while (true) {
+            way.add(zero)
+            if (zero.second != posTarget.second && zero.first <= posTarget.first) {
+                var forIncrement = posTarget.second - posZero.second
+                if (forIncrement == 0) forIncrement = posTarget.second - zero.second
+                if (forIncrement == 0) break
+                val next = zero.first to zero.second + (forIncrement) / abs(forIncrement)
+                zero = if (engaged[next] == false) next else zero.first + (forIncrement) / abs(forIncrement) to zero.second
+                if (zero.first == -1) zero = 1 to zero.second
+            } else {
+                var forIncrement = posTarget.first - posZero.first
+                if (forIncrement == 0) forIncrement = posTarget.first - zero.first
+                if (forIncrement == 0) break
+                val next = zero.first + (forIncrement) / abs(forIncrement) to zero.second
+                zero = if (engaged[next] == false) next else zero.first to zero.second + (forIncrement) / abs(forIncrement)
+                if (way.contains(next)) zero = zero.first + (forIncrement) / abs(forIncrement) to zero.second + (forIncrement) / abs(forIncrement)
+                if (zero.second == -1) zero = zero.first to 1
+                if (zero.first == -1) zero = 1 to zero.second
+            }
+            if (zero == posTarget) {
+                way.add(zero)
+                break
+            }
         }
     }
     return way
@@ -642,11 +674,19 @@ fun getPos(matrix: Matrix<Int>, element: Int): Pair<Int, Int> {
     throw IllegalArgumentException()
 }
 
-fun getPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>): Pair<Int, Int> =
+fun getPosLocalTarget(posNum: Pair<Int, Int>, posMainTarget: Pair<Int, Int>, fillHorizontal: Boolean): Pair<Int, Int> {
+    return if (fillHorizontal) {
         if (posNum.second != posMainTarget.second)
             posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
         else
             posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
+    } else {
+        if (posNum.first != posMainTarget.first)
+            posNum.first + (posMainTarget.first - posNum.first) / abs(posMainTarget.first - posNum.first) to posNum.second
+        else
+            posNum.first to posNum.second + (posMainTarget.second - posNum.second) / abs(posMainTarget.second - posNum.second)
+    }
+}
 
 fun showMatrix(matrix: Matrix<Int>) {
     for (i in 0 until matrix.height) {

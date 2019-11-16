@@ -498,6 +498,15 @@ class Tests {
 
         createMatrix(
                 4, 4, listOf(
+                listOf(1, 2, 3, 4),
+                listOf(5, 11, 14, 15),
+                listOf(9, 10, 6, 12),
+                listOf(13, 7, 8, 0)
+        )
+        ).assertSolution()
+
+        createMatrix(
+                4, 4, listOf(
                 listOf(5, 7, 9, 2),
                 listOf(6, 12, 14, 8),
                 listOf(3, 4, 1, 0),
