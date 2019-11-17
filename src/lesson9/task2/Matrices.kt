@@ -606,7 +606,9 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
         moveCurNumToTarget(
                 moves[i].first, moves[i].second, moves[i].first in numbersForHorizontal
         )
+
     }
+    showMatrix(matrix)
     return resultList
 }
 
