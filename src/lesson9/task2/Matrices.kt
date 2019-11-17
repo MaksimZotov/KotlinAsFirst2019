@@ -663,16 +663,16 @@ fun movesAndMovesForCheckAndNumbersForHorizontal(matrix: Matrix<Int>):
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
                                    posZero: Pair<Int, Int>, target: Pair<Int, Int>): List<Pair<Int, Int>> {
     var trajectory = mutableListOf<Pair<Int, Int>>()
-    var found = false
     val n = matrix.height
+    var steps = 2 * n
     fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
-        if (!way.contains(pos) && count < 2 * n && !found && pos.first in 0 until n
+        if (!way.contains(pos) && count < steps && pos.first in 0 until n
                 && pos.second in 0 until n && engaged[pos] == false) {
             val count = count + 1
             way.add(pos)
             if (pos == target) {
-                found = true
                 trajectory = way
+                steps = count
             } else {
                 goToNeighbors(pos.first + 1 to pos.second, way.toMutableList(), count)
                 goToNeighbors(pos.first - 1 to pos.second, way.toMutableList(), count)
