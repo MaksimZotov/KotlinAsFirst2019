@@ -3,6 +3,7 @@
 package lesson9.task2
 
 import com.sun.org.apache.xpath.internal.operations.Bool
+import lesson1.task1.sqr
 import lesson8.task1.hexagonByThreePoints
 import lesson9.task1.Matrix
 import lesson9.task1.MatrixImpl
@@ -464,7 +465,7 @@ operator fun Matrix<Int>.times(other: Matrix<Int>): Matrix<Int> {
  * 3 10 11  8
  */
 fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
-    if (moves.any { it !in 1..15 }) throw IllegalStateException()
+    if (moves.any { it !in 1 until sqr(matrix.height) }) throw IllegalStateException()
     if (moves.isEmpty()) return matrix
     var curI = -1
     var curJ = -1
@@ -542,8 +543,9 @@ fun fifteenGameMoves(matrix: Matrix<Int>, moves: List<Int>): Matrix<Int> {
  * Перед решением этой задачи НЕОБХОДИМО решить предыдущую
  */
 
+val resultList = mutableListOf<Int>()
+
 fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
-    val list = mutableListOf<Int>()
     val engaged = createEngaged(matrix)
     var posZero = getPos(matrix, 0)
     fun moveCurNumToTarget(curNum: Int, posMainTarget: Pair<Int, Int>, fillHorizontal: Boolean) {
@@ -564,6 +566,7 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             val temp = posCurNum
             posCurNum = posLocalTarget
             posZero = temp
+            resultList.add(curNum)
         }
         engaged[posMainTarget] = true
     }
@@ -573,38 +576,38 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     // получается так, что вначале ячейки заполняются по горизонтали, потом по вертикали - как резултат,
     // размер из n*n становится (n-1)*(n-1)
     // и так до конца
-    val forMoving = movingAndCheckAndHorizontal(matrix)
-    val listOfMoving = forMoving.first
-    val listForCheck = forMoving.second
-    val listForHorizontal = forMoving.third
+    val forMoving = movesAndMovesForCheckAndNumbersForHorizontal(matrix)
+    val moves = forMoving.first
+    val movesForCheck = forMoving.second
+    val numbersForHorizontal = forMoving.third
     val n = matrix.height
-    for (i in listOfMoving.indices) {
+    for (i in moves.indices) {
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
         // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
-        if (listOfMoving[i] in listForCheck && (getPos(matrix, listOfMoving[i].first) in listOf(listOfMoving[i + 1].second,
-                        listOfMoving[i + 1].second.first + 1 to listOfMoving[i + 1].second.second,
-                        listOfMoving[i + 1].second.first to listOfMoving[i + 1].second.second + 1))) {
-            engaged[listOfMoving[i - 1].second] = false
+        if (moves[i] in movesForCheck && (getPos(matrix, moves[i].first) in listOf(moves[i + 1].second,
+                        moves[i + 1].second.first + 1 to moves[i + 1].second.second,
+                        moves[i + 1].second.first to moves[i + 1].second.second + 1))) {
+            engaged[moves[i - 1].second] = false
             moveCurNumToTarget(
-                    listOfMoving[i].first, n - 1 to n - 1, listOfMoving[i].first in listForHorizontal
+                    moves[i].first, n - 1 to n - 1, moves[i].first in numbersForHorizontal
             )
             moveCurNumToTarget(
-                    listOfMoving[i - 1].first, n - 2 to n - 2, listOfMoving[i].first in listForHorizontal
+                    moves[i - 1].first, n - 2 to n - 2, moves[i].first in numbersForHorizontal
             )
             engaged[n - 1 to n - 1] = false
             moveCurNumToTarget(
-                    listOfMoving[i - 1].first, listOfMoving[i - 1].second, listOfMoving[i].first in listForHorizontal
+                    moves[i - 1].first, moves[i - 1].second, moves[i].first in numbersForHorizontal
             )
             // тут смысл в том, что мы последний и предпоследний перемещаем в правый нижний угол таким образом,
             // чтобы при повторной попытке их расставить последний не встал снова на место предпоследнего
             // i - это последний, i - 1 - предпоследний
         }
         moveCurNumToTarget(
-                listOfMoving[i].first, listOfMoving[i].second, listOfMoving[i].first in listForHorizontal
+                moves[i].first, moves[i].second, moves[i].first in numbersForHorizontal
         )
     }
-    return list
+    return resultList
 }
 
 fun createEngaged(matrix: Matrix<Int>): MutableMap<Pair<Int, Int>, Boolean> {
@@ -619,48 +622,48 @@ fun createEngaged(matrix: Matrix<Int>): MutableMap<Pair<Int, Int>, Boolean> {
 // moving - последовательность Pair цифра to координата, в которую цифру надо переместить
 // check - предпоследние справа/снизу цифры и соответствующие им координаты последних цифр справа/снизу
 // horizontal - цифры, которые заполняются по горизонтали
-fun movingAndCheckAndHorizontal(matrix: Matrix<Int>):
+fun movesAndMovesForCheckAndNumbersForHorizontal(matrix: Matrix<Int>):
         Triple<List<Pair<Int, Pair<Int, Int>>>, List<Pair<Int, Pair<Int, Int>>>, List<Int>> {
-    val listOfMoving = mutableListOf<Pair<Int, Pair<Int, Int>>>()
-    val listForCheck = mutableListOf<Pair<Int, Pair<Int, Int>>>()
-    val listForHorizontal = mutableListOf<Int>()
+    val moves = mutableListOf<Pair<Int, Pair<Int, Int>>>()
+    val movesForCheck = mutableListOf<Pair<Int, Pair<Int, Int>>>()
+    val numbersForHorizontal = mutableListOf<Int>()
     val n = matrix.height
     for (i in 0..n - 3) {
         for (j in i + 1 until n) {
             if (j != n - 1) {
-                listOfMoving.add(i * n + j to (i to j - 1))
-                listForHorizontal.add(i * n + j)
+                moves.add(i * n + j to (i to j - 1))
+                numbersForHorizontal.add(i * n + j)
                 continue
             }
-            listOfMoving.add(i * n + j to (i to j))
-            listOfMoving.add(i * n + j + 1 to (i + 1 to j))
-            listOfMoving.add(i * n + j to (i to j - 1))
-            listOfMoving.add(i * n + j + 1 to (i to j))
-            listForCheck.add(i * n + j + 1 to (i + 1 to j))
-            listForHorizontal.add(i * n + j)
-            listForHorizontal.add(i * n + j + 1)
+            moves.add(i * n + j to (i to j))
+            moves.add(i * n + j + 1 to (i + 1 to j))
+            moves.add(i * n + j to (i to j - 1))
+            moves.add(i * n + j + 1 to (i to j))
+            movesForCheck.add(i * n + j + 1 to (i + 1 to j))
+            numbersForHorizontal.add(i * n + j)
+            numbersForHorizontal.add(i * n + j + 1)
         }
         for (j in i + 2 until n) {
             if (j != n - 1) {
-                listOfMoving.add((j - 1) * n + i + 1 to (j - 1 to i))
+                moves.add((j - 1) * n + i + 1 to (j - 1 to i))
                 continue
             }
-            listOfMoving.add((j - 1) * n + i + 1 to (j to i))
-            listOfMoving.add((j) * n + i + 1 to (j to i + 1))
-            listForCheck.add((j) * n + i + 1 to (j to i + 1))
-            listOfMoving.add((j - 1) * n + i + 1 to (j - 1 to i))
-            listOfMoving.add((j) * n + i + 1 to (j to i))
+            moves.add((j - 1) * n + i + 1 to (j to i))
+            moves.add((j) * n + i + 1 to (j to i + 1))
+            moves.add((j - 1) * n + i + 1 to (j - 1 to i))
+            moves.add((j) * n + i + 1 to (j to i))
+            movesForCheck.add((j) * n + i + 1 to (j to i + 1))
         }
     }
-    return Triple(listOfMoving, listForCheck, listForHorizontal)
+    return Triple(moves, movesForCheck, numbersForHorizontal)
 }
 
 fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, Int>, Boolean>,
                                    posZero: Pair<Int, Int>, target: Pair<Int, Int>): List<Pair<Int, Int>> {
     var trajectory = mutableListOf<Pair<Int, Int>>()
     var found = false
+    val n = matrix.height
     fun goToNeighbors(pos: Pair<Int, Int>, way: MutableList<Pair<Int, Int>>, count: Int) {
-        val n = matrix.height
         if (!way.contains(pos) && count < 2 * n && !found && pos.first in 0 until n
                 && pos.second in 0 until n && engaged[pos] == false) {
             val count = count + 1
@@ -683,6 +686,7 @@ fun getTrajectoryZeroToLocalTarget(matrix: Matrix<Int>, engaged: Map<Pair<Int, I
 fun moveZeroToLocalTarget(matrix: Matrix<Int>, way: List<Pair<Int, Int>>) {
     for (i in 0 until way.lastIndex) {
         val temp = matrix[way[i + 1].first, way[i + 1].second]
+        resultList.add(temp)
         matrix[way[i + 1].first, way[i + 1].second] = 0
         matrix[way[i].first, way[i].second] = temp
         showMatrix(matrix)

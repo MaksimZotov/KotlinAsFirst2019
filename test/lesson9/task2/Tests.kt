@@ -463,7 +463,18 @@ class Tests {
     @Test
     @Tag("Impossible")
     fun fifteenGameSolution() {
-        // верно расставляет, пока размерность не равна 2*3
+        createMatrix(
+                7, 7, listOf(
+                listOf(22, 35, 11, 17, 23, 8, 36),
+                listOf(30, 0, 12, 34, 24, 2, 44),
+                listOf(32, 7, 13, 33, 25, 14, 37),
+                listOf(4, 29, 31, 6, 26, 3, 45),
+                listOf(28, 9, 15, 21, 27, 19, 38),
+                listOf(20, 10, 16, 1, 5, 18, 39),
+                listOf(40, 46, 41, 47, 42, 48, 43)
+        )
+        ).assertSolution()
+
         createMatrix(
                 6, 6, listOf(
                 listOf(22, 35, 11, 17, 23, 8),
@@ -475,7 +486,6 @@ class Tests {
         )
         ).assertSolution()
 
-        // успешно обрабатывается, но опять же пока размерность не становится 2*3
         createMatrix(
                 4, 4, listOf(
                 listOf(1, 2, 4, 3),
