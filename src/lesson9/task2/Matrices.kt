@@ -619,9 +619,9 @@ fun createEngaged(matrix: Matrix<Int>): MutableMap<Pair<Int, Int>, Boolean> {
     return map
 }
 
-// moving - последовательность Pair цифра to координата, в которую цифру надо переместить
-// check - предпоследние справа/снизу цифры и соответствующие им координаты последних цифр справа/снизу
-// horizontal - цифры, которые заполняются по горизонтали
+// moves - последовательность Pair цифра to координата, в которую цифру надо переместить
+// movesForCheck - предпоследние справа/снизу цифры и соответствующие им координаты последних цифр справа/снизу
+// numbersForHorizontal - цифры, которые заполняются по горизонтали
 fun movesAndMovesForCheckAndNumbersForHorizontal(matrix: Matrix<Int>):
         Triple<List<Pair<Int, Pair<Int, Int>>>, List<Pair<Int, Pair<Int, Int>>>, List<Int>> {
     val moves = mutableListOf<Pair<Int, Pair<Int, Int>>>()
@@ -629,7 +629,7 @@ fun movesAndMovesForCheckAndNumbersForHorizontal(matrix: Matrix<Int>):
     val numbersForHorizontal = mutableListOf<Int>()
     val n = matrix.height
     for (i in 0..n - 3) {
-        for (j in i + 1 until n) {
+        for (j in i + 1 until n) { // заполняем для горизональных линий
             if (j != n - 1) {
                 moves.add(i * n + j to (i to j - 1))
                 numbersForHorizontal.add(i * n + j)
@@ -643,7 +643,7 @@ fun movesAndMovesForCheckAndNumbersForHorizontal(matrix: Matrix<Int>):
             numbersForHorizontal.add(i * n + j)
             numbersForHorizontal.add(i * n + j + 1)
         }
-        for (j in i + 2 until n) {
+        for (j in i + 2 until n) { // начинаем с i + 2 так как i + 1 уже есть у горизонтальных
             if (j != n - 1) {
                 moves.add((j - 1) * n + i + 1 to (j - 1 to i))
                 continue
