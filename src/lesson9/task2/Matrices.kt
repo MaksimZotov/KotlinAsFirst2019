@@ -589,16 +589,11 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
                         moves[i + 1].second.first + 1 to moves[i + 1].second.second,
                         moves[i + 1].second.first to moves[i + 1].second.second + 1))) {
             engaged[moves[i - 1].second] = false
-            moveCurNumToTarget(
-                    moves[i].first, n - 1 to n - 1, moves[i].first in numbersForHorizontal
-            )
-            moveCurNumToTarget(
-                    moves[i - 1].first, n - 2 to n - 2, moves[i].first in numbersForHorizontal
-            )
-            engaged[n - 1 to n - 1] = false
-            moveCurNumToTarget(
-                    moves[i - 1].first, moves[i - 1].second, moves[i].first in numbersForHorizontal
-            )
+            val fillHorizontal = moves[i].first in numbersForHorizontal
+            val pos = if (fillHorizontal) moves[i].second.first + 1 to n - 1 else n - 1 to moves[i].second.second + 1
+            moveCurNumToTarget(moves[i].first, pos, fillHorizontal)
+            engaged[pos] = false
+            moveCurNumToTarget(moves[i - 1].first, moves[i - 1].second, fillHorizontal)
             // тут смысл в том, что мы последний и предпоследний перемещаем в правый нижний угол таким образом,
             // чтобы при повторной попытке их расставить последний не встал снова на место предпоследнего
             // i - это последний, i - 1 - предпоследний

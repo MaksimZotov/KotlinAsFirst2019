@@ -464,6 +464,14 @@ class Tests {
     @Tag("Impossible")
     fun fifteenGameSolution() {/**/
         createMatrix(
+                4, 4, listOf(
+                listOf(1, 2, 4, 3),
+                listOf(5, 6, 7, 8),
+                listOf(13, 10, 11, 12),
+                listOf(9, 14, 15, 0)
+        )
+        ).assertSolution()
+        createMatrix(
                 7, 7, listOf(
                 listOf(22, 35, 11, 17, 23, 8, 36),
                 listOf(30, 0, 12, 34, 24, 2, 44),
