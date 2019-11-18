@@ -581,7 +581,16 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
     val movesForCheck = forMoving.second
     val numbersForHorizontal = forMoving.third
     val n = matrix.height
-    for (i in moves.indices) {
+    var i = -1
+    while (i < moves.lastIndex) {
+        i++
+        // обработка случая, если последний и предпоследний справа/снизу по горизонтали/вертикали изначально стоят на своих местах
+        if (i + 1 <= moves.lastIndex && moves[i + 1] in movesForCheck) {
+            if (getPos(matrix, moves[i].first) == moves[i + 2].second && getPos(matrix, moves[i + 1].first) == moves[i + 3].second) {
+                i += 3
+                continue
+            }
+        }
         // обработка случая, когда предпоследний встал на место последнего,
         // а сам последний находиться на месте предпоследнего (примеры: 1, 2, 4, 3   1, 2, 0, 3
         // ну или 2 вариант в примерах                                  5, 7, 0, 9   5, 7, 4, 9)
@@ -594,13 +603,10 @@ fun fifteenGameSolution(matrix: Matrix<Int>): List<Int> {
             moveCurNumToTarget(moves[i].first, pos, fillHorizontal)
             engaged[pos] = false
             moveCurNumToTarget(moves[i - 1].first, moves[i - 1].second, fillHorizontal)
-            // тут смысл в том, что мы последний и предпоследний перемещаем в правый нижний угол таким образом,
-            // чтобы при повторной попытке их расставить последний не встал снова на место предпоследнего
-            // i - это последний, i - 1 - предпоследний
+            // тут смысл в том, что последний справа/снизу перемещается так, чтобы при повторном заполнении
+            // последний и предпоследний не встали снова не на свои места
         }
-        moveCurNumToTarget(
-                moves[i].first, moves[i].second, moves[i].first in numbersForHorizontal
-        )
+        moveCurNumToTarget(moves[i].first, moves[i].second, moves[i].first in numbersForHorizontal)
 
     }
     showMatrix(matrix)

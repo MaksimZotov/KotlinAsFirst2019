@@ -462,7 +462,7 @@ class Tests {
 
     @Test
     @Tag("Impossible")
-    fun fifteenGameSolution() {/**/
+    fun fifteenGameSolution() {/*
         createMatrix(
                 4, 4, listOf(
                 listOf(1, 2, 4, 3),
@@ -470,7 +470,7 @@ class Tests {
                 listOf(13, 10, 11, 12),
                 listOf(9, 14, 15, 0)
         )
-        ).assertSolution()
+        ).assertSolution()*/
         createMatrix(
                 7, 7, listOf(
                 listOf(22, 35, 11, 17, 23, 8, 36),
@@ -502,7 +502,6 @@ class Tests {
                 listOf(9, 14, 15, 0)
         )
         ).assertSolution()
-
 
         createMatrix(
                 4, 4, listOf(
